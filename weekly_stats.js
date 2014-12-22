@@ -1,23 +1,24 @@
 
-  function renderWeekOverWeekChart(ids, startDateCurrentWeek, endDateCurrentWeek,
-                            startDatePreviousWeek, endDatePreviousWeek) {
+  function renderWeekOverWeekChart(ids, startDate, endDate) {
+
 
 
     var currentWeek = query({
       'ids': ids,
       'dimensions': 'ga:date,ga:nthDay',
       'metrics': 'ga:sessions',
-      'start-date': startDateCurrentWeek,
-      'end-date': endDateCurrentWeek
-    });
+      'start-date': startDate,
+      'end-date': endDate
+      });
 
     var previousWeek = query({
       'ids': ids,
       'dimensions': 'ga:date,ga:nthDay',
       'metrics': 'ga:sessions',
-      'start-date': startDatePreviousWeek,
-      'end-date':  endDatePreviousWeek
-    });
+      'start-date': moment(startDate).subtract(7, 'days').format('YYYY-MM-DD'),
+      'end-date':  moment(endDate).subtract(7, 'days').format('YYYY-MM-DD')
+      });
+
 
     Promise.all([currentWeek, previousWeek]).then(function(results) {
 
@@ -35,7 +36,7 @@
           {
             //Set week ending date
             //label: 'Last Week',
-            label: 'Week Starting ' + moment(startDatePreviousWeek, 'YYYYMMDD').format('DD/MM/YYYY'),
+            label: 'Week Starting ' + moment(startDate).subtract(7, 'days').format('DD/MM/YYYY'),
             fillColor : "rgba(220,220,220,0.5)",
             strokeColor : "rgba(220,220,220,1)",
             pointColor : "rgba(220,220,220,1)",
@@ -43,7 +44,7 @@
             data : data2
           },
           {
-            label: 'Week Starting ' + moment(startDateCurrentWeek, 'YYYYMMDD').format('DD/MM/YYYY'),
+            label: 'Week Starting ' + moment(startDate).format('DD/MM/YYYY'),
             fillColor : "rgba(151,187,205,0.5)",
             strokeColor : "rgba(151,187,205,1)",
             pointColor : "rgba(151,187,205,1)",
@@ -55,6 +56,8 @@
 
       new Chart(makeCanvas('weekly-session-chart-container')).Line(data);
       generateLegend('weekly-session-legend-container', data.datasets);
+
+      _.delay(renderYearOverYearChart, 500+ Math.random()*500, ids, endDate);
     });
   }
 
@@ -119,30 +122,29 @@
         generateLegend('monthly-session-legend-container', data.datasets);
       })
       .catch(function(err) {
-        console.error(err.stack);
+        console.error(err.error.message);
       })
     }
 
   /* Calculates the number of seconds avergae dution for a session for the current and previous week */
 
-  function renderWeekOverWeekSessionDurationChart(ids, startDateCurrentWeek, endDateCurrentWeek,
-                            startDatePreviousWeek, endDatePreviousWeek) {
+  function renderWeekOverWeekSessionDurationChart(ids, startDate, endDate) {
 
 
     var currentWeek = query({
       'ids': ids,
       'dimensions': 'ga:date,ga:nthDay',
       'metrics': 'ga:avgSessionDuration',
-      'start-date': startDateCurrentWeek,
-      'end-date': endDateCurrentWeek
+      'start-date': startDate,
+      'end-date': endDate
     });
 
     var previousWeek = query({
       'ids': ids,
       'dimensions': 'ga:date,ga:nthDay',
       'metrics': 'ga:avgSessionDuration',
-      'start-date': startDatePreviousWeek,
-      'end-date':  endDatePreviousWeek
+      'start-date': moment(startDate).subtract(7, 'days').format('YYYY-MM-DD'),
+      'end-date':  moment(endDate).subtract(7, 'days').format('YYYY-MM-DD')
     });
 
     Promise.all([currentWeek, previousWeek]).then(function(results) {
@@ -161,7 +163,7 @@
           {
             //Set week ending date
             //label: 'Last Week',
-            label: 'Week Starting ' + moment(startDatePreviousWeek, 'YYYYMMDD').format('DD/MM/YYYY'),
+            label: 'Week Starting ' + moment(startDate).format('DD/MM/YYYY'),
             fillColor : "rgba(220,220,220,0.5)",
             strokeColor : "rgba(220,220,220,1)",
             pointColor : "rgba(220,220,220,1)",
@@ -169,7 +171,7 @@
             data : data2
           },
           {
-            label: 'Week Starting ' + moment(startDateCurrentWeek, 'YYYYMMDD').format('DD/MM/YYYY'),
+            label: 'Week Starting ' + moment(startDate).subtract(7, 'days').format('DD/MM/YYYY'),
             fillColor : "rgba(151,187,205,0.5)",
             strokeColor : "rgba(151,187,205,1)",
             pointColor : "rgba(151,187,205,1)",
@@ -181,7 +183,13 @@
 
       new Chart(makeCanvas('weekly-session-duration-chart-container')).Line(data);
       generateLegend('weekly-session-duration-legend-container', data.datasets);
-    });
+
+      _.delay(renderYearOverYearSessionDurationChart, 500 + Math.random()*500, ids, endDate);
+
+    })
+    .catch(function(err) {
+        console.error(err.error.message);
+      })
   }
 
   /*Calculates the average number of seconds duration of a session for this year to the previous
@@ -242,7 +250,7 @@
         generateLegend('monthly-session-duration-legend-container', data.datasets);
       })
       .catch(function(err) {
-        console.error(err.stack);
+        console.error(err.error.message);
       })
     }
 
@@ -286,17 +294,94 @@
 
       new Chart(makeCanvas('weekly-content-chart-container')).Bar(data, {barDatasetSpacing : 10});
       generateLegend('weekly-content-legend-container', data.datasets);
+
+      _.delay(renderMonthlyContentUsageChart, 500 + Math.random()*500,ids, endDate);
+
     })
     .catch(function(err) {
-      console.error(err.stack);
+      console.error(err.error.message);
     })
 
   }
 
 
+/**
+   * Draw the a chart.js doughnut chart with data from the specified view that
+   * shows the content for the week.
+   */
+  function renderMonthlyContentUsageChart(ids, endDate) {
+
+  /* Retrieve top 6 pages for last month and use values to create 6 copairson queries
+  */
+
+  var topPages =[];
+
+    query({
+      'ids': ids,
+      'dimensions': 'ga:pageTitle',
+      'metrics': 'ga:pageviews',
+      'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
+      'start-date': moment(endDate).subtract(1, 'months').format('YYYY-MM-DD'),
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 6
+
+    })
+    .then(function(response) {
+
+      response.rows.forEach(function(row, i) {
+        topPages.push(row[0]);
+      });
+    })
+    .catch(function(err) {
+      console.error(err.error.message);
+    })
+
+    query({
+      'ids': ids,
+      'dimensions': 'ga:pageTitle',
+      'metrics': 'ga:pageviews',
+      'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
+      'start-date': moment(endDate).subtract(1, 'year').date(1).format('YYYY-MM-DD'),
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 10
+
+    })
+    .then(function(response) {
+
+      var data = [];
+      var labels = [];
+      var datasets = [];
+      var colors = ['#4D5360','#949FB1','#D4CCC5','#ADD7FE','#FEADAD','#C1FEC2', '#C1FEE3', '#FFF9D1', '#F1FFD1', '#D1FFD1', '#D1FFEA'];
+
+      response.rows.forEach(function(row, i) {
+        //labels.push(row[0]);
+        labels.push('');
+        datasets.push(  {
+                        label: row[0],
+                        fillColor: colors[i],
+                        strokeColor: colors[i],
+                        data: [+row[1]]
+                      }  );
+      });
+
+      data = {labels: labels, datasets: datasets};
+
+      new Chart(makeCanvas('monthly-content-chart-container')).Bar(data, {barDatasetSpacing : 10});
+      generateLegend('monthly-content-legend-container', data.datasets);
+    })
+    .catch(function(err) {
+      console.error(err.error.message);
+    })
+
+  }
+
+
+
  /**
    * Draw the a chart.js doughnut chart with data from the specified view that
-   * show the top 5 browsers over the past 30 days.
+   * show the top 5 browsers.
    */
   function renderTopBrowsersPeriod(ids, startDate, endDate) {
 
@@ -320,7 +405,12 @@
 
       new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
       generateLegend('weekly-browser-legend-container', data);
-    });
+
+      _.delay(renderTopBrowsersYear, 500 + Math.random()*500, ids, endDate);
+    })
+      .catch(function(err) {
+      console.error(err.error.message);
+    })
   }
 
 
@@ -350,7 +440,11 @@
 
       new Chart(makeCanvas('yearly-browser-chart-container')).Doughnut(data);
       generateLegend('yearly-browser-legend-container', data);
-    });
+    })
+    .catch(function(err) {
+      console.error(err.error.message);
+    })
+
   }
 
   /**
@@ -358,14 +452,30 @@
      * return a promise the is fulfilled with the value returned by the API.
      * @param {Object} params The request parameters.
      * @return {Promise} A promise.
-     */
+
     function query(params) {
       return new Promise(function(resolve, reject) {
         var data = new gapi.analytics.report.Data({query: params});
+
         data.once('success', function(response) { resolve(response); })
             .once('error', function(response) { reject(response); })
             .execute();
       });
+    } */
+
+
+    function query(params) {
+      var queryPromise = new Promise(function(resolve, reject) {
+        var data = new gapi.analytics.report.Data({query: params});
+
+        window.setTimeout(function(){},5000)
+
+        data.once('success', function(response) { resolve(response); })
+            .once('error', function(response) { reject(response); })
+            .execute();
+      });
+
+      return queryPromise;
     }
 
 

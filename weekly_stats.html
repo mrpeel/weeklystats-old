@@ -42,7 +42,15 @@
   </div>
 
 
-  <div id="view-selector-container"></div>
+  <ul class="FlexGrid FlexGrid--halves">
+  		<li class="FlexGrid-item">
+        <div id="view-selector-container"></div>
+      </li>
+
+  		<li class="FlexGrid-item">
+        <div id="date-range-selector-container"></div>
+      </li>
+  </ul>
   <div class="Screenshot"></div>
 
 
@@ -179,6 +187,8 @@
 
 <script src="javascript/moment.min.js"></script>
 
+<script src="javascript/underscore-min.js"></script>
+
 <!-- Include the ViewSelector2 component script. -->
 <script src="javascript/view-selector2.js"></script>
 
@@ -208,6 +218,19 @@ gapi.analytics.ready(function() {
     viewSelector.execute();
   });
 
+  /**
+   * Create a new DateRangeSelector instance to be rendered inside of an
+   * element with the id "date-range-selector-container".
+   */
+
+   var dateRangeSelector = new gapi.analytics.ext.DateRangeSelector({
+      container: 'date-range-selector-container'
+    })
+    .set({'start-date': '2014-12-08',
+      'end-date':  '2014-12-14',
+    })
+    .execute();
+
    /**
    * Create a new ViewSelector2 instance to be rendered inside of an
    * element with the id "view-selector-container".
@@ -222,33 +245,17 @@ gapi.analytics.ready(function() {
     var title = document.getElementById('view-name');
     title.innerHTML = data.property.name + ' (' + data.view.name + ')';
 
-    var startDateCurrentWeek = '2014-12-01';
-    var endDateCurrentWeek = '2014-12-07';
-    var startDatePreviousWeek = '2014-11-24';
-    var endDatePreviousWeek = '2014-11-30';
+    var startDate = '2014-12-08';
+    var endDate = '2014-12-14';
 
 
-    renderWeekOverWeekChart(data.ids, startDateCurrentWeek, endDateCurrentWeek,
-                            startDatePreviousWeek, endDatePreviousWeek);
+    renderWeekOverWeekChart(data.ids, startDate, endDate);
 
-    renderYearOverYearChart(data.ids, endDateCurrentWeek);
+    _.delay(renderWeekOverWeekSessionDurationChart, 500 + Math.random()*500, data.ids, startDate, endDate);
 
+    _.delay(renderWeekContentUsageChart, 500 + Math.random()*500, data.ids, startDate, endDate);
 
-
-    renderWeekOverWeekSessionDurationChart(data.ids, startDateCurrentWeek, endDateCurrentWeek,
-                            startDatePreviousWeek, endDatePreviousWeek);
-
-    renderYearOverYearSessionDurationChart(data.ids, endDateCurrentWeek);
-
-
-
-    renderWeekContentUsageChart(data.ids, startDateCurrentWeek, endDateCurrentWeek);
-
-
-
-    renderTopBrowsersPeriod(data.ids, startDateCurrentWeek, endDateCurrentWeek);
-
-    renderTopBrowsersYear(data.ids, endDateCurrentWeek);
+    _.delay(renderTopBrowsersPeriod, 500 + Math.random()*500,data.ids, startDate, endDate);
 
   });
 
