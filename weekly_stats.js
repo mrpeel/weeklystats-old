@@ -324,17 +324,19 @@
   //build month labels for 6 time periods
   var monthLabels =[];
 
-  for (var i = 3; i >=0; i++) {
-    monthLabels.push(moment(endDate)subtract((i*3) + 3, 'months').date(1).format('MMM')
-      + '/' + moment(endDate)subtract((i*3) + 1, 'months').date(1).format('MMM'));
+  for (var i = 3; i >=0; i--) {
+    monthLabels.push(moment(endDate).subtract((i*3) + 3, 'months').date(1).format('mmm')
+      + '-' + moment(endDate).subtract((i*3) + 1, 'months').date(1).format('mmm'));
   }
 
 
 
-  var firstPeriodResults =[];
-  var secondPeriodResults =[];
-  var thirdPeriodResults =[];
-  var fourthPeriodResults =[];
+  var pageOneResults =[];
+  var pageTwoResults =[];
+  var pageThreeResults =[];
+  var pageFourResults =[];
+  var pageFiveResults =[];
+  var pageSixResults =[];
 
 
     query({
@@ -410,7 +412,7 @@
    */
   function renderTopBrowsersPeriod(ids, startDate, endDate) {
 
-    query({
+    /*query({
       'ids': ids,
       'dimensions': 'ga:browser',
       'metrics': 'ga:pageviews',
@@ -436,6 +438,38 @@
       .catch(function(err) {
       console.error(err.error.message);
     })
+    */
+
+    /** Blocking call
+     */
+
+    executeQuery({
+      'ids': ids,
+      'dimensions': 'ga:browser',
+      'metrics': 'ga:pageviews',
+      'start-date': startDate,
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 5
+    },
+    function(response) {
+
+      var data = [];
+      var colors = ['#FEADAD','#ADD7FE','#BBFEAD','#ADFEEB','#FEFCAD'];
+
+      response.rows.forEach(function(row, i) {
+        data.push({ value: +row[1], color: colors[i], label: row[0] });
+      });
+
+      new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
+      generateLegend('weekly-browser-legend-container', data);
+
+      _.delay(renderTopBrowsersYear, 500 + Math.random()*500, ids, endDate);
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
   }
 
 
@@ -445,7 +479,7 @@
    */
   function renderTopBrowsersYear(ids, endDate) {
 
-    query({
+    executeQuery({
       'ids': ids,
       'dimensions': 'ga:browser',
       'metrics': 'ga:pageviews',
@@ -453,8 +487,8 @@
       'end-date': endDate,
       'sort': '-ga:pageviews',
       'max-results': 5
-    })
-    .then(function(response) {
+    },
+    function(response) {
 
       var data = [];
       var colors = ['#FFC399','#A3FF99','#99FFD9','#99C8FF','#B199FF'];
@@ -465,18 +499,35 @@
 
       new Chart(makeCanvas('yearly-browser-chart-container')).Doughnut(data);
       generateLegend('yearly-browser-legend-container', data);
-    })
-    .catch(function(err) {
+    },
+    function(err) {
       console.error(err.error.message);
-    })
+    });
 
   }
+
+ /** This function uses the Embed APIs `gapi.analytics.report.Data` component to
+  * return data by waiting for the results which blocks other processing.
+  * This allows the function to be called on a time delay to avoid breaking
+  * the API rate limit inside complex calculations
+  */
+
+  function executeQuery(queryParams, successFunction, errorFunction) {
+
+        var data = new gapi.analytics.report.Data({query: queryParams});
+
+        data.once('success', successFunction)
+            .once('error', errorFunction)
+            .execute();
+    }
+
 
   /**
      * Extend the Embed APIs `gapi.analytics.report.Data` component to
      * return a promise the is fulfilled with the value returned by the API.
      * @param {Object} params The request parameters.
      * @return {Promise} A promise.
+     */
 
     function query(params) {
       return new Promise(function(resolve, reject) {
@@ -486,21 +537,6 @@
             .once('error', function(response) { reject(response); })
             .execute();
       });
-    } */
-
-
-    function query(params) {
-      var queryPromise = new Promise(function(resolve, reject) {
-        var data = new gapi.analytics.report.Data({query: params});
-
-        window.setTimeout(function(){},5000)
-
-        data.once('success', function(response) { resolve(response); })
-            .once('error', function(response) { reject(response); })
-            .execute();
-      });
-
-      return queryPromise;
     }
 
 
