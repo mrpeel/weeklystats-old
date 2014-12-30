@@ -263,7 +263,7 @@
 
     var topPageNames = [];
 
-    query({
+    delayedExecuteQuery({
       'ids': ids,
       'dimensions': 'ga:pageTitle',
       'metrics': 'ga:pageviews',
@@ -272,9 +272,8 @@
       'end-date':  endDate,
       'sort': '-ga:pageviews',
       'max-results': 6
-
-    })
-    .then(function(response) {
+    },
+    function(response) {
 
       var data = [];
       var labels = [];
@@ -300,10 +299,10 @@
 
       _.delay(renderMonthlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
 
-    })
-    .catch(function(err) {
+    },
+    function(err) {
       console.error(err.error.message);
-    })
+    });
 
   }
 
@@ -321,54 +320,93 @@
   * 1st day of 3 months ago - last day of last month
   */
 
-  //build month labels for 6 time periods
+  //Build page query string
+  var pageQuery = '';
+
+  topPages.forEach(function(element, index, array) {
+    if(index>0)
+      pageQuery = pageQuery + ',';
+    pageQuery = pageQuery + 'ga:pageTitle==' + element;
+    });
+
+  var colors = ['#4D5360','#949FB1','#D4CCC5','#ADD7FE','#FEADAD','#C1FEC2', '#C1FEE3', '#FFF9D1', '#F1FFD1', '#D1FFD1', '#D1FFEA'];
+  var pageData = {};
+
+
+  /**Build month labels and time periods for 4 query periods
+   * then run the query for the defined period and collate the results
+   */
   var monthLabels =[];
-
-  for (var i = 3; i >=0; i--) {
-    monthLabels.push(moment(endDate).subtract((i*3) + 3, 'months').date(1).format('mmm')
-      + '-' + moment(endDate).subtract((i*3) + 1, 'months').date(1).format('mmm'));
-  }
+  var periodDates = [];
 
 
+  for (var qCalculator = 3, dataCounter = 0; qCalculator >=0; qCalculator--, dataCounter++) {
+    monthLabels.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('MMM')
+      + '-' + moment(endDate).subtract((qCalculator*3) + 1, 'months').date(1).format('MMM'));
 
-  var pageOneResults =[];
-  var pageTwoResults =[];
-  var pageThreeResults =[];
-  var pageFourResults =[];
-  var pageFiveResults =[];
-  var pageSixResults =[];
-
-
-    query({
+    delayedExecuteQuery({
       'ids': ids,
       'dimensions': 'ga:pageTitle',
       'metrics': 'ga:pageviews',
-      'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
-      'start-date': moment(endDate).subtract(1, 'year').date(1).format('YYYY-MM-DD'),
-      'end-date':  endDate,
-      'sort': '-ga:pageviews',
-      'max-results': 10
+      'filters': pageQuery,
+      'start-date': moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('YYYY-MM-DD'),
+      'end-date': moment(endDate).subtract((qCalculator*3) + 1, 'months').date(1).format('YYYY-MM-DD')
+    },
+    function(response) {
 
-    })
-    .then(function(response) {
+      //map the values into the page results data sets
 
-      var data = [];
-      var labels = [];
-      var datasets = [];
-      var colors = ['#4D5360','#949FB1','#D4CCC5','#ADD7FE','#FEADAD','#C1FEC2', '#C1FEE3', '#FFF9D1', '#F1FFD1', '#D1FFD1', '#D1FFEA'];
+      //initially set all pages to not being found in results
+      var valsFound = [];
 
-      response.rows.forEach(function(row, i) {
-        //labels.push(row[0]);
-        labels.push('');
-        datasets.push(  {
-                        label: row[0],
-                        fillColor: colors[i],
-                        strokeColor: colors[i],
-                        data: [+row[1]]
-                      }  );
+      topPages.forEach(function(element, index, array) {
+        valsFound.push(false);
+        });
+
+      //iterate through results, map in values and set the value as being found
+      response.rows.forEach(function(row, r) {
+
+        //Find the position of the returned value in the topPages array
+        var pagePos = topPages.indexOf(row[0]);
+
+        if(pagePos>-1){
+          //set value has been found
+          valsFound[pagePos] = true;
+          pageData['page' + pagePos].push(+row[1]);
+          }
+        });
+
+    /** Sum values and check for any missing values.
+     *  If value is missing from result set, map a 0 value in
+     */
+    var sumValues = 0;
+
+    topPages.forEach(function(element, index, array) {
+      if(valsFound[index]==false)
+        pageData['page' + index].push(0);
+      else
+        sumValues = sumValues + pageData['page' + index][dataCounter];
       });
 
-      data = {labels: labels, datasets: datasets};
+    /** Adjust each value to make it a percentage of the total rather
+     *  than the raw number.  This will allow comparisons over time
+     *  periods where there is a large variation in the raw numbers.
+     */
+      if(sumValues>0){
+        topPages.forEach(function(element, index, array) {
+          pageData['page' + index][dataCounter] = pageData['page' + index][dataCounter] / sumValues * 100;
+          });
+        }
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+  } //end quarters for loop
+
+
+  console.log pageData;
+  /**Build the line chart
 
       var data = {
         labels : monthLabels,
@@ -396,11 +434,8 @@
 
       new Chart(makeCanvas('monthly-content-chart-container')).Line(data);
       generateLegend('monthly-content-legend-container', data.datasets);
+  */
 
-    })
-    .catch(function(err) {
-      console.error(err.error.message);
-    })
 
   }
 
@@ -443,7 +478,7 @@
     /** Blocking call
      */
 
-    executeQuery({
+    delayedExecuteQuery({
       'ids': ids,
       'dimensions': 'ga:browser',
       'metrics': 'ga:pageviews',
@@ -464,7 +499,6 @@
       new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
       generateLegend('weekly-browser-legend-container', data);
 
-      _.delay(renderTopBrowsersYear, 500 + Math.random()*500, ids, endDate);
     },
     function(err) {
       console.error(err.error.message);
@@ -479,7 +513,7 @@
    */
   function renderTopBrowsersYear(ids, endDate) {
 
-    executeQuery({
+    delayedExecuteQuery({
       'ids': ids,
       'dimensions': 'ga:browser',
       'metrics': 'ga:pageviews',
@@ -505,6 +539,17 @@
     });
 
   }
+
+/** This function wraps the executeQuery function in a delay
+ * between 500 - 1000ms to allow repeated calls to the Embed API
+ * without breaking the rate limit
+ */
+  function delayedExecuteQuery(queryParams, successFunction, errorFunction) {
+
+    _.delay(executeQuery, 500 + Math.random()*500, queryParams, successFunction, errorFunction);
+
+  }
+
 
  /** This function uses the Embed APIs `gapi.analytics.report.Data` component to
   * return data by waiting for the results which blocks other processing.

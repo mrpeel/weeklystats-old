@@ -253,9 +253,10 @@ gapi.analytics.ready(function() {
 
     _.delay(renderWeekOverWeekSessionDurationChart, 500 + Math.random()*500, data.ids, startDate, endDate);
 
-    _.delay(renderWeekContentUsageChart, 500 + Math.random()*500, data.ids, startDate, endDate);
+    renderWeekContentUsageChart(data.ids, startDate, endDate);
 
-    _.delay(renderTopBrowsersPeriod, 500 + Math.random()*500,data.ids, startDate, endDate);
+    renderTopBrowsersPeriod(data.ids, startDate, endDate);
+    renderTopBrowsersYear(data.ids, endDate);
 
   });
 
