@@ -114,12 +114,12 @@
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">Month Content Usage Comparison</h1>
+  					<h1 class="Titles-main">Quaterly Content Usage Comparison</h1>
   					<div class="Titles-sub">By percentage of page views</div>
   				</header>
-  				<figure class="Chartjs-figure" id="monthly-content-chart-container"/>
+  				<figure class="Chartjs-figure" id="quarterly-content-chart-container"/>
   			</div>
-  		<div class="Chartjs-legend" id="monthly-content-legend-container"/>
+  		<div class="Chartjs-legend" id="quarterly-content-legend-container"/>
   		</li>
 
   		<li class="FlexGrid-item">
@@ -136,12 +136,12 @@
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">Past Year Browser Comparison</h1>
-  					<div class="Titles-sub">By page views</div>
+  					<h1 class="Titles-main">Quarterly Browser Comparison</h1>
+  					<div class="Titles-sub">By percentage of page views</div>
   				</header>
-  				<figure class="Chartjs-figure" id="yearly-browser-chart-container"/>
+  				<figure class="Chartjs-figure" id="quarterly-browser-chart-container"/>
   			</div>
-  		<div class="Chartjs-legend" id="yearly-browser-legend-container"/>
+  		<div class="Chartjs-legend" id="quarterly-browser-legend-container"/>
   		</li>
 
   		<li class="FlexGrid-item">
@@ -150,22 +150,43 @@
   					<h1 class="Titles-main">Week Internet Explorer Comparison</h1>
   					<div class="Titles-sub">By page views</div>
   				</header>
-          <figure class="Chartjs-figure" id="weekly-ieversionr-chart-container"/>
+          <figure class="Chartjs-figure" id="weekly-ieversion-chart-container"/>
         </div>
-        <div class="Chartjs-legend" id="weekly-ieversionr-legend-container"/>
+        <div class="Chartjs-legend" id="weekly-ieversion-legend-container"/>
       </li>
 
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">Quarterly Internet Explorer Comparison</h1>
-  					<div class="Titles-sub">By page views</div>
+  					<div class="Titles-sub">By percentage of page views</div>
   				</header>
-  				<figure class="Chartjs-figure" id="chart-6-container"/>
+  				<figure class="Chartjs-figure" id="quarterly-ieversion-chart-container"/>
   			</div>
-  		<div class="Chartjs-legend" id="legend-6-container"/>
+  		<div class="Chartjs-legend" id="quarterly-ieversion-legend-container"/>
   		</li>
 
+  		<li class="FlexGrid-item">
+  		  <div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Week Firefox Comparison</h1>
+  					<div class="Titles-sub">By page views</div>
+  				</header>
+          <figure class="Chartjs-figure" id="weekly-firefoxversion-chart-container"/>
+        </div>
+        <div class="Chartjs-legend" id="weekly-firefoxversion-legend-container"/>
+      </li>
+
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Quarterly Firefox Comparison</h1>
+  					<div class="Titles-sub">By percentage of page views</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="quarterly-firefoxversion-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="quarterly-firefoxversion-legend-container"/>
+  		</li>
   </ul>
 
 </div>
@@ -249,12 +270,15 @@ gapi.analytics.ready(function() {
 
     renderWeekOverWeekChart(data.ids, startDate, endDate);
 
-    delay(renderWeekOverWeekSessionDurationChart, 500 + Math.random()*500, data.ids, startDate, endDate);
+    renderWeekOverWeekSessionDurationChart(data.ids, startDate, endDate);
 
     renderWeekContentUsageChart(data.ids, startDate, endDate);
 
     renderTopBrowsersPeriod(data.ids, startDate, endDate);
-    renderTopBrowsersYear(data.ids, endDate);
+
+    renderIEVersionPeriod(data.ids, startDate, endDate);
+
+    renderFirefoxVersionPeriod(data.ids, startDate, endDate);
 
   });
 

@@ -1,4 +1,12 @@
 
+/** Globally used colour pallete for chart fills
+ */
+  var fillColors = ['rgba(115,115,115,0.33)','rgba(241,90,96,0.33)','rgba(122,195,106,0.33)','rgba(90,155,212,0.33)','rgba(250,167,91,0.33)','rgba(158,103,171,0.33)',
+                    'rgba(193,254,227,0.33)', 'rgba(215,127,80,0.33)'];
+  var strokeColors = ['rgba(115,115,115,0.9)','rgba(241,90,96,0.9)','rgba(122,195,106,0.9)','rgba(90,155,212,0.9)','rgba(250,167,91,0.9)','rgba(158,103,171,0.9)',
+                    'rgba(193,254,227,0.9)', 'rgba(215,127,80,0.9)'];
+
+
   function renderWeekOverWeekChart(ids, startDate, endDate) {
 
 
@@ -37,17 +45,17 @@
             //Set week ending date
             //label: 'Last Week',
             label: 'Week Starting ' + moment(startDate).subtract(7, 'days').format('DD/MM/YYYY'),
-            fillColor : "rgba(220,220,220,0.5)",
-            strokeColor : "rgba(220,220,220,1)",
-            pointColor : "rgba(220,220,220,1)",
+            fillColor : fillColors[0],
+            strokeColor : strokeColors[0],
+            pointColor : strokeColors[0],
             pointStrokeColor : "#fff",
             data : data2
           },
           {
             label: 'Week Starting ' + moment(startDate).format('DD/MM/YYYY'),
-            fillColor : "rgba(151,187,205,0.5)",
-            strokeColor : "rgba(151,187,205,1)",
-            pointColor : "rgba(151,187,205,1)",
+            fillColor : fillColors[1],
+            strokeColor : strokeColors[1],
+            pointColor : strokeColors[1],
             pointStrokeColor : "#fff",
             data : data1
           }
@@ -105,14 +113,14 @@
           datasets : [
             {
               label: 'Last Year',
-              fillColor : "rgba(220,220,220,0.5)",
-              strokeColor : "rgba(220,220,220,1)",
+              fillColor : fillColors[0],
+              strokeColor : strokeColors[0],
               data : data2
             },
             {
               label: 'This Year',
-              fillColor : "rgba(151,187,205,0.5)",
-              strokeColor : "rgba(151,187,205,1)",
+              fillColor : fillColors[1],
+              strokeColor : strokeColors[1],
               data : data1
             }
           ]
@@ -164,17 +172,17 @@
             //Set week ending date
             //label: 'Last Week',
             label: 'Week Starting ' + moment(startDate).format('DD/MM/YYYY'),
-            fillColor : "rgba(220,220,220,0.5)",
-            strokeColor : "rgba(220,220,220,1)",
-            pointColor : "rgba(220,220,220,1)",
+            fillColor : fillColors[0],
+            strokeColor : strokeColors[0],
+            pointColor : strokeColors[0],
             pointStrokeColor : "#fff",
             data : data2
           },
           {
             label: 'Week Starting ' + moment(startDate).subtract(7, 'days').format('DD/MM/YYYY'),
-            fillColor : "rgba(151,187,205,0.5)",
-            strokeColor : "rgba(151,187,205,1)",
-            pointColor : "rgba(151,187,205,1)",
+            fillColor : fillColors[1],
+            strokeColor : strokeColors[1],
+            pointColor : strokeColors[1],
             pointStrokeColor : "#fff",
             data : data1
           }
@@ -233,14 +241,14 @@
           datasets : [
             {
               label: 'Last Year',
-              fillColor : "rgba(220,220,220,0.5)",
-              strokeColor : "rgba(220,220,220,1)",
+              fillColor : fillColors[0],
+              strokeColor : strokeColors[0],
               data : data2
             },
             {
               label: 'This Year',
-              fillColor : "rgba(151,187,205,0.5)",
-              strokeColor : "rgba(151,187,205,1)",
+              fillColor : fillColors[1],
+              strokeColor : strokeColors[1],
               data : data1
             }
           ]
@@ -271,22 +279,21 @@
       'start-date': startDate,
       'end-date':  endDate,
       'sort': '-ga:pageviews',
-      'max-results': 6
+      'max-results': 5
     },
     function(response) {
 
       var data = [];
       var labels = [];
       var datasets = [];
-      var colors = ['#4D5360','#949FB1','#D4CCC5','#ADD7FE','#FEADAD','#C1FEC2'];
 
       response.rows.forEach(function(row, i) {
         //labels.push(row[0]);
         labels.push('');
         datasets.push(  {
                         label: row[0],
-                        fillColor: colors[i],
-                        strokeColor: colors[i],
+                        fillColor: fillColors[i],
+                        strokeColor: strokeColors[i],
                         data: [+row[1]]
                       } );
         topPageNames.push(row[0]);
@@ -297,7 +304,7 @@
       new Chart(makeCanvas('weekly-content-chart-container')).Bar(data, {barDatasetSpacing : 10});
       generateLegend('weekly-content-legend-container', data.datasets);
 
-      delay(renderMonthlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
+      delay(renderQuarterlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
 
     },
     function(err) {
@@ -308,10 +315,10 @@
 
 
 /**
-   * Draw the a chart.js doughnut chart with data from the specified view that
-   * shows the content for the week.
+   * Draw the a line chart with data from the specified view that
+   * shows the top content over the last year.
    */
-  function renderMonthlyContentUsageChart(ids, endDate, topPages) {
+  function renderQuarterlyContentUsageChart(ids, endDate, topPages) {
 
   /* Use top 4 pages for last week and run queries for
   * 1st day of 12 months ago - last day of 10 months ago
@@ -333,8 +340,6 @@
     //Initialise array to hold values for page
     pageData['val' + index] = [];
     });
-
-  var colors = ['#4D5360','#949FB1','#D4CCC5','#ADD7FE','#FEADAD','#C1FEC2', '#C1FEE3', '#FFF9D1', '#F1FFD1', '#D1FFD1', '#D1FFEA'];
 
 
 
@@ -417,9 +422,9 @@
                 //Build data set for each page
                 data.datasets[index] = {
                             label: element,
-                            fillColor: colors[index],
-                            strokeColor: colors[index],
-                            pointColor : "rgba(220,220,220,1)",
+                            fillColor: fillColors[index],
+                            strokeColor: strokeColors[index],
+                            pointColor : strokeColors[index],
                             pointStrokeColor : "#fff",
                             data: pageData['val' + index]
                             };
@@ -427,10 +432,9 @@
 
 
 
-              new Chart(makeCanvas('monthly-content-chart-container')).Line(data);
-              generateLegend('monthly-content-legend-container', data.datasets);
+              new Chart(makeCanvas('quarterly-content-chart-container')).Line(data);
+              generateLegend('quarterly-content-legend-container', data.datasets);
 
-              console.log(pageData);
           },
           function(err) {
           console.error(err.error.message);
@@ -450,13 +454,555 @@
 
 
 
+  }
 
 
 
+ /**
+   * Draw the a chart.js doughnut chart with data from the specified view that
+   * show the top 5 browsers.
+   */
+  function renderTopBrowsersPeriod(ids, startDate, endDate) {
 
+    var topBrowsers = [];
+
+    delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browser',
+      'metrics': 'ga:pageviews',
+      'start-date': startDate,
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 5
+    },
+    function(response) {
+
+      var data = [];
+
+
+      response.rows.forEach(function(row, i) {
+        data.push({ value: +row[1], color: fillColors[i], label: row[0] });
+        topBrowsers.push(row[0]);
+      });
+
+      new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
+      generateLegend('weekly-browser-legend-container', data);
+
+      delay(renderQuarterlyBrowserUsageChart, 500 + Math.random()*500, ids, endDate, topBrowsers);
+
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+  }
+
+
+ /**
+   * Draw the line chart with data from the specified view that
+   * show the top 5 browsers over the last year.
+   */
+  function renderQuarterlyBrowserUsageChart(ids, endDate, topBrowsers) {
+
+ /* Use top 4 pages for last week and run queries for
+  * 1st day of 12 months ago - last day of 10 months ago
+  * 1st day of 9 months ago - last day of 7 months ago
+  * 1st day of 6 months ago - last day of 4 months ago
+  * 1st day of 3 months ago - last day of last month
+  */
+
+  //Build browser query string and initialise arrays for holding the data
+  var browserQuery = '';
+  var pageData = {};
+
+  topBrowsers.forEach(function(element, index, array) {
+    //Add page to query string
+    if(index>0)
+      browserQuery = browserQuery + ',';
+    browserQuery = browserQuery + 'ga:browser==' + element;
+
+    //Initialise array to hold values for page
+    pageData['val' + index] = [];
+    });
+
+
+
+  /**Build month labels and time periods for 4 query periods
+   * then run the query for the defined period and collate the results
+   */
+  var monthLabels =[];
+  var periodDates = [];
+
+
+  for (var qCalculator = 3, dataCounter = 0; qCalculator >=0; qCalculator--, dataCounter++) {
+    monthLabels.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('MMM')
+      + '-' + moment(endDate).subtract((qCalculator*3) + 1, 'months').date(1).format('MMM'));
+
+   periodDates.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('YYYY-MM-DD'));
+   periodDates.push(moment(endDate).subtract((qCalculator*3), 'months').date(1).subtract(1, 'days').format('YYYY-MM-DD'));
+  }
+
+
+  //Retrieve results for each quarter
+
+  delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browser',
+      'metrics': 'ga:pageviews',
+      'filters': browserQuery,
+      'start-date': periodDates[0],
+      'end-date': periodDates[1]
+    },
+    function(response) {
+
+      pageData = processResults(response, pageData, topBrowsers);
+
+      //Run the Q2 query
+      delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browser',
+      'metrics': 'ga:pageviews',
+      'filters': browserQuery,
+      'start-date': periodDates[2],
+      'end-date': periodDates[3]
+      },
+      function(response) {
+
+        pageData = processResults(response, pageData, topBrowsers);
+
+        //Run the Q3 query
+        delayedExecuteQuery({
+        'ids': ids,
+        'dimensions': 'ga:browser',
+        'metrics': 'ga:pageviews',
+        'filters': browserQuery,
+        'start-date': periodDates[4],
+        'end-date': periodDates[5]
+        },
+        function(response) {
+
+          pageData = processResults(response, pageData, topBrowsers);
+
+          //Run the Q4 query
+          delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:browser',
+          'metrics': 'ga:pageviews',
+          'filters': browserQuery,
+          'start-date': periodDates[6],
+          'end-date': periodDates[7]
+          },
+          function(response) {
+              pageData = processResults(response, pageData, topBrowsers);
+
+              //Build the report
+              var data = {
+                labels : monthLabels,
+                datasets : []
+              };
+
+               topBrowsers.forEach(function(element, index, array) {
+
+                //Build data set for each page
+                data.datasets[index] = {
+                            label: element,
+                            fillColor: fillColors[index],
+                            strokeColor: strokeColors[index],
+                            pointColor : strokeColors[index],
+                            pointStrokeColor : "#fff",
+                            data: pageData['val' + index]
+                            };
+                });
+
+
+
+              new Chart(makeCanvas('quarterly-browser-chart-container')).Line(data);
+              generateLegend('quarterly-browser-legend-container', data.datasets);
+
+          },
+          function(err) {
+          console.error(err.error.message);
+          });
+        },
+        function(err) {
+        console.error(err.error.message);
+        });
+      },
+      function(err) {
+      console.error(err.error.message);
+      });
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
 
 
   }
+
+
+  /**
+   * Draw the a chart.js doughnut chart with data from the specified view that
+   * show the top 5 IE Browser versions.
+   */
+  function renderIEVersionPeriod(ids, startDate, endDate) {
+
+    var topVersions = [];
+
+    delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browserVersion',
+      'metrics': 'ga:pageviews',
+      'filters': 'ga:browser==Internet Explorer',
+      'start-date': startDate,
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 5
+    },
+    function(response) {
+
+      var data = [];
+
+      response.rows.forEach(function(row, i) {
+        data.push({ value: +row[1], color: fillColors[i], label: row[0] });
+        topVersions.push(row[0]);
+      });
+
+      new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data);
+      generateLegend('weekly-ieversion-legend-container', data);
+
+      delay(renderQuarterlyIEVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
+
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+  }
+
+
+ /**
+   * Draw the line chart with data from the specified view that
+   * show the top 5 IE Browser versions over the last year.
+   */
+  function renderQuarterlyIEVersionUsageChart(ids, endDate, topVersions) {
+
+ /* Use top 4 pages for last week and run queries for
+  * 1st day of 12 months ago - last day of 10 months ago
+  * 1st day of 9 months ago - last day of 7 months ago
+  * 1st day of 6 months ago - last day of 4 months ago
+  * 1st day of 3 months ago - last day of last month
+  */
+
+  //Build browser query string and initialise arrays for holding the data
+  var browserQuery = 'ga:browser==Internet Explorer;';
+  var pageData = {};
+
+  topVersions.forEach(function(element, index, array) {
+    //Add page to query string
+    if(index>0)
+      browserQuery = browserQuery + ',';
+    browserQuery = browserQuery + 'ga:browserVersion==' + element;
+
+    //Initialise array to hold values for page
+    pageData['val' + index] = [];
+    });
+
+
+
+  /**Build month labels and time periods for 4 query periods
+   * then run the query for the defined period and collate the results
+   */
+  var monthLabels =[];
+  var periodDates = [];
+
+
+  for (var qCalculator = 3, dataCounter = 0; qCalculator >=0; qCalculator--, dataCounter++) {
+    monthLabels.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('MMM')
+      + '-' + moment(endDate).subtract((qCalculator*3) + 1, 'months').date(1).format('MMM'));
+
+   periodDates.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('YYYY-MM-DD'));
+   periodDates.push(moment(endDate).subtract((qCalculator*3), 'months').date(1).subtract(1, 'days').format('YYYY-MM-DD'));
+  }
+
+
+  //Retrieve results for each quarter
+
+  delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browserVersion',
+      'metrics': 'ga:pageviews',
+      'filters': browserQuery,
+      'start-date': periodDates[0],
+      'end-date': periodDates[1]
+    },
+    function(response) {
+
+      pageData = processResults(response, pageData, topVersions);
+
+      //Run the Q2 query
+      delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browserVersion',
+      'metrics': 'ga:pageviews',
+      'filters': browserQuery,
+      'start-date': periodDates[2],
+      'end-date': periodDates[3]
+      },
+      function(response) {
+
+        pageData = processResults(response, pageData, topVersions);
+
+        //Run the Q3 query
+        delayedExecuteQuery({
+        'ids': ids,
+        'dimensions': 'ga:browserVersion',
+        'metrics': 'ga:pageviews',
+        'filters': browserQuery,
+        'start-date': periodDates[4],
+        'end-date': periodDates[5]
+        },
+        function(response) {
+
+          pageData = processResults(response, pageData, topVersions);
+
+          //Run the Q4 query
+          delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:browserVersion',
+          'metrics': 'ga:pageviews',
+          'filters': browserQuery,
+          'start-date': periodDates[6],
+          'end-date': periodDates[7]
+          },
+          function(response) {
+              pageData = processResults(response, pageData, topVersions);
+
+              //Build the report
+              var data = {
+                labels : monthLabels,
+                datasets : []
+              };
+
+               topVersions.forEach(function(element, index, array) {
+
+                //Build data set for each page
+                data.datasets[index] = {
+                            label: element,
+                            fillColor: fillColors[index],
+                            strokeColor: strokeColors[index],
+                            pointColor : strokeColors[index],
+                            pointStrokeColor : "#fff",
+                            data: pageData['val' + index]
+                            };
+                });
+
+
+
+              new Chart(makeCanvas('quarterly-ieversion-chart-container')).Line(data);
+              generateLegend('quarterly-ieversion-legend-container', data.datasets);
+
+          },
+          function(err) {
+          console.error(err.error.message);
+          });
+        },
+        function(err) {
+        console.error(err.error.message);
+        });
+      },
+      function(err) {
+      console.error(err.error.message);
+      });
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+
+  }
+
+
+ /**
+   * Draw the a chart.js doughnut chart with data from the specified view that
+   * show the top 5 Firefox Browser versions.
+   */
+  function renderFirefoxVersionPeriod(ids, startDate, endDate) {
+
+    var topVersions = [];
+
+    delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browserVersion',
+      'metrics': 'ga:pageviews',
+      'filters': 'ga:browser==Firefox',
+      'start-date': startDate,
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 5
+    },
+    function(response) {
+
+      var data = [];
+
+      response.rows.forEach(function(row, i) {
+        data.push({ value: +row[1], color: fillColors[i], label: row[0] });
+        topVersions.push(row[0]);
+      });
+
+      new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data);
+      generateLegend('weekly-firefoxversion-legend-container', data);
+
+      delay(renderQuarterlyFirefoxVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
+
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+  }
+
+
+ /**
+   * Draw the line chart with data from the specified view that
+   * show the top 5 Firefox Browser versions over the last year.
+   */
+  function renderQuarterlyFirefoxVersionUsageChart(ids, endDate, topVersions) {
+
+ /* Use top 4 pages for last week and run queries for
+  * 1st day of 12 months ago - last day of 10 months ago
+  * 1st day of 9 months ago - last day of 7 months ago
+  * 1st day of 6 months ago - last day of 4 months ago
+  * 1st day of 3 months ago - last day of last month
+  */
+
+  //Build browser query string and initialise arrays for holding the data
+  var browserQuery = 'ga:browser==Firefox;';
+  var pageData = {};
+
+  topVersions.forEach(function(element, index, array) {
+    //Add page to query string
+    if(index>0)
+      browserQuery = browserQuery + ',';
+    browserQuery = browserQuery + 'ga:browserVersion==' + element;
+
+    //Initialise array to hold values for page
+    pageData['val' + index] = [];
+    });
+
+
+
+  /**Build month labels and time periods for 4 query periods
+   * then run the query for the defined period and collate the results
+   */
+  var monthLabels =[];
+  var periodDates = [];
+
+
+  for (var qCalculator = 3, dataCounter = 0; qCalculator >=0; qCalculator--, dataCounter++) {
+    monthLabels.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('MMM')
+      + '-' + moment(endDate).subtract((qCalculator*3) + 1, 'months').date(1).format('MMM'));
+
+   periodDates.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('YYYY-MM-DD'));
+   periodDates.push(moment(endDate).subtract((qCalculator*3), 'months').date(1).subtract(1, 'days').format('YYYY-MM-DD'));
+  }
+
+
+  //Retrieve results for each quarter
+
+  delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browserVersion',
+      'metrics': 'ga:pageviews',
+      'filters': browserQuery,
+      'start-date': periodDates[0],
+      'end-date': periodDates[1]
+    },
+    function(response) {
+
+      pageData = processResults(response, pageData, topVersions);
+
+      //Run the Q2 query
+      delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browserVersion',
+      'metrics': 'ga:pageviews',
+      'filters': browserQuery,
+      'start-date': periodDates[2],
+      'end-date': periodDates[3]
+      },
+      function(response) {
+
+        pageData = processResults(response, pageData, topVersions);
+
+        //Run the Q3 query
+        delayedExecuteQuery({
+        'ids': ids,
+        'dimensions': 'ga:browserVersion',
+        'metrics': 'ga:pageviews',
+        'filters': browserQuery,
+        'start-date': periodDates[4],
+        'end-date': periodDates[5]
+        },
+        function(response) {
+
+          pageData = processResults(response, pageData, topVersions);
+
+          //Run the Q4 query
+          delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:browserVersion',
+          'metrics': 'ga:pageviews',
+          'filters': browserQuery,
+          'start-date': periodDates[6],
+          'end-date': periodDates[7]
+          },
+          function(response) {
+              pageData = processResults(response, pageData, topVersions);
+
+              //Build the report
+              var data = {
+                labels : monthLabels,
+                datasets : []
+              };
+
+               topVersions.forEach(function(element, index, array) {
+
+                //Build data set for each page
+                data.datasets[index] = {
+                            label: element,
+                            fillColor: fillColors[index],
+                            strokeColor: strokeColors[index],
+                            pointColor : strokeColors[index],
+                            pointStrokeColor : "#fff",
+                            data: pageData['val' + index]
+                            };
+                });
+
+
+
+              new Chart(makeCanvas('quarterly-firefoxversion-chart-container')).Line(data);
+              generateLegend('quarterly-firefoxversion-legend-container', data.datasets);
+
+          },
+          function(err) {
+          console.error(err.error.message);
+          });
+        },
+        function(err) {
+        console.error(err.error.message);
+        });
+      },
+      function(err) {
+      console.error(err.error.message);
+      });
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+
+  }
+
 
   /** Function to process page results.  Takes each result and finds its position in the referenceData
    * array, then maps in the value to the dataStore set.  It then sums all the values, enters 0s
@@ -519,106 +1065,6 @@
 
 
 
-
-
- /**
-   * Draw the a chart.js doughnut chart with data from the specified view that
-   * show the top 5 browsers.
-   */
-  function renderTopBrowsersPeriod(ids, startDate, endDate) {
-
-    /*query({
-      'ids': ids,
-      'dimensions': 'ga:browser',
-      'metrics': 'ga:pageviews',
-      'start-date': startDate,
-      'end-date':  endDate,
-      'sort': '-ga:pageviews',
-      'max-results': 5
-    })
-    .then(function(response) {
-
-      var data = [];
-      var colors = ['#FEADAD','#ADD7FE','#BBFEAD','#ADFEEB','#FEFCAD'];
-
-      response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: colors[i], label: row[0] });
-      });
-
-      new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
-      generateLegend('weekly-browser-legend-container', data);
-
-      delay(renderTopBrowsersYear, 500 + Math.random()*500, ids, endDate);
-    })
-      .catch(function(err) {
-      console.error(err.error.message);
-    })
-    */
-
-    /** Blocking call
-     */
-
-    delayedExecuteQuery({
-      'ids': ids,
-      'dimensions': 'ga:browser',
-      'metrics': 'ga:pageviews',
-      'start-date': startDate,
-      'end-date':  endDate,
-      'sort': '-ga:pageviews',
-      'max-results': 5
-    },
-    function(response) {
-
-      var data = [];
-      var colors = ['#FEADAD','#ADD7FE','#BBFEAD','#ADFEEB','#FEFCAD'];
-
-      response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: colors[i], label: row[0] });
-      });
-
-      new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
-      generateLegend('weekly-browser-legend-container', data);
-
-    },
-    function(err) {
-      console.error(err.error.message);
-    });
-
-  }
-
-
- /**
-   * Draw the a chart.js doughnut chart with data from the specified view that
-   * show the top 5 browsers.
-   */
-  function renderTopBrowsersYear(ids, endDate) {
-
-    delayedExecuteQuery({
-      'ids': ids,
-      'dimensions': 'ga:browser',
-      'metrics': 'ga:pageviews',
-      'start-date': moment(endDate).subtract(1, 'year').format('YYYY-MM-DD'),
-      'end-date': endDate,
-      'sort': '-ga:pageviews',
-      'max-results': 5
-    },
-    function(response) {
-
-      var data = [];
-      var colors = ['#FFC399','#A3FF99','#99FFD9','#99C8FF','#B199FF'];
-
-      response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: colors[i], label: row[0] });
-      });
-
-      new Chart(makeCanvas('yearly-browser-chart-container')).Doughnut(data);
-      generateLegend('yearly-browser-legend-container', data);
-    },
-    function(err) {
-      console.error(err.error.message);
-    });
-
-  }
 
 
 
