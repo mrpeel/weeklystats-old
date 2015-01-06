@@ -37,17 +37,15 @@
 
   <div class="Screenshot" id="auth-button"></div>
 
-  <div class="Titles">
-  	<h1 class="Titles-main" id="view-name">Select a View</h1>
-  </div>
-
 
   <ul class="FlexGrid FlexGrid--halves">
   		<li class="FlexGrid-item">
+  		  <h1 class="Titles-main">Data Source</h1>
         <div id="view-selector-container"></div>
       </li>
 
   		<li class="FlexGrid-item">
+  		  <h1 class="Titles-main">Primary Comparison Week</h1>
         <div id="date-range-selector-container"></div>
       </li>
   </ul>
@@ -225,6 +223,10 @@ gapi.analytics.ready(function() {
   // Step 3: Authorize the user.
 
   var CLIENT_ID = '940998236407-ll26vtigl8bs52nt0ld3cumii6kmesmg.apps.googleusercontent.com';
+  var startDate = moment().startOf('week').subtract(6, 'days').format('YYYY-MM-DD');
+  var endDate =  moment().startOf('week').format('YYYY-MM-DD');
+  var gaId = 'ga:89463991';
+
 
   gapi.analytics.auth.authorize({
     container: 'auth-button',
@@ -245,42 +247,59 @@ gapi.analytics.ready(function() {
    var dateRangeSelector = new gapi.analytics.ext.DateRangeSelector({
       container: 'date-range-selector-container'
     })
-    .set({'start-date': '2014-12-29',
-      'end-date':  '2015-01-04',
-    })
+    .set({'start-date': startDate,
+      'end-date': endDate})
     .execute();
+
+    dateRangeSelector.on('change', function(data) {
+      var newStartDate, newEndDate;
+
+      //check which date was altered and recalculate dates
+      if(data['start-date']!=startDate)
+        newStartDate = moment(data['start-date']).startOf('week').add(1, 'days').format('YYYY-MM-DD');
+      else
+        newStartDate = moment(data['end-date']).startOf('week').add(1, 'days').format('YYYY-MM-DD');
+
+      //Set new end date from the calculated start date
+      newEndDate = moment(newStartDate).add(6, 'days').format('YYYY-MM-DD');
+
+      dateRangeSelector.set({'start-date': newStartDate, 'end-date': newEndDate}).execute();
+
+      //check if new time period is different to old period
+      if(startDate!=newStartDate) {
+        startDate = newStartDate;
+        endDate =  newEndDate;
+        renderCharts();
+      }
+
+    });
+
 
    /**
    * Create a new ViewSelector2 instance to be rendered inside of an
    * element with the id "view-selector-container".
    */
   var viewSelector = new gapi.analytics.ext.ViewSelector2({
-    container: 'view-selector-container',
+    container: 'view-selector-container'
   })
+    .set({'ids': gaId})
   .execute();
 
   viewSelector.on('viewChange', function(data) {
-
-    var title = document.getElementById('view-name');
-    title.innerHTML = data.property.name + ' (' + data.view.name + ')';
-
-    var startDate = '2014-12-29';
-    var endDate = '2015-01-04';
-
-
-    renderWeekOverWeekChart(data.ids, startDate, endDate);
-
-    renderWeekOverWeekSessionDurationChart(data.ids, startDate, endDate);
-
-    renderWeekContentUsageChart(data.ids, startDate, endDate);
-
-    renderTopBrowsersPeriod(data.ids, startDate, endDate);
-
-    renderIEVersionPeriod(data.ids, startDate, endDate);
-
-    renderFirefoxVersionPeriod(data.ids, startDate, endDate);
+    gaId = data.ids;
+    renderCharts();
 
   });
+
+  function renderCharts() {
+    renderWeekOverWeekChart(gaId, startDate, endDate);
+    renderWeekOverWeekSessionDurationChart(gaId, startDate, endDate);
+    renderWeekContentUsageChart(gaId, startDate, endDate);
+    renderTopBrowsersPeriod(gaId, startDate, endDate);
+    renderIEVersionPeriod(gaId, startDate, endDate);
+    renderFirefoxVersionPeriod(gaId, startDate, endDate);
+  }
+
 
   // Set some global Chart.js defaults.
   Chart.defaults.global.animationSteps = 60;

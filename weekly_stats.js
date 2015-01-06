@@ -65,7 +65,7 @@
       new Chart(makeCanvas('weekly-session-chart-container')).Line(data);
       generateLegend('weekly-session-legend-container', data.datasets);
 
-      delay(renderYearOverYearChart, 500+ Math.random()*500, ids, endDate);
+      delay(renderYearOverYearChart, 350 + Math.random()*500, ids, endDate);
     });
   }
 
@@ -192,7 +192,7 @@
       new Chart(makeCanvas('weekly-session-duration-chart-container')).Line(data);
       generateLegend('weekly-session-duration-legend-container', data.datasets);
 
-      delay(renderYearOverYearSessionDurationChart, 500 + Math.random()*500, ids, endDate);
+      delay(renderYearOverYearSessionDurationChart, 350 + Math.random()*500, ids, endDate);
 
     })
     .catch(function(err) {
@@ -304,7 +304,7 @@
       new Chart(makeCanvas('weekly-content-chart-container')).Bar(data, {barDatasetSpacing : 10});
       generateLegend('weekly-content-legend-container', data.datasets);
 
-      delay(renderQuarterlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
+      delay(renderQuarterlyContentUsageChart, 350 + Math.random()*500, ids, endDate, topPageNames);
 
     },
     function(err) {
@@ -488,7 +488,7 @@
       new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
       generateLegend('weekly-browser-legend-container', data);
 
-      delay(renderQuarterlyBrowserUsageChart, 500 + Math.random()*500, ids, endDate, topBrowsers);
+      delay(renderQuarterlyBrowserUsageChart, 350 + Math.random()*500, ids, endDate, topBrowsers);
 
     },
     function(err) {
@@ -670,7 +670,7 @@
       new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data);
       generateLegend('weekly-ieversion-legend-container', data);
 
-      delay(renderQuarterlyIEVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
+      delay(renderQuarterlyIEVersionUsageChart, 350 + Math.random()*500, ids, endDate, topVersions);
 
     },
     function(err) {
@@ -852,7 +852,7 @@
       new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data);
       generateLegend('weekly-firefoxversion-legend-container', data);
 
-      delay(renderQuarterlyFirefoxVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
+      delay(renderQuarterlyFirefoxVersionUsageChart, 350 + Math.random()*500, ids, endDate, topVersions);
 
     },
     function(err) {
@@ -1074,7 +1074,7 @@
  */
   function delayedExecuteQuery(queryParams, successFunction, errorFunction) {
 
-    delay(executeQuery, 500 + Math.random()*500, queryParams, successFunction, errorFunction);
+    delay(executeQuery, 350 + Math.random()*500, queryParams, successFunction, errorFunction);
 
   }
 
