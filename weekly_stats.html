@@ -115,7 +115,7 @@
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">Month Content Usage Comparison</h1>
-  					<div class="Titles-sub">By page views</div>
+  					<div class="Titles-sub">By percentage of page views</div>
   				</header>
   				<figure class="Chartjs-figure" id="monthly-content-chart-container"/>
   			</div>
@@ -187,8 +187,6 @@
 
 <script src="javascript/moment.min.js"></script>
 
-<script src="javascript/underscore-min.js"></script>
-
 <!-- Include the ViewSelector2 component script. -->
 <script src="javascript/view-selector2.js"></script>
 
@@ -226,8 +224,8 @@ gapi.analytics.ready(function() {
    var dateRangeSelector = new gapi.analytics.ext.DateRangeSelector({
       container: 'date-range-selector-container'
     })
-    .set({'start-date': '2014-12-08',
-      'end-date':  '2014-12-14',
+    .set({'start-date': '2014-12-29',
+      'end-date':  '2015-01-04',
     })
     .execute();
 
@@ -245,13 +243,13 @@ gapi.analytics.ready(function() {
     var title = document.getElementById('view-name');
     title.innerHTML = data.property.name + ' (' + data.view.name + ')';
 
-    var startDate = '2014-12-08';
-    var endDate = '2014-12-14';
+    var startDate = '2014-12-29';
+    var endDate = '2015-01-04';
 
 
     renderWeekOverWeekChart(data.ids, startDate, endDate);
 
-    _.delay(renderWeekOverWeekSessionDurationChart, 500 + Math.random()*500, data.ids, startDate, endDate);
+    delay(renderWeekOverWeekSessionDurationChart, 500 + Math.random()*500, data.ids, startDate, endDate);
 
     renderWeekContentUsageChart(data.ids, startDate, endDate);
 

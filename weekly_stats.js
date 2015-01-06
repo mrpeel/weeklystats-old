@@ -57,7 +57,7 @@
       new Chart(makeCanvas('weekly-session-chart-container')).Line(data);
       generateLegend('weekly-session-legend-container', data.datasets);
 
-      _.delay(renderYearOverYearChart, 500+ Math.random()*500, ids, endDate);
+      delay(renderYearOverYearChart, 500+ Math.random()*500, ids, endDate);
     });
   }
 
@@ -184,7 +184,7 @@
       new Chart(makeCanvas('weekly-session-duration-chart-container')).Line(data);
       generateLegend('weekly-session-duration-legend-container', data.datasets);
 
-      _.delay(renderYearOverYearSessionDurationChart, 500 + Math.random()*500, ids, endDate);
+      delay(renderYearOverYearSessionDurationChart, 500 + Math.random()*500, ids, endDate);
 
     })
     .catch(function(err) {
@@ -297,7 +297,7 @@
       new Chart(makeCanvas('weekly-content-chart-container')).Bar(data, {barDatasetSpacing : 10});
       generateLegend('weekly-content-legend-container', data.datasets);
 
-      _.delay(renderMonthlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
+      delay(renderMonthlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
 
     },
     function(err) {
@@ -320,17 +320,22 @@
   * 1st day of 3 months ago - last day of last month
   */
 
-  //Build page query string
+  //Build page query string and initialise arrays for holding the data
   var pageQuery = '';
+  var pageData = {};
 
   topPages.forEach(function(element, index, array) {
+    //Add page to query string
     if(index>0)
       pageQuery = pageQuery + ',';
     pageQuery = pageQuery + 'ga:pageTitle==' + element;
+
+    //Initialise array to hold values for page
+    pageData['val' + index] = [];
     });
 
   var colors = ['#4D5360','#949FB1','#D4CCC5','#ADD7FE','#FEADAD','#C1FEC2', '#C1FEE3', '#FFF9D1', '#F1FFD1', '#D1FFD1', '#D1FFEA'];
-  var pageData = {};
+
 
 
   /**Build month labels and time periods for 4 query periods
@@ -344,48 +349,158 @@
     monthLabels.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('MMM')
       + '-' + moment(endDate).subtract((qCalculator*3) + 1, 'months').date(1).format('MMM'));
 
-    delayedExecuteQuery({
+   periodDates.push(moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('YYYY-MM-DD'));
+   periodDates.push(moment(endDate).subtract((qCalculator*3), 'months').date(1).subtract(1, 'days').format('YYYY-MM-DD'));
+  }
+
+
+  //Retrieve results for each quarter - wrapped in function to ensure execution is completed prior to analysing results
+
+  delayedExecuteQuery({
       'ids': ids,
       'dimensions': 'ga:pageTitle',
       'metrics': 'ga:pageviews',
       'filters': pageQuery,
-      'start-date': moment(endDate).subtract((qCalculator*3) + 3, 'months').date(1).format('YYYY-MM-DD'),
-      'end-date': moment(endDate).subtract((qCalculator*3) + 1, 'months').date(1).format('YYYY-MM-DD')
+      'start-date': periodDates[0],
+      'end-date': periodDates[1]
     },
     function(response) {
 
-      //map the values into the page results data sets
+      pageData = processResults(response, pageData, topPages);
 
-      //initially set all pages to not being found in results
+      //Run the Q2 query
+      delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:pageTitle',
+      'metrics': 'ga:pageviews',
+      'filters': pageQuery,
+      'start-date': periodDates[2],
+      'end-date': periodDates[3]
+      },
+      function(response) {
+
+        pageData = processResults(response, pageData, topPages);
+
+        //Run the Q3 query
+        delayedExecuteQuery({
+        'ids': ids,
+        'dimensions': 'ga:pageTitle',
+        'metrics': 'ga:pageviews',
+        'filters': pageQuery,
+        'start-date': periodDates[4],
+        'end-date': periodDates[5]
+        },
+        function(response) {
+
+          pageData = processResults(response, pageData, topPages);
+
+          //Run the Q4 query
+          delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:pageTitle',
+          'metrics': 'ga:pageviews',
+          'filters': pageQuery,
+          'start-date': periodDates[6],
+          'end-date': periodDates[7]
+          },
+          function(response) {
+              pageData = processResults(response, pageData, topPages);
+
+              //Build the report
+              var data = {
+                labels : monthLabels,
+                datasets : []
+              };
+
+               topPages.forEach(function(element, index, array) {
+
+                //Build data set for each page
+                data.datasets[index] = {
+                            label: element,
+                            fillColor: colors[index],
+                            strokeColor: colors[index],
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            data: pageData['val' + index]
+                            };
+                });
+
+
+
+              new Chart(makeCanvas('monthly-content-chart-container')).Line(data);
+              generateLegend('monthly-content-legend-container', data.datasets);
+
+              console.log(pageData);
+          },
+          function(err) {
+          console.error(err.error.message);
+          });
+        },
+        function(err) {
+        console.error(err.error.message);
+        });
+      },
+      function(err) {
+      console.error(err.error.message);
+      });
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+
+
+
+
+
+
+
+
+  }
+
+  /** Function to process page results.  Takes each result and finds its position in the referenceData
+   * array, then maps in the value to the dataStore set.  It then sums all the values, enters 0s
+   * for missing values and converts each value to a percentage.
+   */
+
+  function processResults(results, dataStore, referenceData) {
+
+    if(results!=undefined) {
+
+      //initially set all referenceData to not being found in results
       var valsFound = [];
 
-      topPages.forEach(function(element, index, array) {
+      var dataPosition = dataStore.val0.length
+
+      referenceData.forEach(function(element, index, array) {
         valsFound.push(false);
         });
 
       //iterate through results, map in values and set the value as being found
-      response.rows.forEach(function(row, r) {
+      if(results.totalResults>0) {
+        results.rows.forEach(function(row, r) {
 
-        //Find the position of the returned value in the topPages array
-        var pagePos = topPages.indexOf(row[0]);
+          //Find the position of the returned value in the referenceData array
+          var referencePos = referenceData.indexOf(row[0]);
 
-        if(pagePos>-1){
-          //set value has been found
-          valsFound[pagePos] = true;
-          pageData['page' + pagePos].push(+row[1]);
-          }
-        });
+          if(referencePos>-1){
+            //set value has been found
+            valsFound[referencePos] = true;
+            dataStore['val' + referencePos][dataPosition] = (+row[1]);
+            }
+          });
+      }
 
     /** Sum values and check for any missing values.
      *  If value is missing from result set, map a 0 value in
      */
     var sumValues = 0;
 
-    topPages.forEach(function(element, index, array) {
+    referenceData.forEach(function(element, index, array) {
       if(valsFound[index]==false)
-        pageData['page' + index].push(0);
+        dataStore['val' + index].push(0);
       else
-        sumValues = sumValues + pageData['page' + index][dataCounter];
+        sumValues = sumValues + dataStore['val' + index][dataPosition];
       });
 
     /** Adjust each value to make it a percentage of the total rather
@@ -393,51 +508,16 @@
      *  periods where there is a large variation in the raw numbers.
      */
       if(sumValues>0){
-        topPages.forEach(function(element, index, array) {
-          pageData['page' + index][dataCounter] = pageData['page' + index][dataCounter] / sumValues * 100;
+        referenceData.forEach(function(element, index, array) {
+          dataStore['val' + index][dataPosition] = dataStore['val' + index][dataPosition] / sumValues * 100;
           });
         }
-    },
-    function(err) {
-      console.error(err.error.message);
-    });
-
-  } //end quarters for loop
-
-
-  console.log pageData;
-  /**Build the line chart
-
-      var data = {
-        labels : monthLabels,
-        datasets : [
-          {
-            //Set week ending date
-            //label: 'Last Week',
-            label: 'Week Starting ' + moment(startDate).format('DD/MM/YYYY'),
-            fillColor : "rgba(220,220,220,0.5)",
-            strokeColor : "rgba(220,220,220,1)",
-            pointColor : "rgba(220,220,220,1)",
-            pointStrokeColor : "#fff",
-            data : data2
-          },
-          {
-            label: 'Week Starting ' + moment(startDate).subtract(7, 'days').format('DD/MM/YYYY'),
-            fillColor : "rgba(151,187,205,0.5)",
-            strokeColor : "rgba(151,187,205,1)",
-            pointColor : "rgba(151,187,205,1)",
-            pointStrokeColor : "#fff",
-            data : data1
-          }
-        ]
-      };
-
-      new Chart(makeCanvas('monthly-content-chart-container')).Line(data);
-      generateLegend('monthly-content-legend-container', data.datasets);
-  */
-
+    }
+  return dataStore;
 
   }
+
+
 
 
 
@@ -468,7 +548,7 @@
       new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
       generateLegend('weekly-browser-legend-container', data);
 
-      _.delay(renderTopBrowsersYear, 500 + Math.random()*500, ids, endDate);
+      delay(renderTopBrowsersYear, 500 + Math.random()*500, ids, endDate);
     })
       .catch(function(err) {
       console.error(err.error.message);
@@ -540,13 +620,15 @@
 
   }
 
+
+
 /** This function wraps the executeQuery function in a delay
  * between 500 - 1000ms to allow repeated calls to the Embed API
  * without breaking the rate limit
  */
   function delayedExecuteQuery(queryParams, successFunction, errorFunction) {
 
-    _.delay(executeQuery, 500 + Math.random()*500, queryParams, successFunction, errorFunction);
+    delay(executeQuery, 500 + Math.random()*500, queryParams, successFunction, errorFunction);
 
   }
 
@@ -565,6 +647,7 @@
             .once('error', errorFunction)
             .execute();
     }
+
 
 
   /**
@@ -620,3 +703,14 @@
       }).join('');
     }
 
+    /**
+     * Delay the execution of the function
+     */
+
+    function delay(func, timeout, args) {
+      var r = Array.prototype.slice.call(arguments, 2);
+
+      return setTimeout(function() {
+            func.apply(null, r)
+        }, timeout);
+    }
