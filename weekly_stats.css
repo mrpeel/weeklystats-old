@@ -715,21 +715,32 @@ input:focus,select:focus {
 
 .FlexGrid {
     display: -webkit-flex;
+    display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
+    display: -moz-box;
+
+    -webkit-flex-flow: row wrap;
+    flex-flow: row wrap;
+    justify-content: space-around;
+
     list-style: none;
     margin: 0 0 -1.5em -1.5em;
     padding: 0;
 }
 
+
+
 .FlexGrid-item {
-    -webkit-flex: 1 0 calc(100% - 1.5em);
-    -ms-flex: 1 0 calc(100% - 1.5em);
-    flex: 1 0 calc(100% - 1.5em);
-    margin: 0 0 1.5em 1.5em;
+    -webkit-flex: 1 1 calc(100% - 1.5em);
+    -ms-flex: 1 1 calc(100% - 1.5em);
+    flex: 1 1 calc(100% - 1.5em);
+    -webkit-flex-basis: 550px;
+    -ms-flex-preferred-size: 550px;
+    flex-basis: 550px;
+    margin: 0 0 2em 2em;
+    min-width: 500px;
+
 }
 
 .FlexGrid-item--fixed {
@@ -744,24 +755,24 @@ input:focus,select:focus {
     flex-basis: 34%;
 }
 
-@media (min-width:570px) {
-    .FlexGrid-item {
-        -webkit-flex-basis: 300px;
-        -ms-flex-preferred-size: 300px;
-        flex-basis: 300px;
-    }
-}
+
 
 @media (min-width:1024px) {
     .FlexGrid {
         margin: 0 0 -2em -2em;
     }
+}
+
+@media print {
+    .FlexGrid {
+        display: block;
+    }
 
     .FlexGrid-item {
-        -webkit-flex-basis: 360px;
-        -ms-flex-preferred-size: 360px;
-        flex-basis: 360px;
-        margin: 0 0 2em 2em;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        position:relative;
     }
 }
 
