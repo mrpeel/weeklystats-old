@@ -226,6 +226,7 @@ gapi.analytics.ready(function() {
   var startDate = moment().startOf('week').subtract(6, 'days').format('YYYY-MM-DD');
   var endDate =  moment().startOf('week').format('YYYY-MM-DD');
   var gaId = 'ga:89463991';
+  var accountName = '';
 
 
   gapi.analytics.auth.authorize({
@@ -236,7 +237,7 @@ gapi.analytics.ready(function() {
 
 
   gapi.analytics.auth.on('success', function(response) {
-    viewSelector.execute();
+      viewSelector.execute();
   });
 
   /**
@@ -281,15 +282,25 @@ gapi.analytics.ready(function() {
    */
   var viewSelector = new gapi.analytics.ext.ViewSelector2({
     container: 'view-selector-container'
-  })
-    .set({'ids': gaId})
-  .execute();
+  });
+
+
+  //Execute the selector
+  viewSelector.execute();
+
 
   viewSelector.on('viewChange', function(data) {
+    //Check and set whether this is a LASSI2 account
+    if(accountName=='' && data.account.name=='LASSI2') {
+      accountName = 'LASSI2';
+      viewSelector.set({'ids': gaId}).execute();
+    }
+
     gaId = data.ids;
     renderCharts();
 
   });
+
 
   function renderCharts() {
     renderWeekOverWeekChart(gaId, startDate, endDate);
