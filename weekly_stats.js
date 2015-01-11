@@ -65,7 +65,7 @@
       new Chart(makeCanvas('weekly-session-chart-container')).Line(data);
       generateLegend('weekly-session-legend-container', data.datasets);
 
-      delay(renderYearOverYearChart, 350 + Math.random()*500, ids, endDate);
+      delay(renderYearOverYearChart, 500 + Math.random()*500, ids, endDate);
     });
   }
 
@@ -107,6 +107,9 @@
           if (data1[i] === undefined) data1[i] = null;
           if (data2[i] === undefined) data2[i] = null;
         }
+
+        //console.log(data1);
+        //console.log(data2);
 
         var data = {
           labels : labels,
@@ -157,8 +160,8 @@
 
     Promise.all([currentWeek, previousWeek]).then(function(results) {
 
-      var data1 = results[0].rows.map(function(row) { return +row[2]; });
-      var data2 = results[1].rows.map(function(row) { return +row[2]; });
+      var data1 = results[0].rows.map(function(row) { return (+row[2]/60); });
+      var data2 = results[1].rows.map(function(row) { return (+row[2]/60); });
       var labels = results[1].rows.map(function(row) { return +row[0]; });
 
       labels = labels.map(function(label) {
@@ -192,7 +195,7 @@
       new Chart(makeCanvas('weekly-session-duration-chart-container')).Line(data);
       generateLegend('weekly-session-duration-legend-container', data.datasets);
 
-      delay(renderYearOverYearSessionDurationChart, 350 + Math.random()*500, ids, endDate);
+      delay(renderYearOverYearSessionDurationChart, 500 + Math.random()*500, ids, endDate);
 
     })
     .catch(function(err) {
@@ -224,8 +227,8 @@
       });
 
       Promise.all([thisYear, lastYear]).then(function(results) {
-        var data1 = results[0].rows.map(function(row) { return +row[2]; });
-        var data2 = results[1].rows.map(function(row) { return +row[2]; });
+        var data1 = results[0].rows.map(function(row) { return (+row[2]/60); });
+        var data2 = results[1].rows.map(function(row) { return (+row[2]/60); });
         var labels = ['Jan','Feb','Mar','Apr','May','Jun',
                       'Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -235,6 +238,10 @@
           if (data1[i] === undefined) data1[i] = null;
           if (data2[i] === undefined) data2[i] = null;
         }
+
+        //console.log(data1);
+        //console.log(data2);
+
 
         var data = {
           labels : labels,
@@ -304,7 +311,7 @@
       new Chart(makeCanvas('weekly-content-chart-container')).Bar(data, {barDatasetSpacing : 10});
       generateLegend('weekly-content-legend-container', data.datasets);
 
-      delay(renderQuarterlyContentUsageChart, 350 + Math.random()*500, ids, endDate, topPageNames);
+      delay(renderQuarterlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
 
     },
     function(err) {
@@ -488,7 +495,7 @@
       new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
       generateLegend('weekly-browser-legend-container', data);
 
-      delay(renderQuarterlyBrowserUsageChart, 350 + Math.random()*500, ids, endDate, topBrowsers);
+      delay(renderQuarterlyBrowserUsageChart, 500 + Math.random()*500, ids, endDate, topBrowsers);
 
     },
     function(err) {
@@ -670,7 +677,7 @@
       new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data);
       generateLegend('weekly-ieversion-legend-container', data);
 
-      delay(renderQuarterlyIEVersionUsageChart, 350 + Math.random()*500, ids, endDate, topVersions);
+      delay(renderQuarterlyIEVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
 
     },
     function(err) {
@@ -852,7 +859,7 @@
       new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data);
       generateLegend('weekly-firefoxversion-legend-container', data);
 
-      delay(renderQuarterlyFirefoxVersionUsageChart, 350 + Math.random()*500, ids, endDate, topVersions);
+      delay(renderQuarterlyFirefoxVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
 
     },
     function(err) {
@@ -1074,7 +1081,7 @@
  */
   function delayedExecuteQuery(queryParams, successFunction, errorFunction) {
 
-    delay(executeQuery, 350 + Math.random()*500, queryParams, successFunction, errorFunction);
+    delay(executeQuery, 500 + Math.random()*500, queryParams, successFunction, errorFunction);
 
   }
 
