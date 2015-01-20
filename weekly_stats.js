@@ -9,8 +9,19 @@
 
   function renderWeekOverWeekChart(ids, startDate, endDate) {
 
+      //Retrieve historical data - per day of the week, per week for the last year
+      // ordered by day of week, then the highest to lowest number of sessions returned.
+      var historicalData = query({
+          'ids': ids,
+          'dimensions': 'ga:dayOfWeek,ga:year,ga:nthWeek',
+          'metrics': 'ga:sessions',
+          'filters': 'ga:sessions>0',
+          'start-date': moment(endDate).subtract(1, 'years').format('YYYY-MM-DD'),
+          'end-date':  endDate,
+          'sort': 'ga:dayOfWeek,-ga:sessions'
+        });
 
-
+    //Retrieve weekly data
     var currentWeek = query({
       'ids': ids,
       'dimensions': 'ga:date,ga:nthDay',
@@ -28,7 +39,7 @@
       });
 
 
-    Promise.all([currentWeek, previousWeek]).then(function(results) {
+    Promise.all([currentWeek, previousWeek, historicalData]).then(function(results) {
 
       var data1 = results[0].rows.map(function(row) { return +row[2]; });
       var data2 = results[1].rows.map(function(row) { return +row[2]; });
@@ -37,6 +48,81 @@
       labels = labels.map(function(label) {
         return moment(label, 'YYYYMMDD').format('ddd');
       });
+
+      var dataLastYear =[];
+
+      var monData = [];
+      var tueData = [];
+      var wedData = [];
+      var thuData = [];
+      var friData = [];
+      var satData = [];
+      var sunData = [];
+
+      //push values in in order from highest number to lowest number
+      results[2].rows.forEach(function(row, i) {
+            switch(+row[0]) {
+              case 0:
+                sunData.push(+row[3]);
+                break;
+              case 1:
+                monData.push(+row[3]);
+                break;
+              case 2:
+                tueData.push(+row[3]);
+                break;
+              case 3:
+                wedData.push(+row[3]);
+                break;
+              case 4:
+                thuData.push(+row[3]);
+                break;
+              case 5:
+                friData.push(+row[3]);
+                break;
+              case 6:
+                satData.push(+row[3]);
+                break;
+            }
+      });
+
+        //Now retrieve the median (middle value) for each historical data set for each day and push the value into dataLastYear
+          if(monData.length > 0)
+            dataLastYear.push(monData[Math.round(monData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(tueData.length > 0)
+            dataLastYear.push(tueData[Math.round(tueData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(wedData.length > 0)
+            dataLastYear.push(wedData[Math.round(wedData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(thuData.length > 0)
+            dataLastYear.push(thuData[Math.round(thuData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(friData.length > 0)
+            dataLastYear.push(friData[Math.round(friData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(satData.length > 0)
+            dataLastYear.push(satData[Math.round(satData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(sunData.length > 0)
+            dataLastYear.push(sunData[Math.round(sunData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+
 
       var data = {
         labels : labels,
@@ -58,6 +144,14 @@
             pointColor : strokeColors[1],
             pointStrokeColor : "#fff",
             data : data1
+          },
+          {
+            label: 'Median for the Last Year',
+            fillColor : fillColors[2],
+            strokeColor : strokeColors[2],
+            pointColor : strokeColors[2],
+            pointStrokeColor : "#fff",
+            data : dataLastYear
           }
         ]
       };
@@ -142,6 +236,21 @@
   function renderWeekOverWeekSessionDurationChart(ids, startDate, endDate) {
 
 
+  var dataLastYear =[];
+
+    //Retrieve historical data - per day of the week, per week for the last year
+    // ordered by day of week, then the highest to lowest number of sessions returned.
+
+    var historicalData = query({
+      'ids': ids,
+      'dimensions': 'ga:dayOfWeek,ga:year,ga:nthWeek',
+      'metrics': 'ga:avgSessionDuration',
+      'filters': 'ga:avgSessionDuration>0',
+      'start-date': moment(endDate).subtract(1, 'years').format('YYYY-MM-DD'),
+      'end-date':  endDate,
+      'sort': 'ga:dayOfWeek,-ga:avgSessionDuration'
+    });
+
     var currentWeek = query({
       'ids': ids,
       'dimensions': 'ga:date,ga:nthDay',
@@ -158,15 +267,88 @@
       'end-date':  moment(endDate).subtract(7, 'days').format('YYYY-MM-DD')
     });
 
-    Promise.all([currentWeek, previousWeek]).then(function(results) {
+    Promise.all([currentWeek, previousWeek, historicalData]).then(function(results) {
 
-      var data1 = results[0].rows.map(function(row) { return (+row[2]/60); });
-      var data2 = results[1].rows.map(function(row) { return (+row[2]/60); });
+      var data1 = results[0].rows.map(function(row) { return (+row[2]/60).toFixed(2); });
+      var data2 = results[1].rows.map(function(row) { return (+row[2]/60).toFixed(2); });
       var labels = results[1].rows.map(function(row) { return +row[0]; });
 
       labels = labels.map(function(label) {
         return moment(label, 'YYYYMMDD').format('ddd');
       });
+
+     var dataLastYear =[];
+
+      var monData = [];
+      var tueData = [];
+      var wedData = [];
+      var thuData = [];
+      var friData = [];
+      var satData = [];
+      var sunData = [];
+
+      //push values in in order from highest number to lowest number
+      results[2].rows.forEach(function(row, i) {
+        switch(+row[0]) {
+          case 0:
+            sunData.push((+row[3]/60).toFixed(2));
+            break;
+          case 1:
+            monData.push((+row[3]/60).toFixed(2));
+            break;
+          case 2:
+            tueData.push((+row[3]/60).toFixed(2));
+            break;
+          case 3:
+            wedData.push((+row[3]/60).toFixed(2));
+            break;
+          case 4:
+            thuData.push((+row[3]/60).toFixed(2));
+            break;
+          case 5:
+            friData.push((+row[3]/60).toFixed(2));
+            break;
+          case 6:
+            satData.push((+row[3]/60).toFixed(2));
+            break;
+        }
+        });
+
+        //Now retrieve the median (middle value) for each historical data set for each day and push the value into dataLastYear
+          if(monData.length > 0)
+            dataLastYear.push(monData[Math.round(monData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(tueData.length > 0)
+            dataLastYear.push(tueData[Math.round(tueData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(wedData.length > 0)
+            dataLastYear.push(wedData[Math.round(wedData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(thuData.length > 0)
+            dataLastYear.push(thuData[Math.round(thuData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(friData.length > 0)
+            dataLastYear.push(friData[Math.round(friData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(satData.length > 0)
+            dataLastYear.push(satData[Math.round(satData.length/2)]);
+          else
+            dataLastYear.push(0);
+
+          if(sunData.length > 0)
+            dataLastYear.push(sunData[Math.round(sunData.length/2)]);
+          else
+            dataLastYear.push(0);
 
       var data = {
         labels : labels,
@@ -188,6 +370,14 @@
             pointColor : strokeColors[1],
             pointStrokeColor : "#fff",
             data : data1
+          },
+          {
+            label: 'Median for the Last Year',
+            fillColor : fillColors[2],
+            strokeColor : strokeColors[2],
+            pointColor : strokeColors[2],
+            pointStrokeColor : "#fff",
+            data : dataLastYear
           }
         ]
       };
@@ -227,8 +417,8 @@
       });
 
       Promise.all([thisYear, lastYear]).then(function(results) {
-        var data1 = results[0].rows.map(function(row) { return (+row[2]/60); });
-        var data2 = results[1].rows.map(function(row) { return (+row[2]/60); });
+        var data1 = results[0].rows.map(function(row) { return (+row[2]/60).toFixed(2); });
+        var data2 = results[1].rows.map(function(row) { return (+row[2]/60).toFixed(2); });
         var labels = ['Jan','Feb','Mar','Apr','May','Jun',
                       'Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -270,10 +460,10 @@
     }
 
 
-/**
-   * Draw the a chart.js doughnut chart with data from the specified view that
+/** Replaced by doughnut chart
+   * Draw the a chart.js bar chart with data from the specified view that
    * shows the content for the week.
-   */
+
   function renderWeekContentUsageChart(ids, startDate, endDate) {
 
     var topPageNames = [];
@@ -298,7 +488,7 @@
         //labels.push(row[0]);
         labels.push('');
         datasets.push(  {
-                        label: row[0],
+                        label: row[0] + ' (' + row[1] + ')',
                         fillColor: fillColors[i],
                         strokeColor: strokeColors[i],
                         data: [+row[1]]
@@ -318,7 +508,58 @@
       console.error(err.error.message);
     });
 
+  }*/
+
+
+  /**
+   * Draw the a chart.js doughnut chart with data from the specified view that
+   * shows the content for the week*/
+
+   function renderWeekContentUsageChart(ids, startDate, endDate) {
+
+    var topPageNames = [];
+
+    delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:pageTitle',
+      'metrics': 'ga:pageviews',
+      'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
+      'start-date': startDate,
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 5
+    },
+    function(response) {
+
+
+      var data = [];
+      var sumValues = 0;
+
+      //Calculate sum of all page views for percentages
+      response.rows.forEach(function(row, i) {
+        sumValues = sumValues + +row[1];
+      });
+
+
+      response.rows.forEach(function(row, i) {
+        data.push({ value: +row[1], color: fillColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+        topPageNames.push(row[0]);
+      });
+
+
+      new Chart(makeCanvas('weekly-content-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true});
+      generateLegend('weekly-content-legend-container', data);
+
+      delay(renderQuarterlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
+
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
   }
+
+
 
 
 /**
@@ -464,11 +705,61 @@
   }
 
 
+  /**  Moved back to doughnut chart
+   * Draw the a chart.js bar chart with data from the specified view that
+   * show the top 5 browsers.
+
+  function renderTopBrowsersPeriod(ids, startDate, endDate) {
+
+    var topBrowsers = [];
+
+    delayedExecuteQuery({
+      'ids': ids,
+      'dimensions': 'ga:browser',
+      'metrics': 'ga:pageviews',
+      'start-date': startDate,
+      'end-date':  endDate,
+      'sort': '-ga:pageviews',
+      'max-results': 5
+    },
+    function(response) {
+
+
+      var data = [];
+      var labels = [];
+      var datasets = [];
+
+      response.rows.forEach(function(row, i) {
+        //labels.push(row[0]);
+        labels.push('');
+        datasets.push(  {
+                        label: row[0] + ' (' + row[1] + ')',
+                        fillColor: fillColors[i],
+                        strokeColor: strokeColors[i],
+                        data: [+row[1]]
+                      } );
+        topBrowsers.push(row[0]);
+      });
+
+      data = {labels: labels, datasets: datasets};
+
+      new Chart(makeCanvas('weekly-browser-chart-container')).Bar(data, {barDatasetSpacing : 10});
+      generateLegend('weekly-browser-legend-container', data.datasets);
+
+      delay(renderQuarterlyBrowserUsageChart, 500 + Math.random()*500, ids, endDate, topBrowsers);
+
+    },
+    function(err) {
+      console.error(err.error.message);
+    });
+
+  } */
+
 
  /**
    * Draw the a chart.js doughnut chart with data from the specified view that
-   * show the top 5 browsers.
-   */
+   * show the top 5 browsers.*/
+
   function renderTopBrowsersPeriod(ids, startDate, endDate) {
 
     var topBrowsers = [];
@@ -485,14 +776,21 @@
     function(response) {
 
       var data = [];
+      var sumValues = 0;
+
+      //Calculate sum of all page views for percentages
+      response.rows.forEach(function(row, i) {
+        sumValues = sumValues + +row[1];
+      });
 
 
       response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], label: row[0] });
+        data.push({ value: +row[1], color: fillColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
         topBrowsers.push(row[0]);
       });
 
-      new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data);
+
+      new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true});
       generateLegend('weekly-browser-legend-container', data);
 
       delay(renderQuarterlyBrowserUsageChart, 500 + Math.random()*500, ids, endDate, topBrowsers);
@@ -668,13 +966,19 @@
     function(response) {
 
       var data = [];
+      var sumValues = 0;
+
+      //Calculate sum of all page views for percentages
+      response.rows.forEach(function(row, i) {
+        sumValues = sumValues + +row[1];
+      });
 
       response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], label: row[0] });
+        data.push({ value: +row[1], color: fillColors[i], label: 'IE ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
         topVersions.push(row[0]);
       });
 
-      new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data);
+      new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true});
       generateLegend('weekly-ieversion-legend-container', data);
 
       delay(renderQuarterlyIEVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
@@ -794,7 +1098,7 @@
 
                 //Build data set for each page
                 data.datasets[index] = {
-                            label: element,
+                            label: 'IE ' + element,
                             fillColor: fillColors[index],
                             strokeColor: strokeColors[index],
                             pointColor : strokeColors[index],
@@ -850,13 +1154,20 @@
     function(response) {
 
       var data = [];
+      var sumValues = 0;
+
+      //Calculate sum of all page views for percentages
+      response.rows.forEach(function(row, i) {
+        sumValues = sumValues + +row[1];
+      });
+
 
       response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], label: row[0] });
+        data.push({ value: +row[1], color: fillColors[i], label: 'Firefox ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
         topVersions.push(row[0]);
       });
 
-      new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data);
+      new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33});
       generateLegend('weekly-firefoxversion-legend-container', data);
 
       delay(renderQuarterlyFirefoxVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
@@ -976,7 +1287,7 @@
 
                 //Build data set for each page
                 data.datasets[index] = {
-                            label: element,
+                            label: 'Firefox ' + element,
                             fillColor: fillColors[index],
                             strokeColor: strokeColors[index],
                             pointColor : strokeColors[index],
@@ -1062,7 +1373,7 @@
      */
       if(sumValues>0){
         referenceData.forEach(function(element, index, array) {
-          dataStore['val' + index][dataPosition] = dataStore['val' + index][dataPosition] / sumValues * 100;
+          dataStore['val' + index][dataPosition] = (dataStore['val' + index][dataPosition] / sumValues * 100).toFixed(2);
           });
         }
     }

@@ -18,7 +18,7 @@
 		<div class="u-hidden u-lg-block">
 
       <div class="Titles Titles--hero">
-      <h1 class="Titles-main">LASSI2 Weekly Stats</h1>
+      <h1 class="Titles-main">LASSI2 Weekly Stats (beta)</h1>
 
       </div>
     </div>
@@ -68,7 +68,7 @@
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">Session By Month</h1>
+  					<h1 class="Titles-main">Sessions By Month</h1>
   					<div class="Titles-sub">No of sessions</div>
   				</header>
   				<figure class="Chartjs-figure" id="monthly-session-chart-container"/>
@@ -320,6 +320,7 @@ gapi.analytics.ready(function() {
   Chart.defaults.global.animationEasing = 'easeInOutQuart';
   Chart.defaults.global.responsive = true;
   Chart.defaults.global.maintainAspectRatio = false;
+  Chart.defaults.global.tooltipTemplate = "<%if (label){%><%=label%><%}%>";
 
 });
 </script>
