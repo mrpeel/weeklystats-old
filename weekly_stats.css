@@ -1,4 +1,4 @@
-html {
+26AldingaStreet9html {
     font-family: sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
@@ -773,6 +773,7 @@ input:focus,select:focus {
         break-inside: avoid;
         position:relative;
     }
+
 }
 
 .Header {
@@ -780,7 +781,7 @@ input:focus,select:focus {
 }
 
 .Header-block {
-    background: #333;
+    /*background: #333;*/
     box-shadow: 0 0 .5em rgba(0,0,0,.1);
     padding: 1em 1.5em;
     position: relative;
@@ -1243,9 +1244,9 @@ input:focus,select:focus {
     text-decoration: none;
 }
 
-.Titles--hero {
+/*.Titles--hero {
     color: #75787d;
-}
+}*/
 
 .Titles--hero .Titles-main {
     font-size: 2.25em;

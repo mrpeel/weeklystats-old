@@ -6,6 +6,12 @@
   var strokeColors = ['rgba(115,115,115,0.9)','rgba(241,90,96,0.9)','rgba(122,195,106,0.9)','rgba(90,155,212,0.9)','rgba(250,167,91,0.9)','rgba(158,103,171,0.9)',
                     'rgba(193,254,227,0.9)', 'rgba(215,127,80,0.9)'];
 
+  var lineChartLegend = "<% for (var i=0; i<datasets.length; i++){%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].pointColor%>;\"></i><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%>";
+  var barChartLegend = "<% for (var i=0; i<datasets.length; i++){%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].strokeColor%>;\"></i><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%>";
+  var dougnutChartLegend = "<% for (var i=0; i<segments.length; i++){%><li><i style=\"background:<%=segments[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=segments[i].highlightColor%>;\"></i><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%>";
+
+
+
 
   function renderWeekOverWeekChart(ids, startDate, endDate) {
 
@@ -156,8 +162,9 @@
         ]
       };
 
-      new Chart(makeCanvas('weekly-session-chart-container')).Line(data);
-      generateLegend('weekly-session-legend-container', data.datasets);
+      var lineChart = new Chart(makeCanvas('weekly-session-chart-container')).Line(data, {legendTemplate: lineChartLegend});
+      //generateLegend('weekly-session-legend-container', data.datasets);
+      document.getElementById('weekly-session-legend-container').innerHTML = lineChart.generateLegend();
 
       delay(renderYearOverYearChart, 500 + Math.random()*500, ids, endDate);
     });
@@ -223,8 +230,10 @@
           ]
         };
 
-        new Chart(makeCanvas('monthly-session-chart-container')).Bar(data);
-        generateLegend('monthly-session-legend-container', data.datasets);
+        var barChart = new Chart(makeCanvas('monthly-session-chart-container')).Bar(data, {legendTemplate: barChartLegend});
+        //generateLegend('monthly-session-legend-container', data.datasets);
+        document.getElementById('monthly-session-legend-container').innerHTML = barChart.generateLegend();
+
       })
       .catch(function(err) {
         console.error(err.error.message);
@@ -382,8 +391,10 @@
         ]
       };
 
-      new Chart(makeCanvas('weekly-session-duration-chart-container')).Line(data);
-      generateLegend('weekly-session-duration-legend-container', data.datasets);
+      var lineChart = new Chart(makeCanvas('weekly-session-duration-chart-container')).Line(data, {legendTemplate: lineChartLegend});
+      //generateLegend('weekly-session-duration-legend-container', data.datasets);
+      document.getElementById('weekly-session-duration-legend-container').innerHTML = lineChart.generateLegend();
+
 
       delay(renderYearOverYearSessionDurationChart, 500 + Math.random()*500, ids, endDate);
 
@@ -451,8 +462,11 @@
           ]
         };
 
-        new Chart(makeCanvas('monthly-session-duration-chart-container')).Bar(data);
-        generateLegend('monthly-session-duration-legend-container', data.datasets);
+        var barChart = new Chart(makeCanvas('monthly-session-duration-chart-container')).Bar(data, {legendTemplate: barChartLegend});
+        //generateLegend('monthly-session-duration-legend-container', data.datasets);
+        document.getElementById('monthly-session-duration-legend-container').innerHTML = barChart.generateLegend();
+
+
       })
       .catch(function(err) {
         console.error(err.error.message);
@@ -542,13 +556,15 @@
 
 
       response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
         topPageNames.push(row[0]);
       });
 
 
-      new Chart(makeCanvas('weekly-content-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true});
-      generateLegend('weekly-content-legend-container', data);
+      var doughnutChart = new Chart(makeCanvas('weekly-content-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
+      //generateLegend('weekly-content-legend-container', data);
+      document.getElementById('weekly-content-legend-container').innerHTML = doughnutChart.generateLegend();
+
 
       delay(renderQuarterlyContentUsageChart, 500 + Math.random()*500, ids, endDate, topPageNames);
 
@@ -680,8 +696,10 @@
 
 
 
-              new Chart(makeCanvas('quarterly-content-chart-container')).Line(data);
-              generateLegend('quarterly-content-legend-container', data.datasets);
+              var lineChart = new Chart(makeCanvas('quarterly-content-chart-container')).Line(data, {legendTemplate: lineChartLegend});
+              //generateLegend('quarterly-content-legend-container', data.datasets);
+              document.getElementById('quarterly-content-legend-container').innerHTML = lineChart.generateLegend();
+
 
           },
           function(err) {
@@ -785,13 +803,14 @@
 
 
       response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
         topBrowsers.push(row[0]);
       });
 
 
-      new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true});
-      generateLegend('weekly-browser-legend-container', data);
+      var doughnutChart = new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
+      //generateLegend('weekly-browser-legend-container', data);
+      document.getElementById('weekly-browser-legend-container').innerHTML = doughnutChart.generateLegend();
 
       delay(renderQuarterlyBrowserUsageChart, 500 + Math.random()*500, ids, endDate, topBrowsers);
 
@@ -920,9 +939,9 @@
                 });
 
 
-
-              new Chart(makeCanvas('quarterly-browser-chart-container')).Line(data);
-              generateLegend('quarterly-browser-legend-container', data.datasets);
+              var lineChart = new Chart(makeCanvas('quarterly-browser-chart-container')).Line(data, {legendTemplate: lineChartLegend});
+              //generateLegend('quarterly-browser-legend-container', data.datasets);
+              document.getElementById('quarterly-browser-legend-container').innerHTML = lineChart.generateLegend();
 
           },
           function(err) {
@@ -974,12 +993,14 @@
       });
 
       response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], label: 'IE ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: 'IE ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
         topVersions.push(row[0]);
       });
 
-      new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true});
-      generateLegend('weekly-ieversion-legend-container', data);
+      var doughnutChart = new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
+      //generateLegend('weekly-ieversion-legend-container', data);
+      document.getElementById('weekly-ieversion-legend-container').innerHTML = doughnutChart.generateLegend();
+
 
       delay(renderQuarterlyIEVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
 
@@ -1108,9 +1129,9 @@
                 });
 
 
-
-              new Chart(makeCanvas('quarterly-ieversion-chart-container')).Line(data);
-              generateLegend('quarterly-ieversion-legend-container', data.datasets);
+              var lineChart = new Chart(makeCanvas('quarterly-ieversion-chart-container')).Line(data, {legendTemplate: lineChartLegend});
+              //generateLegend('quarterly-ieversion-legend-container', data.datasets);
+              document.getElementById('quarterly-ieversion-legend-container').innerHTML = lineChart.generateLegend();
 
           },
           function(err) {
@@ -1163,12 +1184,13 @@
 
 
       response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], label: 'Firefox ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: 'Firefox ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
         topVersions.push(row[0]);
       });
 
-      new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33});
-      generateLegend('weekly-firefoxversion-legend-container', data);
+      var doughnutChart = new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
+      //generateLegend('weekly-firefoxversion-legend-container', data);
+      document.getElementById('weekly-firefoxversion-legend-container').innerHTML = doughnutChart.generateLegend();
 
       delay(renderQuarterlyFirefoxVersionUsageChart, 500 + Math.random()*500, ids, endDate, topVersions);
 
@@ -1297,9 +1319,9 @@
                 });
 
 
-
-              new Chart(makeCanvas('quarterly-firefoxversion-chart-container')).Line(data);
-              generateLegend('quarterly-firefoxversion-legend-container', data.datasets);
+              var lineChart = new Chart(makeCanvas('quarterly-firefoxversion-chart-container')).Line(data, {legendTemplate: lineChartLegend});
+              //generateLegend('quarterly-firefoxversion-legend-container', data.datasets);
+              document.getElementById('quarterly-firefoxversion-legend-container').innerHTML = lineChart.generateLegend();
 
           },
           function(err) {
