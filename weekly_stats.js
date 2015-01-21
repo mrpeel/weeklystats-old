@@ -3,8 +3,8 @@
  */
   var fillColors = ['rgba(115,115,115,0.33)','rgba(241,90,96,0.33)','rgba(122,195,106,0.33)','rgba(90,155,212,0.33)','rgba(250,167,91,0.33)','rgba(158,103,171,0.33)',
                     'rgba(193,254,227,0.33)', 'rgba(215,127,80,0.33)'];
-  var strokeColors = ['rgba(115,115,115,0.9)','rgba(241,90,96,0.9)','rgba(122,195,106,0.9)','rgba(90,155,212,0.9)','rgba(250,167,91,0.9)','rgba(158,103,171,0.9)',
-                    'rgba(193,254,227,0.9)', 'rgba(215,127,80,0.9)'];
+  var strokeColors = ['rgba(115,115,115,1)','rgba(241,90,96,1)','rgba(122,195,106,1)','rgba(90,155,212,1)','rgba(250,167,91,1)','rgba(158,103,171,1)',
+                    'rgba(193,254,227,1)', 'rgba(215,127,80,1)'];
 
   var lineChartLegend = "<% for (var i=0; i<datasets.length; i++){%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].pointColor%>;\"></i><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%>";
   var barChartLegend = "<% for (var i=0; i<datasets.length; i++){%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].strokeColor%>;\"></i><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%>";
