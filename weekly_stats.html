@@ -3,6 +3,7 @@
 <head>
   <title>System Weekly Stats</title>
    <link rel="stylesheet" href="weekly_stats.css">
+   <link rel="shortcut icon" href="favicon.png?v=1.1">
 </head>
 <body>
 
@@ -259,8 +260,10 @@ gapi.analytics.ready(function() {
       //check which date was altered and recalculate dates
       if(data['start-date']!=startDate)
         newStartDate = moment(data['start-date']).startOf('week').add(1, 'days').format('YYYY-MM-DD');
-      else
-        newStartDate = moment(data['end-date']).startOf('week').add(1, 'days').format('YYYY-MM-DD');
+      else {
+        //newStartDate = moment(data['end-date']).startOf('week').add(1, 'days').format('YYYY-MM-DD');
+        newStartDate = moment(data['end-date']).subtract(6 - moment(data['end-date']).weekday(),'days').format('YYYY-MM-DD');
+        }
 
       //Set new end date from the calculated start date
       newEndDate = moment(newStartDate).add(6, 'days').format('YYYY-MM-DD');
