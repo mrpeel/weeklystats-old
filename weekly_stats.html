@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>LASSI2 Weekly Stats</title>
+  <title>System Weekly Stats</title>
    <link rel="stylesheet" href="weekly_stats.css">
 </head>
 <body>
@@ -18,7 +18,7 @@
 		<div class="u-lg-block">
 
       <div class="Titles Titles--hero">
-      <h1 class="Titles-main">LASSI2 Weekly Stats (beta)</h1>
+      <h1 class="Titles-main" id="page-title">LASSI2 Weekly Stats (beta)</h1>
 
       </div>
     </div>
@@ -291,6 +291,10 @@ gapi.analytics.ready(function() {
 
 
   viewSelector.on('viewChange', function(data) {
+    //rename the page
+    var title = document.getElementById('page-title');
+      title.innerHTML = 'Weekly Stats for ' + data.property.name;
+
     //Check and set whether this is a LASSI2 account
     if(accountName=='' && data.account.name=='LASSI2') {
       accountName = 'LASSI2';
