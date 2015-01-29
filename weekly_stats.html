@@ -261,8 +261,9 @@ gapi.analytics.ready(function() {
       if(data['start-date']!=startDate)
         newStartDate = moment(data['start-date']).startOf('week').add(1, 'days').format('YYYY-MM-DD');
       else {
-        //newStartDate = moment(data['end-date']).startOf('week').add(1, 'days').format('YYYY-MM-DD');
-        newStartDate = moment(data['end-date']).subtract(6 - moment(data['end-date']).weekday(),'days').format('YYYY-MM-DD');
+        //Shift date one day back to account for Sundays which are the start of the week but the last day of the week
+        //for this application.  Use the date to calculate the start of the week and add one day to get Monday.
+        newStartDate = moment(data['end-date']).subtract(1,'days').startOf('week').add(1, 'days').format('YYYY-MM-DD');
         }
 
       //Set new end date from the calculated start date
