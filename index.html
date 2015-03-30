@@ -316,6 +316,7 @@ gapi.analytics.ready(function() {
   function renderCharts() {
     renderWeekOverWeekChart(gaId, startDate, endDate);
     delay(renderWeekOverWeekSessionDurationChart, 850 + Math.random()*500, gaId, startDate, endDate);
+    retrieveAllTimeTopNames(gaId);
     renderWeekContentUsageChart(gaId, startDate, endDate);
     renderTopBrowsersPeriod(gaId, startDate, endDate);
     renderIEVersionPeriod(gaId, startDate, endDate);

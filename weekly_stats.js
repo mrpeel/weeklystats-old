@@ -9,9 +9,109 @@
   var lineChartLegend = "<% for (var i=0; i<datasets.length; i++){%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].pointColor%>;\"></i><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%>";
   var barChartLegend = "<% for (var i=0; i<datasets.length; i++){%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].strokeColor%>;\"></i><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%>";
   var dougnutChartLegend = "<% for (var i=0; i<segments.length; i++){%><li><i style=\"background:<%=segments[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=segments[i].highlightColor%>;\"></i><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%>";
+  var allTimeTopPageNames = [];
+  var allTimeTopBrowsers = [];
+  var allTimeTopIEVersions = [];
+  var allTimeTopFirefoxVersions = [];
 
 
+  function retrieveAllTimeTopNames(ids) {
+      //Retrieve all time top page names, browsers, IE Versions and Firefox Versions 
+      //as a back-up for queries which rely on this data 
+      // but loading may have failed for the selected date period
+    
+    delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:pageTitle',
+          'metrics': 'ga:pageviews',
+          'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
+          'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
+          'end-date':  moment().format('YYYY-MM-DD'),
+          'sort': '-ga:pageviews',
+          'max-results': 5
+        },
+        function(response) {
+    
+          if(response.totalResults>0) {
+            response.rows.forEach(function(row, i) {
+              allTimeTopPageNames.push(row[0]);
+            });
+          }
+  
+        },
+        function(err) {
+          console.error(err.error.message);
+        });
+    
+    delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:browser',
+          'metrics': 'ga:pageviews',
+          'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
+          'end-date':  moment().format('YYYY-MM-DD'),
+          'sort': '-ga:pageviews',
+          'max-results': 5
+        },
+        function(response) {
+    
+          if(response.totalResults>0) {
+            response.rows.forEach(function(row, i) {
+              allTimeTopBrowsers.push(row[0]);
+            });
+          }
+  
+        },
+        function(err) {
+          console.error(err.error.message);
+        });  
 
+      delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:browserVersion',
+          'metrics': 'ga:pageviews',
+          'filters': 'ga:browser==Internet Explorer',
+          'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
+          'end-date':  moment().format('YYYY-MM-DD'),
+          'sort': '-ga:pageviews',
+          'max-results': 5
+        },
+        function(response) {
+    
+          if(response.totalResults>0) {
+            response.rows.forEach(function(row, i) {
+              allTimeTopIEVersions.push(row[0]);
+            });
+          }
+        },
+        function(err) {
+          console.error(err.error.message);
+        });
+
+      delayedExecuteQuery({
+          'ids': ids,
+          'dimensions': 'ga:browserVersion',
+          'metrics': 'ga:pageviews',
+          'filters': 'ga:browser==Firefox',
+          'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
+          'end-date':  moment().format('YYYY-MM-DD'),
+          'sort': '-ga:pageviews',
+          'max-results': 5
+        },
+        function(response) {
+    
+          if(response.totalResults>0) {
+            response.rows.forEach(function(row, i) {
+              allTimeTopFirefoxVersions.push(row[0]);
+            });
+          }
+        },
+        function(err) {
+          console.error(err.error.message);
+        });  
+  
+  //Reset function to do nothing for subsequent calls
+  retrieveAllTimeTopNames = function() {};
+  }
 
   function renderWeekOverWeekChart(ids, startDate, endDate) {
 
@@ -237,7 +337,7 @@
       })
       .catch(function(err) {
         console.error(err.error.message);
-      })
+      });
     }
 
   /* Calculates the number of seconds avergae dution for a session for the current and previous week */
@@ -401,7 +501,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
-      })
+      });
   }
 
   /*Calculates the average number of seconds duration of a session for this year to the previous
@@ -470,7 +570,7 @@
       })
       .catch(function(err) {
         console.error(err.error.message);
-      })
+      });
     }
 
 
@@ -545,24 +645,30 @@
     },
     function(response) {
 
-
       var data = [];
       var sumValues = 0;
 
-      //Calculate sum of all page views for percentages
-      response.rows.forEach(function(row, i) {
-        sumValues = sumValues + +row[1];
-      });
+      if(response.totalResults>0) {
+  
+        //Calculate sum of all page views for percentages
+        response.rows.forEach(function(row, i) {
+          sumValues = sumValues + (+row[1]);
+        });
+  
+  
+        response.rows.forEach(function(row, i) {
+          data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+          topPageNames.push(row[0]);
+        });
+  
+      }
+      else {
+          data.push({ value: 1, color: fillColors[0], highlight: strokeColors[0], label: 'No data for selected period'});
+          topPageNames = allTimeTopPageNames.slice();
+      }
 
-
-      response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
-        topPageNames.push(row[0]);
-      });
-
-
+  
       var doughnutChart = new Chart(makeCanvas('weekly-content-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
-      //generateLegend('weekly-content-legend-container', data);
       document.getElementById('weekly-content-legend-container').innerHTML = doughnutChart.generateLegend();
 
 
@@ -796,16 +902,23 @@
       var data = [];
       var sumValues = 0;
 
-      //Calculate sum of all page views for percentages
-      response.rows.forEach(function(row, i) {
-        sumValues = sumValues + +row[1];
-      });
-
-
-      response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
-        topBrowsers.push(row[0]);
-      });
+      if(response.totalResults>0) {
+  
+        //Calculate sum of all page views for percentages
+        response.rows.forEach(function(row, i) {
+          sumValues = sumValues + (+row[1]);
+        });
+  
+  
+        response.rows.forEach(function(row, i) {
+          data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+          topBrowsers.push(row[0]);
+        });
+      }
+      else {
+        data.push({ value: 1, color: fillColors[0], highlight: strokeColors[0], label: 'No data for selected period'});
+        topBrowsers = allTimeTopBrowsers.slice();
+      }
 
 
       var doughnutChart = new Chart(makeCanvas('weekly-browser-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
@@ -987,15 +1100,21 @@
       var data = [];
       var sumValues = 0;
 
-      //Calculate sum of all page views for percentages
-      response.rows.forEach(function(row, i) {
-        sumValues = sumValues + +row[1];
-      });
-
-      response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: 'IE ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
-        topVersions.push(row[0]);
-      });
+      if(response.totalResults>0) {
+        //Calculate sum of all page views for percentages
+        response.rows.forEach(function(row, i) {
+          sumValues = sumValues + (+row[1]);
+        });
+  
+        response.rows.forEach(function(row, i) {
+          data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: 'IE ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+          topVersions.push(row[0]);
+        });
+      }
+      else {
+          data.push({ value: 1, color: fillColors[0], highlight: strokeColors[0], label: 'No data for selected period'});
+          topVersions = allTimeTopIEVersions.slice();
+      }
 
       var doughnutChart = new Chart(makeCanvas('weekly-ieversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
       //generateLegend('weekly-ieversion-legend-container', data);
@@ -1177,16 +1296,22 @@
       var data = [];
       var sumValues = 0;
 
-      //Calculate sum of all page views for percentages
-      response.rows.forEach(function(row, i) {
-        sumValues = sumValues + +row[1];
-      });
-
-
-      response.rows.forEach(function(row, i) {
-        data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: 'Firefox ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
-        topVersions.push(row[0]);
-      });
+      if(response.totalResults>0) {
+        //Calculate sum of all page views for percentages
+        response.rows.forEach(function(row, i) {
+          sumValues = sumValues + (+row[1]);
+        });
+  
+  
+        response.rows.forEach(function(row, i) {
+          data.push({ value: +row[1], color: fillColors[i], highlight: strokeColors[i], label: 'Firefox ' + row[0] + ': ' + row[1] + ' (' + Math.round(row[1]/sumValues*100) + '%)' });
+          topVersions.push(row[0]);
+        });
+      }
+      else {
+          data.push({ value: 1, color: fillColors[0], highlight: strokeColors[0], label: 'No data for selected period'});
+          topVersions = allTimeTopFirefoxVersions.slice();
+      }
 
       var doughnutChart = new Chart(makeCanvas('weekly-firefoxversion-chart-container')).Doughnut(data, {percentageInnerCutout : 33, animateScale : true, legendTemplate: dougnutChartLegend});
       //generateLegend('weekly-firefoxversion-legend-container', data);
@@ -1351,12 +1476,12 @@
 
   function processResults(results, dataStore, referenceData) {
 
-    if(results!=undefined) {
+    if(results!==undefined) {
 
       //initially set all referenceData to not being found in results
       var valsFound = [];
 
-      var dataPosition = dataStore.val0.length
+      var dataPosition = dataStore.val0.length;
 
       referenceData.forEach(function(element, index, array) {
         valsFound.push(false);
@@ -1383,7 +1508,7 @@
     var sumValues = 0;
 
     referenceData.forEach(function(element, index, array) {
-      if(valsFound[index]==false)
+      if(valsFound[index]===false)
         dataStore['val' + index].push(0);
       else
         sumValues = sumValues + dataStore['val' + index][dataPosition];
@@ -1497,6 +1622,6 @@
       var r = Array.prototype.slice.call(arguments, 2);
 
       return setTimeout(function() {
-            func.apply(null, r)
+            func.apply(null, r);
         }, timeout);
     }
