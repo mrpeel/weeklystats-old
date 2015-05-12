@@ -214,8 +214,6 @@
 <!-- Include the DateRangeSelector component script. -->
 <script src="javascript/date-range-selector.js"></script>
 
-<!-- Include the ActiveUsers component script. -->
-<script src="javascript/active-users.js"></script>
 
 <script src="weekly_stats.js"></script>
 
@@ -275,7 +273,7 @@ gapi.analytics.ready(function() {
       if(startDate!=newStartDate) {
         startDate = newStartDate;
         endDate =  newEndDate;
-        renderCharts();
+        renderCharts(gaId, startDate, endDate);
       }
 
     });
@@ -307,25 +305,16 @@ gapi.analytics.ready(function() {
     }
     else {
       gaId = data.ids;
-      renderCharts();
+      //Start chart rendering
+      renderCharts(gaId, startDate, endDate)
     }
 
   });
 
 
-  function renderCharts() {
-    renderWeekOverWeekChart(gaId, startDate, endDate);
-    delay(renderWeekOverWeekSessionDurationChart, 850 + Math.random()*500, gaId, startDate, endDate);
-    retrieveAllTimeTopNames(gaId);
-    renderWeekContentUsageChart(gaId, startDate, endDate);
-    renderTopBrowsersPeriod(gaId, startDate, endDate);
-    renderIEVersionPeriod(gaId, startDate, endDate);
-    renderFirefoxVersionPeriod(gaId, startDate, endDate);
-  }
-
 
   // Set some global Chart.js defaults.
-  Chart.defaults.global.animationSteps = 60;
+  Chart.defaults.global.animationSteps = 120;
   Chart.defaults.global.animationEasing = 'easeInOutQuart';
   Chart.defaults.global.responsive = true;
   Chart.defaults.global.maintainAspectRatio = false;
