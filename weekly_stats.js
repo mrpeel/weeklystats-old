@@ -13,6 +13,17 @@
   var allTimeTopIEVersions = [];
   var allTimeTopFirefoxVersions = [];
 
+  /** Thees functions show and hide a loading bar
+   * 
+   */
+  function showLoadingBar(){
+    document.getElementById("load-bar").className = "loader";
+  }
+
+  function hideLoadingBar(){
+    document.getElementById("load-bar").className = "loader-hidden";
+  }
+
   /** This function starts the execution chain for rendering the analytics charts.
    * It only calls the first function with the end of each function calling the
    * subsequent render function.  The chaining approach has been used to ensure the
@@ -23,6 +34,7 @@
    */
   
   function renderCharts(ids, startDate, endDate){
+      showLoadingBar();
       renderWeekOverWeekSessions(ids, startDate, endDate);
       
   }
@@ -45,7 +57,8 @@
           'filters': 'ga:sessions>0',
           'start-date': moment(endDate).subtract(1, 'years').format('YYYY-MM-DD'),
           'end-date':  endDate,
-          'sort': 'ga:dayOfWeek,-ga:sessions'        })
+          'sort': 'ga:dayOfWeek,-ga:sessions'
+      })
       .then(function(result){
         processLastYear(result);
         return rateLimitDelay();
@@ -83,6 +96,7 @@
       })
       .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
       });
   
 
@@ -247,6 +261,7 @@
       })
       .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
       });
 
 
@@ -343,6 +358,7 @@
       })
       .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
       });
 
 
@@ -502,6 +518,7 @@
       })
       .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
       });
 
 
@@ -568,6 +585,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
     });
 
       
@@ -754,6 +772,7 @@
     })
     .catch(function(err) {
       console.error(err.error.message);
+      hideLoadingBar();
     });
         
     
@@ -811,6 +830,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
     });
     
     
@@ -989,6 +1009,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
     });
   
     
@@ -1049,6 +1070,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
     });
     
     function processWeekResults(result) {
@@ -1227,6 +1249,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
     });
 
     function renderChart() {
@@ -1284,6 +1307,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
     });
     
     function processWeekResults(result) {
@@ -1459,6 +1483,7 @@
     })
     .catch(function(err) {
         console.error(err.error.message);
+        hideLoadingBar();
     });
     
 
@@ -1482,6 +1507,9 @@
 
       var lineChart = new Chart(makeCanvas('quarterly-firefoxversion-chart-container')).Line(data, {legendTemplate: lineChartLegend});
       document.getElementById('quarterly-firefoxversion-legend-container').innerHTML = lineChart.generateLegend();
+      
+      //Hide the loading bar
+      hideLoadingBar();
     }  
   }
 
