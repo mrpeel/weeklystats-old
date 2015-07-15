@@ -1596,12 +1596,14 @@ function processResults(results, dataStore, referenceData) {
         //initially set all referenceData to not being found in results
         var valsFound = [];
 
-        var dataPosition = dataStore.val0.length;
-
         referenceData.forEach(function(element, index, array) {
             valsFound.push(false);
         });
 
+        //Find the current position in the array (0-3) depending on which quarter is being processed 
+        var dataPosition = dataStore.val0.length;
+
+        
         //iterate through results, map in values and set the value as being found
         if (results.totalResults > 0) {
             results.rows.forEach(function(row, r) {
