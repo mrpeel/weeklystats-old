@@ -1,0 +1,17 @@
+{
+    "jscompiler": {
+        "outputs": [
+            {
+                "inputs": [
+                    "statschartbuilder.js",
+                    "generatecharts.js"
+                ],
+                "output": "weeklystats.min.js",
+                "generateMap": true,
+                "mangle": true,
+                "isolate": true
+            }
+            
+        ]
+    }
+}
