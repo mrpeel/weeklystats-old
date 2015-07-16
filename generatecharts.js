@@ -48,6 +48,24 @@ function renderCharts(ids, startDate, endDate) {
             return renderQuarterlyContentUsage(ids, startDate, endDate, result);  
         })
         .then(function(result) {
+            return renderWeekBrowserUsage(ids, startDate, endDate);  
+        })
+        .then(function(result) {
+            return renderQuarterlyBrowserUsage(ids, startDate, endDate, result);  
+        })
+        .then(function(result) {
+            return renderWeekIEUsage(ids, startDate, endDate);  
+        })
+        .then(function(result) {
+            return renderQuarterlyIEUsage(ids, startDate, endDate, result);  
+        })
+        .then(function(result) {
+            return renderWeekFirefoxUsage(ids, startDate, endDate);  
+        })
+        .then(function(result) {
+            return renderQuarterlyFirefoxUsage(ids, startDate, endDate, result);  
+        })
+        .then(function(result) {
             hideLoadingBar();
         })
         .catch(function(err) {
@@ -237,11 +255,9 @@ function renderQuarterlyContentUsage(ids, startDate, endDate, topFiveData) {
     
     quarterlyContentUsage.gaDimensions = 'ga:pageTitle';
     quarterlyContentUsage.gaMetrics = 'ga:pageviews';
-    
-    //Prepare topFiveData data for top five
-    quarterlyContentUsage.retrieveTopFive();
-    
-    return quarterlyContentUsage.delayExecution()
+        
+    //Prepare topFiveData data for top five    
+    return quarterlyContentUsage.retrieveTopFive()
         .then(function(result) {
             //Build query and label strings
             quarterlyContentUsage.buildQueryAndLabels();
@@ -258,6 +274,181 @@ function renderQuarterlyContentUsage(ids, startDate, endDate, topFiveData) {
             quarterlyContentUsage.createLineChart('quarterly-content-chart-container','quarterly-content-legend-container');
 
             return quarterlyContentUsage.delayExecution();
+        })
+        .then(function(){
+            return true;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
+}
+
+function renderWeekBrowserUsage(ids, startDate, endDate) {
+
+    var weekBrowserUsage = new WeekDoughnutChart(ids, startDate, endDate);
+    
+    weekBrowserUsage.gaDimensions = 'ga:browser';
+    weekBrowserUsage.gaMetrics = 'ga:pageviews';
+    weekBrowserUsage.gaFilters = '';
+    weekBrowserUsage.gaSort = '-ga:pageviews';
+    
+    //Retrieve data for week and set up data in doughnut chart format
+    return weekBrowserUsage.retrieveAndSetUpGAData()
+        .then(function(result) {  
+            weekBrowserUsage.createDoughnutChart('weekly-browser-chart-container','weekly-browser-legend-container');
+            return weekBrowserUsage.delayExecution();
+        })
+        .then(function(){
+            return weekBrowserUsage.topFiveData;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
+}
+
+function renderQuarterlyBrowserUsage(ids, startDate, endDate, topFiveData) {
+    //Create object and pass in the GA query term and top five data
+    var quarterlyBrowserUsage = new QuarterlyChart(ids, startDate, endDate, 'browser', topFiveData);
+    
+    quarterlyBrowserUsage.gaDimensions = 'ga:browser';
+    quarterlyBrowserUsage.gaMetrics = 'ga:pageviews';
+        
+    //Prepare topFiveData data for top five    
+    return quarterlyBrowserUsage.retrieveTopFive()
+        .then(function(result) {
+            //Build query and label strings
+            quarterlyBrowserUsage.buildQueryAndLabels();
+            return quarterlyBrowserUsage.delayExecution();
+        })
+        //Retrieve Data
+        .then(function(result) {
+            //Build query and label strings
+            return quarterlyBrowserUsage.retrieveGAData();
+        })
+        .then(function(result) {
+            //Set up data in chart format and render chart
+            quarterlyBrowserUsage.setUpChartData();
+            quarterlyBrowserUsage.createLineChart('quarterly-browser-chart-container','quarterly-browser-legend-container');
+
+            return quarterlyBrowserUsage.delayExecution();
+        })
+        .then(function(){
+            return true;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
+}
+
+function renderWeekIEUsage(ids, startDate, endDate) {
+
+    var weekIEUsage = new WeekDoughnutChart(ids, startDate, endDate);
+
+    
+    weekIEUsage.gaDimensions = 'ga:browserVersion';
+    weekIEUsage.gaMetrics = 'ga:pageviews';
+    weekIEUsage.gaFilters = 'ga:browser==Internet Explorer';
+    weekIEUsage.gaSort = '-ga:pageviews';
+    
+    //Retrieve data for week and set up data in doughnut chart format
+    return weekIEUsage.retrieveAndSetUpGAData()
+        .then(function(result) {  
+            weekIEUsage.createDoughnutChart('weekly-ieversion-chart-container','weekly-ieversion-legend-container');
+            return weekIEUsage.delayExecution();
+        })
+        .then(function(){
+            return weekIEUsage.topFiveData;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
+}
+
+function renderQuarterlyIEUsage(ids, startDate, endDate, topFiveData) {
+    //Create object and pass in the GA query term and top five data
+    var quarterlyIEUsage = new QuarterlyChart(ids, startDate, endDate, 'browserVersion', topFiveData);
+    
+    quarterlyIEUsage.gaDimensions = 'ga:browserVersion';
+    quarterlyIEUsage.gaMetrics = 'ga:pageviews';
+    quarterlyIEUsage.queryPrefix = 'ga:browser==Internet Explorer;';
+        
+    //Prepare topFiveData data for top five    
+    return quarterlyIEUsage.retrieveTopFive()
+        .then(function(result) {
+            //Build query and label strings
+            quarterlyIEUsage.buildQueryAndLabels();
+            return quarterlyIEUsage.delayExecution();
+        })
+        //Retrieve Data
+        .then(function(result) {
+            //Build query and label strings
+            return quarterlyIEUsage.retrieveGAData();
+        })
+        .then(function(result) {
+            //Set up data in chart format and render chart
+            quarterlyIEUsage.setUpChartData();
+            quarterlyIEUsage.createLineChart('quarterly-ieversion-chart-container','quarterly-ieversion-legend-container');
+
+            return quarterlyIEUsage.delayExecution();
+        })
+        .then(function(){
+            return true;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
+}
+
+function renderWeekFirefoxUsage(ids, startDate, endDate) {
+
+    var weekFirefoxUsage = new WeekDoughnutChart(ids, startDate, endDate);
+
+    
+    weekFirefoxUsage.gaDimensions = 'ga:browserVersion';
+    weekFirefoxUsage.gaMetrics = 'ga:pageviews';
+    weekFirefoxUsage.gaFilters = 'ga:browser==Firefox';
+    weekFirefoxUsage.gaSort = '-ga:pageviews';
+    
+    //Retrieve data for week and set up data in doughnut chart format
+    return weekFirefoxUsage.retrieveAndSetUpGAData()
+        .then(function(result) {  
+            weekFirefoxUsage.createDoughnutChart('weekly-firefoxversion-chart-container','weekly-firefoxversion-legend-container');
+            return weekFirefoxUsage.delayExecution();
+        })
+        .then(function(){
+            return weekFirefoxUsage.topFiveData;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
+}
+
+function renderQuarterlyFirefoxUsage(ids, startDate, endDate, topFiveData) {
+    //Create object and pass in the GA query term and top five data
+    var quarterlyFirefoxUsage = new QuarterlyChart(ids, startDate, endDate, 'browserVersion', topFiveData);
+    
+    quarterlyFirefoxUsage.gaDimensions = 'ga:browserVersion';
+    quarterlyFirefoxUsage.gaMetrics = 'ga:pageviews';
+    quarterlyFirefoxUsage.queryPrefix = 'ga:browser==Firefox;';
+        
+    //Prepare topFiveData data for top five    
+    return quarterlyFirefoxUsage.retrieveTopFive()
+        .then(function(result) {
+            //Build query and label strings
+            quarterlyFirefoxUsage.buildQueryAndLabels();
+            return quarterlyFirefoxUsage.delayExecution();
+        })
+        //Retrieve Data
+        .then(function(result) {
+            //Build query and label strings
+            return quarterlyFirefoxUsage.retrieveGAData();
+        })
+        .then(function(result) {
+            //Set up data in chart format and render chart
+            quarterlyFirefoxUsage.setUpChartData();
+            quarterlyFirefoxUsage.createLineChart('quarterly-firefoxversion-chart-container','quarterly-firefoxversion-legend-container');
+
+            return quarterlyFirefoxUsage.delayExecution();
         })
         .then(function(){
             return true;

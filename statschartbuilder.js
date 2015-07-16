@@ -229,9 +229,9 @@ WeekToPreviousWeekChart.prototype.retrieveGAData = function () {
 
     //capture execution context to enable usage within functions
     var weekToPreviousWeekContext = this;
-    
-    //run GA queries and map data into properties
-   return weekToPreviousWeekContext.queryGA({
+
+    //Create gaParams object and populate with first query
+    var gaParams = {
         'ids': weekToPreviousWeekContext.gaIds,
         'dimensions': weekToPreviousWeekContext.gaLastYearDimensions,
         'metrics': weekToPreviousWeekContext.gaMetrics,
@@ -239,7 +239,10 @@ WeekToPreviousWeekChart.prototype.retrieveGAData = function () {
         'start-date': weekToPreviousWeekContext.lastYearStartDate,
         'end-date': weekToPreviousWeekContext.lastYearEndDate,
         'sort': weekToPreviousWeekContext.gaSort
-        })
+    };
+    
+    //run GA queries and map data into properties
+   return weekToPreviousWeekContext.queryGA(gaParams)
             //process last year's data results
             .then(function(result) {
                 weekToPreviousWeekContext.transformLastYearDataToMedians(result);
@@ -248,13 +251,16 @@ WeekToPreviousWeekChart.prototype.retrieveGAData = function () {
             })
             //Retrieve current week data
             .then(function(result) {  
-                return weekToPreviousWeekContext.queryGA({
+                //Redefine gaParams for weekly data
+                gaParams = {
                     'ids': weekToPreviousWeekContext.gaIds,
                     'dimensions': weekToPreviousWeekContext.gaDimensions,
                     'metrics': weekToPreviousWeekContext.gaMetrics,
                     'start-date': weekToPreviousWeekContext.currentWeekStartDate,
                     'end-date': weekToPreviousWeekContext.currentWeekEndDate
-                });
+                };
+
+                return weekToPreviousWeekContext.queryGA(gaParams);
             })
             //Add results for current week data
             .then(function(result) {
@@ -266,13 +272,10 @@ WeekToPreviousWeekChart.prototype.retrieveGAData = function () {
             })
             //Retrieve previous week data
             .then(function(result) {
-                return weekToPreviousWeekContext.queryGA({
-                    'ids': weekToPreviousWeekContext.gaIds,
-                    'dimensions': weekToPreviousWeekContext.gaDimensions,
-                    'metrics': weekToPreviousWeekContext.gaMetrics,
-                    'start-date': weekToPreviousWeekContext.lastWeekStartDate,
-                    'end-date': weekToPreviousWeekContext.lastWeekEndDate
-                });
+                gaParams["start-date"] = weekToPreviousWeekContext.lastWeekStartDate;
+                gaParams["end-date"] = weekToPreviousWeekContext.lastWeekEndDate;
+
+                return weekToPreviousWeekContext.queryGA(gaParams);
             })
             //Add results for previous week data
             .then(function(result) {
@@ -368,17 +371,21 @@ YearToPreviousYearChart.prototype.retrieveGAData = function () {
 
     //capture execution context to enable usage within functions
     var yearToPreviousYearContext = this;
-    
-    //run GA queries and map data into properties
 
-    //Retrieve data for current year
-    return yearToPreviousYearContext.queryGA({
+    //Create gaParams object and populate with first query
+    var gaParams = {
             'ids': yearToPreviousYearContext.gaIds,
             'dimensions': yearToPreviousYearContext.gaDimensions ,
             'metrics': yearToPreviousYearContext.gaMetrics,
             'start-date': yearToPreviousYearContext.currentYearStartDate,
             'end-date': yearToPreviousYearContext.currentYearEndDate
-        })
+    };
+    
+    
+    //run GA queries and map data into properties
+
+    //Retrieve data for current year
+    return yearToPreviousYearContext.queryGA(gaParams)
         .then(function(result) {
             yearToPreviousYearContext.currentYearData = result.rows.map(function(row) {
                 return +row[2];
@@ -388,13 +395,10 @@ YearToPreviousYearChart.prototype.retrieveGAData = function () {
         })
         .then(function(result) {
             //Previous year data
-            return yearToPreviousYearContext.queryGA({
-                'ids': yearToPreviousYearContext.gaIds,
-                'dimensions': yearToPreviousYearContext.gaDimensions,
-                'metrics': yearToPreviousYearContext.gaMetrics,
-                'start-date': yearToPreviousYearContext.previousYearStartDate,
-                'end-date': yearToPreviousYearContext.previousYearEndDate
-            });
+                gaParams["start-date"] = yearToPreviousYearContext.previousYearStartDate;
+                gaParams["end-date"] = yearToPreviousYearContext.previousYearEndDate;
+
+                return yearToPreviousYearContext.queryGA(gaParams);
         })
         .then(function(result) {
             yearToPreviousYearContext.previousYearData = result.rows.map(function(row) {
@@ -484,17 +488,25 @@ WeekDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
     //capture execution context to enable usage within functions
     var weekDoughnutChartContext = this;
     
-    //run GA queries and map data into properties
-    return weekDoughnutChartContext.queryGA({
+    //Create gaParams object
+    var gaParams = {
         'ids': weekDoughnutChartContext.gaIds,
         'dimensions': weekDoughnutChartContext.gaDimensions,
         'metrics': weekDoughnutChartContext.gaMetrics,
-        'filters': weekDoughnutChartContext.gaFilters,
         'start-date': weekDoughnutChartContext.currentWeekStartDate,
         'end-date': weekDoughnutChartContext.currentWeekEndDate,
         'sort': weekDoughnutChartContext.gaSort,
-        'max-results': 5
-        })
+        'max-results': 5                    
+    };
+
+    //Add in the filters property if required
+    if (weekDoughnutChartContext.gaFilters!=='') {
+        gaParams.filters = weekDoughnutChartContext.gaFilters;
+    }        
+
+    
+    //run GA queries and map data into properties
+    return weekDoughnutChartContext.queryGA(gaParams)
         //process results
         .then(function(result) {
             var sumValues = 0;
@@ -546,6 +558,7 @@ var QuarterlyChart = function (ids, startDate, endDate, queryElement, topFiveDat
     "use strict";
     
     StatsChart.call(this, ids, startDate, endDate);
+    this.queryPrefix = '';
     this.pageQuery = '';
     this.pageData = {};
     this.monthLabels = [];
@@ -600,7 +613,7 @@ QuarterlyChart.prototype.retrieveTopFive = function() {
             });
     }
     
-    return true;
+    return quarterlyChartContext.delayExecution();
 
 };
 
@@ -620,10 +633,15 @@ QuarterlyChart.prototype.buildQueryAndLabels = function() {
      *  and initialise arrays for holding the data
      */
     
+    //If a special prefix is required, add it to the start of the query
+    if (quarterlyChartContext.queryPrefix!=='') {
+        quarterlyChartContext.pageQuery = quarterlyChartContext.queryPrefix;
+    }
+    
     quarterlyChartContext.searchValues.forEach(function(element, index, array) {
         //Add page to query string
         if (index > 0) {
-            quarterlyChartContext.pageQuery = quarterlyChartContext.pageQuery + ', ';
+            quarterlyChartContext.pageQuery = quarterlyChartContext.pageQuery + ',';
         }
 
         quarterlyChartContext.pageQuery = quarterlyChartContext.pageQuery + 'ga:' + quarterlyChartContext.gaQueryElement + '==' + element;
@@ -655,56 +673,44 @@ QuarterlyChart.prototype.retrieveGAData = function () {
     //capture execution context to enable usage within functions
     var quarterlyChartContext = this;
     
-    //run GA queries and map data into properties
-    return quarterlyChartContext.queryGA({
+    //Create gaParams object with first query vals
+    var gaParams = {
             'ids': quarterlyChartContext.gaIds,
             'dimensions': quarterlyChartContext.gaDimensions,
             'metrics': quarterlyChartContext.gaMetrics,
             'filters': quarterlyChartContext.pageQuery,
             'start-date': quarterlyChartContext.periodDates[0],
             'end-date': quarterlyChartContext.periodDates[1]
+    };
+    
+    //run GA queries and map data into properties
+    return quarterlyChartContext.queryGA(gaParams)
+        .then(function(result) {
+            quarterlyChartContext.processQuarterlyResults(result);
+            return quarterlyChartContext.delayExecution();
+        })
+        .then(function(result) {
+            gaParams["start-date"] = quarterlyChartContext.periodDates[2];
+            gaParams["end-date"] = quarterlyChartContext.periodDates[3];
+            return quarterlyChartContext.queryGA(gaParams);
         })
         .then(function(result) {
             quarterlyChartContext.processQuarterlyResults(result);
             return quarterlyChartContext.delayExecution();
         })
         .then(function(result) {
-            return quarterlyChartContext.queryGA({
-                'ids': quarterlyChartContext.gaIds,
-                'dimensions': quarterlyChartContext.gaDimensions,
-                'metrics': quarterlyChartContext.gaMetrics,
-                'filters': quarterlyChartContext.pageQuery,
-                'start-date': quarterlyChartContext.periodDates[2],
-                'end-date': quarterlyChartContext.periodDates[3]
-            });
+            gaParams["start-date"] = quarterlyChartContext.periodDates[4];
+            gaParams["end-date"] = quarterlyChartContext.periodDates[5];
+            return quarterlyChartContext.queryGA(gaParams);
         })
         .then(function(result) {
             quarterlyChartContext.processQuarterlyResults(result);
             return quarterlyChartContext.delayExecution();
         })
         .then(function(result) {
-            return quarterlyChartContext.queryGA({
-                'ids': quarterlyChartContext.gaIds,
-                'dimensions': quarterlyChartContext.gaDimensions,
-                'metrics': quarterlyChartContext.gaMetrics,
-                'filters': quarterlyChartContext.pageQuery,
-                'start-date': quarterlyChartContext.periodDates[4],
-                'end-date': quarterlyChartContext.periodDates[5]
-            });
-        })
-        .then(function(result) {
-            quarterlyChartContext.processQuarterlyResults(result);
-            return quarterlyChartContext.delayExecution();
-        })
-        .then(function(result) {
-            return quarterlyChartContext.queryGA({
-                'ids': quarterlyChartContext.gaIds,
-                'dimensions': quarterlyChartContext.gaDimensions,
-                'metrics': quarterlyChartContext.gaMetrics,
-                'filters': quarterlyChartContext.pageQuery,
-                'start-date': quarterlyChartContext.periodDates[6],
-                'end-date': quarterlyChartContext.periodDates[7]
-            });
+            gaParams["start-date"] = quarterlyChartContext.periodDates[6];
+            gaParams["end-date"] = quarterlyChartContext.periodDates[7];
+            return quarterlyChartContext.queryGA(gaParams);
         })
         .then(function(result) {
             quarterlyChartContext.processQuarterlyResults(result);
