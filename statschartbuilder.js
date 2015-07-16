@@ -586,20 +586,27 @@ QuarterlyChart.prototype.retrieveTopFive = function() {
     
     //capture execution context to enable usage within functions
     var quarterlyChartContext = this;
-    
-    //Check if there is data in the search values, if so return immediately
-    if (quarterlyChartContext.searchValues.length === 0) {    
-        /*run query for previous 2 years*/
-        return quarterlyChartContext.queryGA({ 
-            'ids': quarterlyChartContext.ids,
-            'dimensions': 'ga:' + quarterlyChartContext.gaQueryElement,
-            'metrics': 'ga:pageviews',
-            'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
+
+    //Create gaParams object with query vals
+    var gaParams = {
+            'ids': quarterlyChartContext.gaIds,
+            'dimensions': quarterlyChartContext.gaDimensions,
+            'metrics': quarterlyChartContext.gaMetrics,
             'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
             'end-date': moment().format('YYYY-MM-DD'),
             'sort': '-ga:pageviews',
             'max-results': 5
-            })
+    };
+
+    //Add in the filters if required
+    if (quarterlyChartContext.gaFilters!=='') {
+        gaParams.filters = quarterlyChartContext.gaFilters;
+    }
+    
+    //Check if there is data in the search values, if so return immediately
+    if (quarterlyChartContext.searchValues.length === 0) {    
+        /*run query for previous 2 years*/
+        return quarterlyChartContext.queryGA(gaParams)
             .then(function(result) {
                 if (result.totalResults > 0) {
                     result.rows.forEach(function(row, i) {

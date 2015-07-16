@@ -255,6 +255,7 @@ function renderQuarterlyContentUsage(ids, startDate, endDate, topFiveData) {
     
     quarterlyContentUsage.gaDimensions = 'ga:pageTitle';
     quarterlyContentUsage.gaMetrics = 'ga:pageviews';
+    quarterlyContentUsage.gaFilters = 'ga:pageTitle!=Redirect;ga:pageviews>10';
         
     //Prepare topFiveData data for top five    
     return quarterlyContentUsage.retrieveTopFive()
@@ -289,7 +290,6 @@ function renderWeekBrowserUsage(ids, startDate, endDate) {
     
     weekBrowserUsage.gaDimensions = 'ga:browser';
     weekBrowserUsage.gaMetrics = 'ga:pageviews';
-    weekBrowserUsage.gaFilters = '';
     weekBrowserUsage.gaSort = '-ga:pageviews';
     
     //Retrieve data for week and set up data in doughnut chart format
@@ -370,6 +370,7 @@ function renderQuarterlyIEUsage(ids, startDate, endDate, topFiveData) {
     
     quarterlyIEUsage.gaDimensions = 'ga:browserVersion';
     quarterlyIEUsage.gaMetrics = 'ga:pageviews';
+    quarterlyIEUsage.gaFilters = 'ga:browser==Internet Explorer';    
     quarterlyIEUsage.queryPrefix = 'ga:browser==Internet Explorer;';
         
     //Prepare topFiveData data for top five    
@@ -429,6 +430,7 @@ function renderQuarterlyFirefoxUsage(ids, startDate, endDate, topFiveData) {
     
     quarterlyFirefoxUsage.gaDimensions = 'ga:browserVersion';
     quarterlyFirefoxUsage.gaMetrics = 'ga:pageviews';
+    quarterlyFirefoxUsage.gaFilters = 'ga:browser==Firefox';
     quarterlyFirefoxUsage.queryPrefix = 'ga:browser==Firefox;';
         
     //Prepare topFiveData data for top five    
