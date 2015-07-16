@@ -238,68 +238,28 @@ function renderQuarterlyContentUsage(ids, startDate, endDate, topFiveData) {
     quarterlyContentUsage.gaDimensions = 'ga:pageTitle';
     quarterlyContentUsage.gaMetrics = 'ga:pageviews';
     
-    //Prepare serachTerms data for top five
-    //return quarterlyContentUsage.retrieveTopFive()
-    //Prepare query string and date periods
-    //    .then(function(result) {
-            return quarterlyContentUsage.setQueryTerms()//;
-      //  })
+    //Prepare topFiveData data for top five
+    quarterlyContentUsage.retrieveTopFive();
+    
+    return quarterlyContentUsage.delayExecution()
         .then(function(result) {
-            return quarterlyContentUsage.queryGA({
-                    'ids': quarterlyContentUsage.gaIds,
-                    'dimensions': quarterlyContentUsage.gaDimensions,
-                    'metrics': quarterlyContentUsage.gaMetrics,
-                    'filters': quarterlyContentUsage.pageQuery,
-                    'start-date': quarterlyContentUsage.periodDates[0],
-                    'end-date': quarterlyContentUsage.periodDates[1]
-            });
-        })
-        .then(function(result) {
-            quarterlyContentUsage.processQuarterlyResults(result);
+            //Build query and label strings
+            quarterlyContentUsage.buildQueryAndLabels();
             return quarterlyContentUsage.delayExecution();
         })
+        //Retrieve Data
         .then(function(result) {
-            return quarterlyContentUsage.queryGA({
-                'ids': quarterlyContentUsage.gaIds,
-                'dimensions': quarterlyContentUsage.gaDimensions,
-                'metrics': quarterlyContentUsage.gaMetrics,
-                'filters': quarterlyContentUsage.pageQuery,
-                'start-date': quarterlyContentUsage.periodDates[2],
-                'end-date': quarterlyContentUsage.periodDates[3]
-            });
+            //Build query and label strings
+            return quarterlyContentUsage.retrieveGAData();
         })
         .then(function(result) {
-            quarterlyContentUsage.processQuarterlyResults(result);
-            return quarterlyContentUsage.delayExecution();
-        })
-        .then(function(result) {
-            return quarterlyContentUsage.queryGA({
-                'ids': quarterlyContentUsage.gaIds,
-                'dimensions': quarterlyContentUsage.gaDimensions,
-                'metrics': quarterlyContentUsage.gaMetrics,
-                'filters': quarterlyContentUsage.pageQuery,
-                'start-date': quarterlyContentUsage.periodDates[4],
-                'end-date': quarterlyContentUsage.periodDates[5]
-            });
-        })
-        .then(function(result) {
-            quarterlyContentUsage.processQuarterlyResults(result);
-            return quarterlyContentUsage.delayExecution();
-        })
-        .then(function(result) {
-            return quarterlyContentUsage.queryGA({
-                'ids': quarterlyContentUsage.gaIds,
-                'dimensions': quarterlyContentUsage.gaDimensions,
-                'metrics': quarterlyContentUsage.gaMetrics,
-                'filters': quarterlyContentUsage.pageQuery,
-                'start-date': quarterlyContentUsage.periodDates[6],
-                'end-date': quarterlyContentUsage.periodDates[7]
-            });
-        })
-        .then(function(result) {
-            quarterlyContentUsage.processQuarterlyResults(result);
+            //Set up data in chart format and render chart
             quarterlyContentUsage.setUpChartData();
             quarterlyContentUsage.createLineChart('quarterly-content-chart-container','quarterly-content-legend-container');
+
+            return quarterlyContentUsage.delayExecution();
+        })
+        .then(function(){
             return true;
         })
         .catch(function(err) {

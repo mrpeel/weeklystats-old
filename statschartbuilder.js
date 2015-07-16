@@ -101,8 +101,12 @@ StatsChart.prototype.makeCanvas = function (chartElement) {
  */
 StatsChart.prototype.createLineChart = function (chartElement, legendElement) {
     "use strict";
+    
+    //capture execution context to enable usage within functions
+    var statsChartContext = this;
+
     //Make the canvas on the element
-    var lineChart = new Chart(this.makeCanvas(chartElement)).Line(this.chartData, {
+    var lineChart = new Chart(statsChartContext.makeCanvas(chartElement)).Line(statsChartContext.chartData, {
             legendTemplate: LINE_CHART_LEGEND
         });
     document.getElementById(legendElement).innerHTML = lineChart.generateLegend();
@@ -117,8 +121,12 @@ StatsChart.prototype.createLineChart = function (chartElement, legendElement) {
 
 StatsChart.prototype.createBarChart = function (chartElement, legendElement) {
     "use strict";
+
+    //capture execution context to enable usage within functions
+    var statsChartContext = this;
+    
     //Make the canvas on the element
-    var barChart = new Chart(this.makeCanvas(chartElement)).Bar(this.chartData, {
+    var barChart = new Chart(statsChartContext.makeCanvas(chartElement)).Bar(statsChartContext.chartData, {
             legendTemplate: BAR_CHART_LEGEND
         });
     document.getElementById(legendElement).innerHTML = barChart.generateLegend();
@@ -133,8 +141,12 @@ StatsChart.prototype.createBarChart = function (chartElement, legendElement) {
 
 StatsChart.prototype.createDoughnutChart = function (chartElement, legendElement) {
     "use strict";
+
+    //capture execution context to enable usage within functions
+    var statsChartContext = this;
+    
     //Make the canvas on the element
-    var doughnutChart = new Chart(this.makeCanvas(chartElement)).Doughnut(this.chartData, {
+    var doughnutChart = new Chart(statsChartContext.makeCanvas(chartElement)).Doughnut(statsChartContext.chartData, {
             percentageInnerCutout: 33,
             animateScale: true,
             legendTemplate: DOUGHNUT_CHART_LEGEND
@@ -172,6 +184,10 @@ WeekToPreviousWeekChart.prototype.constructor = WeekToPreviousWeekChart;
  */
 WeekToPreviousWeekChart.prototype.transformLastYearDataToMedians = function (lastYearResults) {
     "use strict";
+
+    //capture execution context to enable usage within functions
+    var weekToPreviousWeekContext = this;
+    
     // Object to hold year's data for each weekday
     var dayData = { day0: [],
                     day1: [],
@@ -195,9 +211,9 @@ WeekToPreviousWeekChart.prototype.transformLastYearDataToMedians = function (las
         */
     for (dayLoop = 1; dayLoop <= 7; dayLoop++) {
         if (dayData['day' + (dayLoop % 7)] === undefined) {
-            this.lastYearData.push(0);
+            weekToPreviousWeekContext.lastYearData.push(0);
         } else {
-            this.lastYearData.push(dayData['day' + (dayLoop % 7)][Math.round(dayData['day' + (dayLoop % 7)].length / 2)]);
+            weekToPreviousWeekContext.lastYearData.push(dayData['day' + (dayLoop % 7)][Math.round(dayData['day' + (dayLoop % 7)].length / 2)]);
         }   
     }
     
@@ -289,35 +305,39 @@ WeekToPreviousWeekChart.prototype.retrieveGAData = function () {
  */
 WeekToPreviousWeekChart.prototype.setUpChartData = function () {
     "use strict";
+
+    //capture execution context to enable usage within functions
+    var weekToPreviousWeekContext = this;
+    
     
     //Set-up the chart data ready for rendering
-    this.chartData = {  labels: this.labels,
+    weekToPreviousWeekContext.chartData = {  labels: weekToPreviousWeekContext.labels,
                         datasets: [{
                                     //Previous week
-                                    label: 'Week Starting ' + this.lastWeekStarting,
-                                    fillColor: this.fillColors[0],
-                                    strokeColor: this.strokeColors[0],
-                                    pointColor: this.strokeColors[0],
+                                    label: 'Week Starting ' + weekToPreviousWeekContext.lastWeekStarting,
+                                    fillColor: weekToPreviousWeekContext.fillColors[0],
+                                    strokeColor: weekToPreviousWeekContext.strokeColors[0],
+                                    pointColor: weekToPreviousWeekContext.strokeColors[0],
                                     pointStrokeColor: "#fff",
-                                    data: this.previousWeekData
+                                    data: weekToPreviousWeekContext.previousWeekData
                                     }, 
                                    {
                                     //Current week
-                                    label: 'Week Starting ' + this.currentWeekStarting,
-                                    fillColor: this.fillColors[1],
-                                    strokeColor: this.strokeColors[1],
-                                    pointColor: this.strokeColors[1],
+                                    label: 'Week Starting ' + weekToPreviousWeekContext.currentWeekStarting,
+                                    fillColor: weekToPreviousWeekContext.fillColors[1],
+                                    strokeColor: weekToPreviousWeekContext.strokeColors[1],
+                                    pointColor: weekToPreviousWeekContext.strokeColors[1],
                                     pointStrokeColor: "#fff",
-                                    data: this.currentWeekData
+                                    data: weekToPreviousWeekContext.currentWeekData
                                     }, 
                                    {
                                     //Previous year median
                                     label: 'Median for the Last Year',
-                                    fillColor: this.fillColors[2],
-                                    strokeColor: this.strokeColors[2],
-                                    pointColor: this.strokeColors[2],
+                                    fillColor: weekToPreviousWeekContext.fillColors[2],
+                                    strokeColor: weekToPreviousWeekContext.strokeColors[2],
+                                    pointColor: weekToPreviousWeekContext.strokeColors[2],
                                     pointStrokeColor: "#fff",
-                                    data: this.lastYearData
+                                    data: weekToPreviousWeekContext.lastYearData
                                     }]
                 };
 };
@@ -402,34 +422,39 @@ YearToPreviousYearChart.prototype.retrieveGAData = function () {
  */
 YearToPreviousYearChart.prototype.setUpChartData = function () {
     "use strict";
+
+    //capture execution context to enable usage within functions
+    var yearToPreviousYearContext = this;
+    
+
     // Ensure the data arrays match the labels array.  If not, add in null values
     // Chart.js bar charts don't accept sparse datasets.
 
-    for (var i = 0, len = this.labels.length; i < len; i++) {
-        if (this.currentYearData[i] === undefined) {
-            this.currentYearData[i] = null;
+    for (var i = 0, len = yearToPreviousYearContext.labels.length; i < len; i++) {
+        if (yearToPreviousYearContext.currentYearData[i] === undefined) {
+            yearToPreviousYearContext.currentYearData[i] = null;
         }
 
-        if (this.previousYearData[i] === undefined) {
-            this.previousYearData[i] = null;  
+        if (yearToPreviousYearContext.previousYearData[i] === undefined) {
+            yearToPreviousYearContext.previousYearData[i] = null;  
         }
     }
 
     
     //Set-up the chart data ready for rendering
-    this.chartData = {
-        labels: this.labels,
+    yearToPreviousYearContext.chartData = {
+        labels: yearToPreviousYearContext.labels,
         datasets: [{
                     label: 'Last Year',
-                    fillColor: this.fillColors[0],
-                    strokeColor: this.strokeColors[0],
-                    data: this.previousYearData
+                    fillColor: yearToPreviousYearContext.fillColors[0],
+                    strokeColor: yearToPreviousYearContext.strokeColors[0],
+                    data: yearToPreviousYearContext.previousYearData
                     }, 
                    {
                     label: 'This Year',
-                    fillColor: this.fillColors[1],
-                    strokeColor: this.strokeColors[1],
-                    data: this.currentYearData
+                    fillColor: yearToPreviousYearContext.fillColors[1],
+                    strokeColor: yearToPreviousYearContext.strokeColors[1],
+                    data: yearToPreviousYearContext.currentYearData
                     }]
             };
 };
@@ -546,34 +571,36 @@ QuarterlyChart.prototype.constructor = YearToPreviousYearChart;
 QuarterlyChart.prototype.retrieveTopFive = function() {
     "use strict";
     
+    //capture execution context to enable usage within functions
+    var quarterlyChartContext = this;
+    
     //Check if there is data in the search values, if so return immediately
-    if (this.searchValues.length > 0) {
-        return new Promise(function (resolve) {});
+    if (quarterlyChartContext.searchValues.length === 0) {    
+        /*run query for previous 2 years*/
+        return quarterlyChartContext.queryGA({ 
+            'ids': quarterlyChartContext.ids,
+            'dimensions': 'ga:' + quarterlyChartContext.gaQueryElement,
+            'metrics': 'ga:pageviews',
+            'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
+            'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
+            'end-date': moment().format('YYYY-MM-DD'),
+            'sort': '-ga:pageviews',
+            'max-results': 5
+            })
+            .then(function(result) {
+                if (result.totalResults > 0) {
+                    result.rows.forEach(function(row, i) {
+                        quarterlyChartContext.searchValues.push(row[0]);
+                    });
+                }
+            })
+            .catch(function(err) {
+                console.log(err.message);
+                return false;
+            });
     }
     
-    /*run query for previous 2 years*/
-    return this.queryGA({ 
-        'ids': this.ids,
-        'dimensions': 'ga:' + this.gaQueryElement,
-        'metrics': 'ga:pageviews',
-        'filters': 'ga:pageTitle!=Redirect;ga:pageviews>10',
-        'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
-        'end-date': moment().format('YYYY-MM-DD'),
-        'sort': '-ga:pageviews',
-        'max-results': 5
-    })
-        .then(function(result) {
-            if (result.totalResults > 0) {
-                result.rows.forEach(function(row, i) {
-                    this.searchValues.push(row[0]);
-                });
-            }
-            return true;
-        })
-        .catch(function(err) {
-            console.log(err.message);
-            return false;
-        });
+    return true;
 
 };
 
@@ -583,26 +610,27 @@ QuarterlyChart.prototype.retrieveTopFive = function() {
  * @param {none} 
  * @return {boolean} returns true so that it can be used with promise chaining to wait for the result.
  */
-QuarterlyChart.prototype.setQueryTerms = function() {
+QuarterlyChart.prototype.buildQueryAndLabels = function() {
     "use strict";
 
+    //capture execution context to enable usage within functions
+    var quarterlyChartContext = this;
+    
     /* Use searchElement and searchValues to build query
      *  and initialise arrays for holding the data
      */
-
-    for (var sCounter = 0; sCounter < this.searchValues.length; sCounter++) {
+    
+    quarterlyChartContext.searchValues.forEach(function(element, index, array) {
         //Add page to query string
-        if (sCounter > 0) {
-            this.pageQuery = this.pageQuery + ', ';
+        if (index > 0) {
+            quarterlyChartContext.pageQuery = quarterlyChartContext.pageQuery + ', ';
         }
 
-        this.pageQuery = this.pageQuery + 'ga:' + this.gaQueryElement + '==' + this.searchValues[sCounter];
+        quarterlyChartContext.pageQuery = quarterlyChartContext.pageQuery + 'ga:' + quarterlyChartContext.gaQueryElement + '==' + element;
 
         //Initialise array to hold values for page
-        this.pageData['val' + sCounter] = [];
-        
-    }
-
+        quarterlyChartContext.pageData['val' + index] = [];
+    });
 
     /**Build month labels and time periods for 4 query periods
     * 1st day of 12 months ago - last day of 10 months ago
@@ -611,14 +639,80 @@ QuarterlyChart.prototype.setQueryTerms = function() {
     * 1st day of 3 months ago - last day of last month
     */
     for (var qCalculator = 3, dataCounter = 0; qCalculator >= 0; qCalculator--, dataCounter++) {
-        this.monthLabels.push(moment(this.endDate).subtract((qCalculator * 3) + 3, 'months').date(1).format('MMM') + '-' + 
-                                  moment(this.endDate).subtract((qCalculator * 3) + 1,         'months').date(1).format('MMM'));
+        quarterlyChartContext.monthLabels.push(moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 3, 'months').date(1).format('MMM') + '-' + 
+                                  moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 1,         'months').date(1).format('MMM'));
 
-        this.periodDates.push(moment(this.endDate).subtract((qCalculator * 3) + 3, 'months').date(1).format('YYYY-MM-DD'));
-        this.periodDates.push(moment(this.endDate).subtract((qCalculator * 3), 'months').date(1).subtract(1, 'days').format('YYYY-MM-DD'));
+        quarterlyChartContext.periodDates.push(moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 3, 'months').date(1).format('YYYY-MM-DD'));
+        quarterlyChartContext.periodDates.push(moment(quarterlyChartContext.endDate).subtract((qCalculator * 3), 'months').date(1).subtract(1, 'days').format('YYYY-MM-DD'));
     }    
     
     return true;
+};
+
+QuarterlyChart.prototype.retrieveGAData = function () {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var quarterlyChartContext = this;
+    
+    //run GA queries and map data into properties
+    return quarterlyChartContext.queryGA({
+            'ids': quarterlyChartContext.gaIds,
+            'dimensions': quarterlyChartContext.gaDimensions,
+            'metrics': quarterlyChartContext.gaMetrics,
+            'filters': quarterlyChartContext.pageQuery,
+            'start-date': quarterlyChartContext.periodDates[0],
+            'end-date': quarterlyChartContext.periodDates[1]
+        })
+        .then(function(result) {
+            quarterlyChartContext.processQuarterlyResults(result);
+            return quarterlyChartContext.delayExecution();
+        })
+        .then(function(result) {
+            return quarterlyChartContext.queryGA({
+                'ids': quarterlyChartContext.gaIds,
+                'dimensions': quarterlyChartContext.gaDimensions,
+                'metrics': quarterlyChartContext.gaMetrics,
+                'filters': quarterlyChartContext.pageQuery,
+                'start-date': quarterlyChartContext.periodDates[2],
+                'end-date': quarterlyChartContext.periodDates[3]
+            });
+        })
+        .then(function(result) {
+            quarterlyChartContext.processQuarterlyResults(result);
+            return quarterlyChartContext.delayExecution();
+        })
+        .then(function(result) {
+            return quarterlyChartContext.queryGA({
+                'ids': quarterlyChartContext.gaIds,
+                'dimensions': quarterlyChartContext.gaDimensions,
+                'metrics': quarterlyChartContext.gaMetrics,
+                'filters': quarterlyChartContext.pageQuery,
+                'start-date': quarterlyChartContext.periodDates[4],
+                'end-date': quarterlyChartContext.periodDates[5]
+            });
+        })
+        .then(function(result) {
+            quarterlyChartContext.processQuarterlyResults(result);
+            return quarterlyChartContext.delayExecution();
+        })
+        .then(function(result) {
+            return quarterlyChartContext.queryGA({
+                'ids': quarterlyChartContext.gaIds,
+                'dimensions': quarterlyChartContext.gaDimensions,
+                'metrics': quarterlyChartContext.gaMetrics,
+                'filters': quarterlyChartContext.pageQuery,
+                'start-date': quarterlyChartContext.periodDates[6],
+                'end-date': quarterlyChartContext.periodDates[7]
+            });
+        })
+        .then(function(result) {
+            quarterlyChartContext.processQuarterlyResults(result);
+            return true;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
 };
 
 /** 
@@ -631,19 +725,22 @@ QuarterlyChart.prototype.setQueryTerms = function() {
 
 QuarterlyChart.prototype.processQuarterlyResults = function (results) {
     "use strict";
-    
+
+    //capture execution context to enable usage within functions
+    var quarterlyChartContext = this;
+
     //Check that results have values
     if (results !== undefined) {
 
         //initially set all searchValues to not being found in results
         var valsFound = [];
 
-        this.searchValues.forEach(function(element, index, array) {
+        quarterlyChartContext.searchValues.forEach(function(element, index, array) {
             valsFound.push(false);
         });
 
         //Find the current length of array depending on which quarter is being processed, 0 = First quarter, 1 = Second quarter ...
-        var quarterNum = this.pageData.val0.length;
+        var quarterNum = quarterlyChartContext.pageData.val0.length;
         
         
         //iterate through results, map in values and set the value as being found
@@ -651,14 +748,14 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
             results.rows.forEach(function(row, r) {
 
                 //Find the position of the returned value in the searchValues
-                var referencePos = this.searchValues.indexOf(row[0]);
+                var referencePos = quarterlyChartContext.searchValues.indexOf(row[0]);
 
                 if (referencePos > -1) {
                     //set value has been found
                     valsFound[referencePos] = true;
                     
                     //add in data to the value in array for this quarter
-                    this.pageData['val' + referencePos][quarterNum] = (+row[1]);
+                    quarterlyChartContext.pageData['val' + referencePos][quarterNum] = (+row[1]);
                 }
             });
         }
@@ -668,11 +765,11 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
          */
         var sumValues = 0;
 
-        this.searchValues.forEach(function(element, index, array) {
+        quarterlyChartContext.searchValues.forEach(function(element, index, array) {
             if (valsFound[index] === false)
-                this.pageData['val' + index].push(0);
+                quarterlyChartContext.pageData['val' + index].push(0);
             else
-                sumValues = sumValues + this.pageData['val' + index][quarterNum];
+                sumValues = sumValues + quarterlyChartContext.pageData['val' + index][quarterNum];
         });
 
         /** Adjust each value to make it a percentage of the total rather
@@ -680,8 +777,8 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
          *  periods where there is a large variation in the raw numbers.
          */
         if (sumValues > 0) {
-            this.searchValues.forEach(function(element, index, array) {
-                this.pageData['val' + index][quarterNum] = (this.pageData['val' + index][quarterNum] / sumValues * 100).toFixed(2);
+            quarterlyChartContext.searchValues.forEach(function(element, index, array) {
+                quarterlyChartContext.pageData['val' + index][quarterNum] = (quarterlyChartContext.pageData['val' + index][quarterNum] / sumValues * 100).toFixed(2);
             });
         }
     }
@@ -691,22 +788,25 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
 
 QuarterlyChart.prototype.setUpChartData = function () {
     "use strict";
-    
+
+    //capture execution context to enable usage within functions
+    var quarterlyChartContext = this;
+
     //Set-up the chart data ready for rendering
-    this.chartData = {
-        labels: this.monthLabels,
+    quarterlyChartContext.chartData = {
+        labels: quarterlyChartContext.monthLabels,
         datasets: []
     };
 
-    this.searchValues.forEach(function(element, index, array) {
+    quarterlyChartContext.searchValues.forEach(function(element, index, array) {
         //Build data set for each page
-        this.chartData.datasets[index] = {
+        quarterlyChartContext.chartData.datasets[index] = {
             label: element,
-            fillColor: this.fillColors[index],
-            strokeColor: this.strokeColors[index],
-            pointColor: this.strokeColors[index],
+            fillColor: quarterlyChartContext.fillColors[index],
+            strokeColor: quarterlyChartContext.strokeColors[index],
+            pointColor: quarterlyChartContext.strokeColors[index],
             pointStrokeColor: "#fff",
-            data: this.pageData['val' + index]
+            data: quarterlyChartContext.pageData['val' + index]
         };
     });    
 };
