@@ -217,8 +217,8 @@
 <!-- Include the DateRangeSelector component script. -->
 <script src="javascript/date-range-selector.js"></script>
 
-<script src="statschartbuilder.min.js"></script>
-<script src="generatecharts.min.js"></script>
+<script src="statschartbuilder.js"></script>
+<script src="generatecharts.js"></script>
 
 <script>
 gapi.analytics.ready(function() {
@@ -276,7 +276,8 @@ gapi.analytics.ready(function() {
       if(startDate!=newStartDate) {
         startDate = newStartDate;
         endDate =  newEndDate;
-        renderCharts(gaId, startDate, endDate);
+        //renderCharts(gaId, startDate, endDate);
+        renderEventCharts(gaId, startDate, endDate);
       }
 
     });
@@ -309,7 +310,8 @@ gapi.analytics.ready(function() {
     else {
       gaId = data.ids;
       //Start chart rendering
-      renderCharts(gaId, startDate, endDate)
+      //renderCharts(gaId, startDate, endDate);
+      renderEventCharts(gaId, startDate, endDate);
     }
 
   });

@@ -3,7 +3,7 @@
 /*global gapi, Chart */
 /*global Promise, setTimeout, document, console */
 /*global moment */
-/*global statschartbuilder, StatsChart, WeekToPreviousWeekChart, YearToPreviousYearChart, WeekDoughnutChart, QuarterlyChart */
+/*global statschartbuilder, StatsChart, WeekToPreviousWeekChart, YearToPreviousYearChart, WeekDoughnutChart, QuarterlyChart, ActivityData */
 
 
 
@@ -64,6 +64,9 @@ function renderCharts(ids, startDate, endDate) {
         })
         .then(function(result) {
             return renderQuarterlyFirefoxUsage(ids, startDate, endDate, result);  
+        })
+        .then(function(result) {
+            return renderActivityData(ids, startDate, endDate);  
         })
         .then(function(result) {
             hideLoadingBar();
@@ -451,6 +454,52 @@ function renderQuarterlyFirefoxUsage(ids, startDate, endDate, topFiveData) {
             quarterlyFirefoxUsage.createLineChart('quarterly-firefoxversion-chart-container','quarterly-firefoxversion-legend-container');
 
             return quarterlyFirefoxUsage.delayExecution();
+        })
+        .then(function(){
+            return true;
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
+}
+
+/*
+*  Rendering for GA event values
+*/
+function renderEventCharts(ids, startDate, endDate) {
+    
+    showLoadingBar();
+    
+    //Run each rendering function through a promise chain
+    return renderActivityData(ids, startDate, endDate)
+        .then(function(result) {
+            hideLoadingBar();
+        })
+        .catch(function(err) {
+            console.log(err.message);
+            hideLoadingBar();
+        });
+    
+
+}
+
+function renderActivityData(ids, startDate, endDate) {
+    
+    //Create object and pass in the GA query term and top five data
+    var activityData = new ActivityData(ids, startDate, endDate);
+    
+    activityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
+    activityData.gaMetrics = 'ga:totalEvents';
+        
+    //Query and Parce Activity Data
+    return activityData.retrieveAndParseGAData()
+        .then(function(result) {
+            //Pass data to new chart
+            console.log(activityData.overallActivityData);
+            console.log(activityData.overallSearchBreakdownData);
+            console.log(activityData.applicationActivityData);
+            console.log(activityData.applicationSearchBreakdownData);
+            return true;
         })
         .then(function(){
             return true;

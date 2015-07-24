@@ -11,8 +11,12 @@
 
 //Constants for generating the legend for each type of chart
 var LINE_CHART_LEGEND = "<% for (var i=0; i<datasets.length; i++) {%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].pointColor%>;\"></i><%if (datasets[i].label) {%><%=datasets[i].label%><%}%></li><%}%>";
+
 var BAR_CHART_LEGEND = "<% for (var i=0; i<datasets.length; i++) {%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].strokeColor%>;\"></i><%if (datasets[i].label) {%><%=datasets[i].label%><%}%></li><%}%>";
+
 var DOUGHNUT_CHART_LEGEND = "<% for (var i=0; i<segments.length; i++) {%><li><i style=\"background:<%=segments[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=segments[i].highlightColor%>;\"></i><%if (segments[i].label) {%><%=segments[i].label%><%}%></li><%}%>";
+
+
 
 /** 
  * General chart class containing the common data and methods 
@@ -20,10 +24,14 @@ var DOUGHNUT_CHART_LEGEND = "<% for (var i=0; i<segments.length; i++) {%><li><i 
  */
 var StatsChart = function (ids, startDate, endDate) {
     "use strict";
-    this.fillColors = [     'rgba(115,115,115,0.33)', 'rgba(241,90,96,0.33)', 'rgba(122,195,106,0.33)', 'rgba(90,155,212,0.33)', 'rgba(250,167,91,0.33)', 'rgba(158,103,171,0.33)',
-                            'rgba(193,254,227,0.33)', 'rgba(215,127,80,0.33)'];
-    this.strokeColors = [   'rgba(115,115,115,1)', 'rgba(241,90,96,1)', 'rgba(122,195,106,1)', 'rgba(90,155,212,1)', 'rgba(250,167,91,1)', 'rgba(158,103,171,1)',
-                            'rgba(193,254,227,1)', 'rgba(215,127,80,1)'];
+    this.fillColors =   [   'rgba(244,67,54,0.33)', 'rgba(76,175,80,0.33)', 'rgba(96,125,139,0.33)', 'rgba(103,58,183,0.33)', 'rgba(3,169,244,0.33)', 'rgba(255,87,34,0.33)',
+                            'rgba(233,30,99,0.33)', 'rgba(139,195,74,0.33)', 'rgba(121,85,72,0.33)', 'rgba(63,81,181,0.33)', 'rgba(0,188,212,0.33)', 'rgba(255,193,7,0.33)'
+                        ];
+    
+    this.strokeColors = [   'rgba(244,67,54,1)', 'rgba(76,175,80,1)', 'rgba(96,125,139,0,1)', 'rgba(103,58,183,1)', 'rgba(3,169,244,1)', 'rgba(255,87,34,1)',
+                            'rgba(233,30,99,1)', 'rgba(139,195,74,1)', 'rgba(121,85,72,1)', 'rgba(63,81,181,1)', 'rgba(0,188,212,1)', 'rgba(255,193,7,1)'
+                        ];
+    
     this.gaIds = ids;
     this.gaDimensions = '';
     this.gaMetrics = '';
@@ -822,4 +830,248 @@ QuarterlyChart.prototype.setUpChartData = function () {
             data: quarterlyChartContext.pageData['val' + index]
         };
     });    
+};
+
+/** 
+ *  Class to retrieve and parse GA activity data 
+ *  
+ */
+var ActivityData = function (ids, startDate, endDate) {
+    "use strict";
+    StatsChart.call(this, ids, startDate, endDate);
+
+    //Constants for determining which applicaion triggered a GA event
+    this.applicationCategories = {};
+    this.applicationCategories.lassi = ['LASSI-Search', 'LASSI-tool-bar-button'];
+    this.applicationCategories.historicalAerialPhotographs = ['OHAP-Search', 'OHAP-tool-bar-button'];
+    this.applicationCategories.smes = ['SMES-Search', 'SMES-tool-bar-button'];
+    this.applicationCategories.lassiSpear = ['SPEAR-Search','SPEAR-tool-bar-button'];
+    this.applicationCategories.vicnames = ['VICNAMES-Search', 'VICNAMES-tool-bar-button'];
+    this.applicationCategories.viewMyTitles = ['VMT-Search', 'VMT-tool-bar-button'];
+    this.applicationCategories.tpi = ['TPC-tool-bar-button'];
+
+    //Constants for classifying GA events
+    this.applicationActivities = {};
+    this.applicationActivities.searchCategories = ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'];
+    this.applicationActivities.panAndZoomLabels = ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent', 
+                                              'Zoom to Greater Melbourne', 'Zoom to Scale'];
+    this.applicationActivities.retrieveInformationLabels = ['Add Mark to selection', 'Clear Selection List', 'Display Mark Selection List Window', 'Historical Information',
+                                                       'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels', 'Identify Survey Marks', 
+                                                       'Parcel information: click on map'];
+    this.applicationActivities.mapBasedSelectLabels = ['Select Parcel', 'Unselect Parcel', 'Complete Selection'];
+    this.applicationActivities.mapToolsLabels = ['Markup tools', 'Measure Area', 'Measure Distance', 'Clear Highlight', 'Street View: click on map'];
+    this.applicationActivities.saveLabels = ['Save Geo-Referenced Image', 'Save Image'];
+    this.applicationActivities.printLabels = ['Print Map'];
+    this.applicationActivities.downloadLabels = ['Activate Document Download Tab', 'Draw Polygon to Export Survey Information to LandXML'];
+    this.applicationActivities.administerLabels = ['Add Labels', 'Administration', 'Administrator functions', 'Broadcast Message', 'Delete Labels', 'Edit Labels',
+                                                   'Export property information', 'Mark Maintenance'];
+    
+    //Create specific data elements to hold data for each chart
+    this.overallActivityData = {};
+    this.overallSearchBreakdownData = {};
+    /*this.overallSearchBreakdownData.Address = 0;
+    this.overallSearchBreakdownData.Coordinates = 0;
+    this.overallSearchBreakdownData['Council Property No.'] = 0;
+    this.overallSearchBreakdownData['Crown Description'] = 0;
+    this.overallSearchBreakdownData['Lot on Plan'] = 0;
+    this.overallSearchBreakdownData['Lot on Street'] = 0;
+    this.overallSearchBreakdownData['Melway/VicRoads'] = 0;
+    this.overallSearchBreakdownData['Parcel PFI'] = 0;
+    this.overallSearchBreakdownData['Parcel SPI'] = 0;
+    this.overallSearchBreakdownData['Parcel VIEW_PFI'] = 0;
+    this.overallSearchBreakdownData['Property PFI'] = 0;
+    this.overallSearchBreakdownData['Property VIEW_PFI'] = 0;
+    this.overallSearchBreakdownData['Survey Label'] = 0;
+    this.overallSearchBreakdownData['Survey Mark'] = 0;*/
+
+
+    this.applicationActivityData = {};
+    /*this.applicationActivityData['LASSI General'] = {};
+    this.applicationActivityData['Historical Aerial Photographs'] = {};
+    this.applicationActivityData.SMES = {};
+    this.applicationActivityData['LASSI SPEAR Including Map Based Search'] = {};
+    this.applicationActivityData.VICNAMES = {};
+    this.applicationActivityData['View My Titles'] = {};
+    this.applicationActivityData['TPI Confirm on Map'] = {};*/
+
+    this.applicationSearchBreakdownData = {};
+    /*this.applicationSearchBreakdownData['LASSI General'] = {};
+    this.applicationSearchBreakdownData['Historical Aerial Photographs'] = {};
+    this.applicationSearchBreakdownData.SMES = {};
+    this.applicationSearchBreakdownData['LASSI SPEAR Including Map Based Search'] = {};
+    this.applicationSearchBreakdownData.VICNAMES = {};
+    this.applicationSearchBreakdownData['View My Titles'] = {};
+    this.applicationSearchBreakdownData['TPI Confirm on Map'] = {};*/
+
+};
+
+ActivityData.prototype = Object.create(StatsChart.prototype);
+ActivityData.prototype.constructor = ActivityData;
+
+/**
+ * Determine which application this value is for
+ * @param {String} categoryValue - the look-up value
+ * @return {String} the string value for the application name
+ */
+
+ActivityData.prototype.determineApplication = function (categoryValue) {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var activityDataContext = this;
+    
+    if(activityDataContext.applicationCategories.lassi.indexOf(categoryValue) >= 0) {
+        return 'LASSI General';
+    } else if(activityDataContext.applicationCategories.historicalAerialPhotographs.indexOf(categoryValue) >= 0) {
+        return 'Historical Aerial Photographs';
+    } else if(activityDataContext.applicationCategories.smes.indexOf(categoryValue) >= 0) {
+        return 'SMES';
+    } else if(activityDataContext.applicationCategories.lassiSpear.indexOf(categoryValue) >= 0) {
+        return 'LASSI SPEAR Including Map Based Search';
+    } else if(activityDataContext.applicationCategories.vicnames.indexOf(categoryValue) >= 0) {
+        return 'VICNAMES';
+    } else if(activityDataContext.applicationCategories.viewMyTitles.indexOf(categoryValue) >= 0) {
+        return 'View My Titles';
+    } else if(activityDataContext.applicationCategories.tpi.indexOf(categoryValue) >= 0) {
+        return 'TPI Confirm on Map';
+    }
+        
+};
+
+/**
+ * Determine which type of event has occurred
+ * @params {String} categoryValue, eventLabelValue - the look-up values to determine the activity type
+ * @return {String} the string value for the activity type
+ */
+
+ActivityData.prototype.determineActivity = function (categoryValue, eventLabelValue) {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var activityDataContext = this;
+    
+    if(activityDataContext.applicationActivities.searchCategories.indexOf(categoryValue) >= 0) {
+        return 'Search';
+    } else if(activityDataContext.applicationActivities.panAndZoomLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Pan and Zoom';
+    } else if(activityDataContext.applicationActivities.retrieveInformationLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Retrieve Information';
+    } else if(activityDataContext.applicationActivities.mapBasedSelectLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Map Based Parcel Select';
+    } else if(activityDataContext.applicationActivities.mapToolsLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Map Tools';
+    } else if(activityDataContext.applicationActivities.saveLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Save Image';
+    } else if(activityDataContext.applicationActivities.printLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Print Map';
+    } else if(activityDataContext.applicationActivities.downloadLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Download Data';
+    } else if(activityDataContext.applicationActivities.administerLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Administer Data';
+    }
+        
+};
+
+/**
+ * Retrieve the data required from Google Analytics and populate data sets
+ * @param {None} 
+ * @return {None}.
+ */
+ActivityData.prototype.retrieveAndParseGAData = function () {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var activityDataContext = this;
+    
+    //Create gaParams object
+    var gaParams = {
+        'ids': activityDataContext.gaIds,
+        'dimensions': activityDataContext.gaDimensions,
+        'metrics': activityDataContext.gaMetrics,
+        'start-date': activityDataContext.currentWeekStartDate,
+        'end-date': activityDataContext.currentWeekEndDate
+    };
+
+
+    
+    //run GA queries and map data into properties
+    return activityDataContext.queryGA(gaParams)
+        //process results
+        .then(function(result) {
+            var sumValues = 0;
+            
+            if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
+                activityDataContext.parseActivityData(result);
+            } 
+                
+            return true;
+            })
+            .catch(function(err) {
+                console.log(err.message);
+            });
+       
+};
+
+ActivityData.prototype.parseActivityData = function (results) {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var activityDataContext = this;
+
+    //Work through each result and add value to appropriate 
+        
+    results.rows.forEach(function(row, r) {
+
+        //Rows have the following elements, 0 - Event Category, 1 - event Label, 2 - Number of Events
+        var application = activityDataContext.determineApplication(row[0]);
+        var activity = activityDataContext.determineActivity(row[0], row[1]);
+        
+        //Ensure all required properties exist with a value of at least 0
+        if (activityDataContext.overallActivityData[activity]===undefined) {
+            activityDataContext.overallActivityData[activity] = 0;
+        }
+        
+        if (activityDataContext.applicationActivityData[application]===undefined) {
+            activityDataContext.applicationActivityData[application] = {};
+        }
+
+        
+        if (activityDataContext.applicationActivityData[application][activity]===undefined) {
+            activityDataContext.applicationActivityData[application][activity] = 0;
+        }
+        
+        
+        
+        //Add aoverall activity value
+        activityDataContext.overallActivityData[activity] += (+row[2]);            
+            
+        //Add value to specific application activity values
+        activityDataContext.applicationActivityData[application][activity] += (+row[2]);
+
+        
+        
+        //Check if this is a search activity - add search breakdown figures as well
+        if(activity ==='Search') {
+            //Ensure all required properties exist with a value of at least 0
+            if (activityDataContext.overallSearchBreakdownData[row[1]]===undefined) {
+                activityDataContext.overallSearchBreakdownData[row[1]] = 0;  
+            }
+
+            if (activityDataContext.applicationSearchBreakdownData[application]===undefined) {
+                activityDataContext.applicationSearchBreakdownData[application] = {};
+            }
+
+            if (activityDataContext.applicationSearchBreakdownData[application][row[1]]===undefined) {
+                activityDataContext.applicationSearchBreakdownData[application][row[1]] = 0;
+            }
+
+            //Add value to overall search type numbers
+            activityDataContext.overallSearchBreakdownData[row[1]] += (+row[2]);
+            
+            //Add value to specific application search type numbers
+            activityDataContext.applicationSearchBreakdownData[application][row[1]] += (+row[2]);  
+        } 
+    });
+        
+                
 };
