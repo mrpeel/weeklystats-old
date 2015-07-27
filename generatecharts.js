@@ -66,7 +66,7 @@ function renderCharts(ids, startDate, endDate) {
             return renderQuarterlyFirefoxUsage(ids, startDate, endDate, result);  
         })
         .then(function(result) {
-            return renderActivityData(ids, startDate, endDate);  
+            return renderEventCharts(ids, startDate, endDate);  
         })
         .then(function(result) {
             hideLoadingBar();
@@ -467,44 +467,174 @@ function renderQuarterlyFirefoxUsage(ids, startDate, endDate, topFiveData) {
 *  Rendering for GA event values
 */
 function renderEventCharts(ids, startDate, endDate) {
-    
+        
     showLoadingBar();
     
-    //Run each rendering function through a promise chain
-    return renderActivityData(ids, startDate, endDate)
-        .then(function(result) {
-            hideLoadingBar();
-        })
-        .catch(function(err) {
-            console.log(err.message);
-            hideLoadingBar();
-        });
-    
-
-}
-
-function renderActivityData(ids, startDate, endDate) {
-    
     //Create object and pass in the GA query term and top five data
-    var activityData = new ActivityData(ids, startDate, endDate);
+    var currentWeekActivityData = new ActivityData(ids, startDate, endDate, 'Current');
+    var previousWeekActivityData = new ActivityData(ids, startDate, endDate, 'Previous');
+    var lastYearActivityData = new ActivityData(ids, startDate, endDate, 'Year');
     
-    activityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
-    activityData.gaMetrics = 'ga:totalEvents';
-        
-    //Query and Parce Activity Data
-    return activityData.retrieveAndParseGAData()
+    currentWeekActivityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
+    currentWeekActivityData.gaMetrics = 'ga:totalEvents';
+
+    previousWeekActivityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
+    previousWeekActivityData.gaMetrics = 'ga:totalEvents';
+
+    lastYearActivityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
+    lastYearActivityData.gaMetrics = 'ga:totalEvents';
+
+    
+    //Query and parse current week Activity Data
+    return currentWeekActivityData.retrieveAndParseGAData()
         .then(function(result) {
-            //Pass data to new chart
-            console.log(activityData.overallActivityData);
-            console.log(activityData.overallSearchBreakdownData);
-            console.log(activityData.applicationActivityData);
-            console.log(activityData.applicationSearchBreakdownData);
-            return true;
+            //Render overall activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.overallActivityData);
+            currentWeekActivityData.createDoughnutChart('overall-activity-current-week-chart-container','overall-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Render overall search chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.overallSearchBreakdownData);
+            currentWeekActivityData.createDoughnutChart('overall-search-current-week-chart-container','overall-search-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function(result) {
+            //Attempt to render LASSI General activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['LASSI General'] || []);
+            currentWeekActivityData.createDoughnutChart('lassi-activity-current-week-chart-container','lassi-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Attempt to render LASSI General search chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['LASSI General'] || []);
+            currentWeekActivityData.createDoughnutChart('lassi-search-current-week-chart-container','lassi-search-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function(result) {
+            //Attempt to render LASSI SPEAR activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['LASSI SPEAR Including Map Based Search'] || []);
+            currentWeekActivityData.createDoughnutChart('spear-activity-current-week-chart-container','spear-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Attempt to render LASSI SPEAR search chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['LASSI SPEAR Including Map Based Search'] || []);
+            currentWeekActivityData.createDoughnutChart('spear-search-current-week-chart-container','spear-search-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function(result) {
+            //Attempt to render SMES activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData.SMES || []);
+            currentWeekActivityData.createDoughnutChart('smes-activity-current-week-chart-container','smes-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Attempt to render SMES search chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData.SMES || []);
+            currentWeekActivityData.createDoughnutChart('smes-search-current-week-chart-container','smes-search-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function(result) {
+            //Attempt to render VICNAMES activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData.VICNAMES || []);
+            currentWeekActivityData.createDoughnutChart('vicnames-activity-current-week-chart-container','vicnames-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Attempt to render VICNAMES search chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData.VICNAMES || []);
+            currentWeekActivityData.createDoughnutChart('vicnames-search-current-week-chart-container','vicnames-search-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function(result) {
+            //Attempt to render View My Titles activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['View My Titles'] || []);
+            currentWeekActivityData.createDoughnutChart('vmt-activity-current-week-chart-container','vmt-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Attempt to render View My Titles search chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['View My Titles'] || []);
+            currentWeekActivityData.createDoughnutChart('vmt-search-current-week-chart-container','vmt-search-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function(result) {
+            //Attempt to render Historical Aerial Photographs activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['Historical Aerial Photographs'] || []);
+            currentWeekActivityData.createDoughnutChart('hap-activity-current-week-chart-container','hap-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Attempt to render Historical Aerial Photographs search chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['Historical Aerial Photographs'] || []);
+            currentWeekActivityData.createDoughnutChart('hap-search-current-week-chart-container','hap-search-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        .then(function(result) {
+            //Attempt to render TPI Confirm on Map activity chart
+            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['TPI Confirm on Map'] || []);
+            currentWeekActivityData.createDoughnutChart('tcom-activity-current-week-chart-container','tcom-activity-current-week-legend-container');
+
+            return currentWeekActivityData.delayExecution();
+        })
+        //Query and parse previous week Activity Data
+        .then(function(result) {        
+            return previousWeekActivityData.retrieveAndParseGAData();
         })
         .then(function(){
-            return true;
+            //Render overall activity chart
+            previousWeekActivityData.prepareChartData(previousWeekActivityData.overallActivityData);
+            previousWeekActivityData.createDoughnutChart('overall-activity-previous-week-chart-container','overall-activity-previous-week-legend-container');
+
+            return previousWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Render overall search chart
+            previousWeekActivityData.prepareChartData(previousWeekActivityData.overallSearchBreakdownData);
+            previousWeekActivityData.createDoughnutChart('overall-search-previous-week-chart-container','overall-search-previous-week-legend-container');
+
+            return previousWeekActivityData.delayExecution();
+        })
+        //Query and parse last year Activity Data
+        .then(function(result) {        
+            return lastYearActivityData.retrieveAndParseGAData();
+        })
+        .then(function(){
+            //Render overall activity chart
+            lastYearActivityData.prepareChartData(lastYearActivityData.overallActivityData);
+            lastYearActivityData.createDoughnutChart('overall-activity-last-year-chart-container','overall-activity-last-year-legend-container');
+
+            return previousWeekActivityData.delayExecution();
+        })
+        .then(function() {
+            //Render overall search chart
+            lastYearActivityData.prepareChartData(lastYearActivityData.overallSearchBreakdownData);
+            lastYearActivityData.createDoughnutChart('overall-search-last-year-chart-container','overall-search-last-year-legend-container');
+
+            return lastYearActivityData.delayExecution();
+        })
+        .then(function(result) {
+            hideLoadingBar();
         })
         .catch(function(err) {
             console.log(err.message);
+            hideLoadingBar();
         });
+    
+
 }

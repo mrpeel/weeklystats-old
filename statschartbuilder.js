@@ -25,11 +25,13 @@ var DOUGHNUT_CHART_LEGEND = "<% for (var i=0; i<segments.length; i++) {%><li><i 
 var StatsChart = function (ids, startDate, endDate) {
     "use strict";
     this.fillColors =   [   'rgba(244,67,54,0.33)', 'rgba(76,175,80,0.33)', 'rgba(96,125,139,0.33)', 'rgba(103,58,183,0.33)', 'rgba(3,169,244,0.33)', 'rgba(255,87,34,0.33)',
-                            'rgba(233,30,99,0.33)', 'rgba(139,195,74,0.33)', 'rgba(121,85,72,0.33)', 'rgba(63,81,181,0.33)', 'rgba(0,188,212,0.33)', 'rgba(255,193,7,0.33)'
+                            'rgba(233,30,99,0.33)', 'rgba(139,195,74,0.33)', 'rgba(121,85,72,0.33)', 'rgba(63,81,181,0.33)', 'rgba(0,188,212,0.33)', 'rgba(255,193,7,0.33)',
+                            'rgba(156,39,176,0.33)', 'rgba(205,220,57,0.33)', 'rgba(158,158,158,0.33)', 'rgba(33,150,243,0.33)', 'rgba(0,150,136,0.33)', 'rgba(255,235,59,0.33)'
                         ];
     
-    this.strokeColors = [   'rgba(244,67,54,1)', 'rgba(76,175,80,1)', 'rgba(96,125,139,0,1)', 'rgba(103,58,183,1)', 'rgba(3,169,244,1)', 'rgba(255,87,34,1)',
-                            'rgba(233,30,99,1)', 'rgba(139,195,74,1)', 'rgba(121,85,72,1)', 'rgba(63,81,181,1)', 'rgba(0,188,212,1)', 'rgba(255,193,7,1)'
+    this.strokeColors = [   'rgba(244,67,54,1)', 'rgba(76,175,80,1)', 'rgba(96,125,139,1)', 'rgba(103,58,183,1)', 'rgba(3,169,244,1)', 'rgba(255,87,34,1)',
+                            'rgba(233,30,99,1)', 'rgba(139,195,74,1)', 'rgba(121,85,72,1)', 'rgba(63,81,181,1)', 'rgba(0,188,212,1)', 'rgba(255,193,7,1)',
+                            'rgba(156,39,176,1)', 'rgba(205,220,57,1)', 'rgba(158,158,158,1)', 'rgba(33,150,243,1)', 'rgba(0,150,136,1)', 'rgba(255,235,59,1)'
                         ];
     
     this.gaIds = ids;
@@ -836,11 +838,26 @@ QuarterlyChart.prototype.setUpChartData = function () {
  *  Class to retrieve and parse GA activity data 
  *  
  */
-var ActivityData = function (ids, startDate, endDate) {
+var ActivityData = function (ids, startDate, endDate, periodType) {
     "use strict";
-    StatsChart.call(this, ids, startDate, endDate);
+    
+    var periodStartDate, periodEndDate;
+    
+    //Set-up correct date for current week, previous week, or previous year
+    if(periodType==='Current') {
+        periodStartDate = startDate;
+        periodEndDate = endDate;
+    } else if(periodType==='Previous') {
+        periodStartDate = moment(startDate).subtract(7, 'days').format('YYYY-MM-DD');
+        periodEndDate = moment(endDate).subtract(7, 'days').format('YYYY-MM-DD');        
+    } else {
+        periodStartDate = moment(endDate).subtract(1, 'years').format('YYYY-MM-DD');
+        periodEndDate = moment(endDate).format('YYYY-MM-DD');
+    }
+    
+    StatsChart.call(this, ids, periodStartDate, periodEndDate);
 
-    //Constants for determining which applicaion triggered a GA event
+    //Values for determining which applicaion triggered a GA event
     this.applicationCategories = {};
     this.applicationCategories.lassi = ['LASSI-Search', 'LASSI-tool-bar-button'];
     this.applicationCategories.historicalAerialPhotographs = ['OHAP-Search', 'OHAP-tool-bar-button'];
@@ -850,7 +867,7 @@ var ActivityData = function (ids, startDate, endDate) {
     this.applicationCategories.viewMyTitles = ['VMT-Search', 'VMT-tool-bar-button'];
     this.applicationCategories.tpi = ['TPC-tool-bar-button'];
 
-    //Constants for classifying GA events
+    //Values for classifying GA events into specific categories
     this.applicationActivities = {};
     this.applicationActivities.searchCategories = ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'];
     this.applicationActivities.panAndZoomLabels = ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent', 
@@ -869,39 +886,8 @@ var ActivityData = function (ids, startDate, endDate) {
     //Create specific data elements to hold data for each chart
     this.overallActivityData = {};
     this.overallSearchBreakdownData = {};
-    /*this.overallSearchBreakdownData.Address = 0;
-    this.overallSearchBreakdownData.Coordinates = 0;
-    this.overallSearchBreakdownData['Council Property No.'] = 0;
-    this.overallSearchBreakdownData['Crown Description'] = 0;
-    this.overallSearchBreakdownData['Lot on Plan'] = 0;
-    this.overallSearchBreakdownData['Lot on Street'] = 0;
-    this.overallSearchBreakdownData['Melway/VicRoads'] = 0;
-    this.overallSearchBreakdownData['Parcel PFI'] = 0;
-    this.overallSearchBreakdownData['Parcel SPI'] = 0;
-    this.overallSearchBreakdownData['Parcel VIEW_PFI'] = 0;
-    this.overallSearchBreakdownData['Property PFI'] = 0;
-    this.overallSearchBreakdownData['Property VIEW_PFI'] = 0;
-    this.overallSearchBreakdownData['Survey Label'] = 0;
-    this.overallSearchBreakdownData['Survey Mark'] = 0;*/
-
-
     this.applicationActivityData = {};
-    /*this.applicationActivityData['LASSI General'] = {};
-    this.applicationActivityData['Historical Aerial Photographs'] = {};
-    this.applicationActivityData.SMES = {};
-    this.applicationActivityData['LASSI SPEAR Including Map Based Search'] = {};
-    this.applicationActivityData.VICNAMES = {};
-    this.applicationActivityData['View My Titles'] = {};
-    this.applicationActivityData['TPI Confirm on Map'] = {};*/
-
     this.applicationSearchBreakdownData = {};
-    /*this.applicationSearchBreakdownData['LASSI General'] = {};
-    this.applicationSearchBreakdownData['Historical Aerial Photographs'] = {};
-    this.applicationSearchBreakdownData.SMES = {};
-    this.applicationSearchBreakdownData['LASSI SPEAR Including Map Based Search'] = {};
-    this.applicationSearchBreakdownData.VICNAMES = {};
-    this.applicationSearchBreakdownData['View My Titles'] = {};
-    this.applicationSearchBreakdownData['TPI Confirm on Map'] = {};*/
 
 };
 
@@ -950,6 +936,7 @@ ActivityData.prototype.determineActivity = function (categoryValue, eventLabelVa
     //capture execution context to enable usage within functions
     var activityDataContext = this;
     
+    //Search predefined values to determine which class of activity was performed and return readable string
     if(activityDataContext.applicationActivities.searchCategories.indexOf(categoryValue) >= 0) {
         return 'Search';
     } else if(activityDataContext.applicationActivities.panAndZoomLabels.indexOf(eventLabelValue) >= 0) {
@@ -999,7 +986,7 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
         //process results
         .then(function(result) {
             var sumValues = 0;
-            
+            //Check for results and a specific return which GA gives for no data on a query of events
             if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
                 activityDataContext.parseActivityData(result);
             } 
@@ -1011,6 +998,12 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
             });
        
 };
+
+/**
+ * Parse the GA event data and categorise into event type and application and store in overall breakdown and application specific breakdown data properties
+ * @param {object} results object from call to GA to retrieve events 
+ * @return {None}.
+ */
 
 ActivityData.prototype.parseActivityData = function (results) {
     "use strict";
@@ -1074,4 +1067,54 @@ ActivityData.prototype.parseActivityData = function (results) {
     });
         
                 
+};
+
+/**
+ * Prepare Doughnut chart data for a data set for information 
+ * @param {object} the overall chart data to render
+ * @return {None}.
+ */
+
+ActivityData.prototype.prepareChartData = function (overallChartData) {
+    "use strict";
+
+    var objProp, sumValues = 0, valueCounter = 0;
+    
+    //capture execution context to enable usage within functions
+    var activityDataContext = this;
+    
+    //The same data set can be used for multiple charts so reset the chartData array to empty
+    activityDataContext.chartData = [];
+    
+    //Calculate sum of all activity numbers for percentages
+    for (objProp in overallChartData) {
+        sumValues = sumValues + overallChartData[objProp];
+    }
+    
+    //Check if the sum of values is greater than 0
+    if (sumValues>0) {
+        //Loop through again to provide the actual values 
+        for (objProp in overallChartData) {
+            activityDataContext.chartData.push({
+                value: overallChartData[objProp],
+                color: activityDataContext.fillColors[valueCounter],
+                highlight: activityDataContext.strokeColors[valueCounter],
+                label: objProp + ': ' + overallChartData[objProp] + ' (' + Math.round(overallChartData[objProp] / sumValues * 100) + '%)'
+            });
+            
+            valueCounter++;
+        }
+    } else {
+        //No data present fill with dummy values
+        activityDataContext.chartData.push({
+            value: 1,
+            color: activityDataContext.fillColors[0],
+            highlight: activityDataContext.strokeColors[0],
+            label: 'No data for selected period'
+        });
+    }
+    
+    
+    return true;
+       
 };
