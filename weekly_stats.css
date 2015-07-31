@@ -738,9 +738,22 @@ input:focus,select:focus {
     -ms-flex-preferred-size: 550px;
     flex-basis: 550px;
     margin: 0 0 2em 2em;
+    min-width: 300px;
+
+}
+
+.FlexGrid-item-selector {
+    -webkit-flex: 1 1 calc(100% - 1.5em);
+    -ms-flex: 1 1 calc(100% - 1.5em);
+    flex: 1 1 calc(100% - 1.5em);
+    -webkit-flex-basis: 250px;
+    -ms-flex-preferred-size: 550px;
+    flex-basis: 550px;
+    margin: 0 0 2em 2em;
     min-width: 500px;
 
 }
+
 
 .FlexGrid-item--fixed {
     -webkit-flex: 0 0 auto!important;

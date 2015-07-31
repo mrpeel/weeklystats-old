@@ -3,12 +3,20 @@
         "outputs": [
             {
                 "inputs": [
-                    "statschartbuilder.js",
+                    "statschartbuilder.js"
+                ],
+                "output": "statschartbuilder.min.js",
+                "generateMap": true,
+                "mangle": false,
+                "isolate": true
+            },
+            {
+                "inputs": [
                     "generatecharts.js"
                 ],
-                "output": "weeklystats.min.js",
+                "output": "generatecharts.min.js",
                 "generateMap": true,
-                "mangle": true,
+                "mangle": false,
                 "isolate": true
             }
             

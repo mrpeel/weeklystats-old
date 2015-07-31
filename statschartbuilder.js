@@ -838,7 +838,7 @@ QuarterlyChart.prototype.setUpChartData = function () {
  *  Class to retrieve and parse GA activity data 
  *  
  */
-var ActivityData = function (ids, startDate, endDate, periodType) {
+/*var ActivityData = function (ids, startDate, endDate, periodType) {
     "use strict";
     
     var periodStartDate, periodEndDate;
@@ -888,6 +888,124 @@ var ActivityData = function (ids, startDate, endDate, periodType) {
     this.overallSearchBreakdownData = {};
     this.applicationActivityData = {};
     this.applicationSearchBreakdownData = {};
+
+};*/
+
+var ActivityData = function (ids, startDate, endDate) {
+    "use strict";
+    
+    StatsChart.call(this, ids, startDate, endDate);
+    
+    this.previousWeekStartDate = moment(startDate).subtract(7, 'days').format('YYYY-MM-DD');
+    this.previousWeekEndDate = moment(endDate).subtract(7, 'days').format('YYYY-MM-DD');        
+    this.previousWeekStarting = moment(this.previousWeekStartDate).format('DD/MM/YYYY');
+    
+    this.lastYearStartDate = moment(endDate).subtract(1, 'years').format('YYYY-MM-DD');
+    this.lastYearEndDate = moment(endDate).format('YYYY-MM-DD');
+    
+
+    //Values for determining which applicaion triggered a GA event
+    this.applicationCategories = {
+                                lassi: ['LASSI-Search', 'LASSI-tool-bar-button'],
+                                historicalAerialPhotographs: ['OHAP-Search', 'OHAP-tool-bar-button'],
+                                smes: ['SMES-Search', 'SMES-tool-bar-button'],
+                                lassiSpear: ['SPEAR-Search','SPEAR-tool-bar-button'],
+                                vicnames: ['VICNAMES-Search', 'VICNAMES-tool-bar-button'],
+                                viewMyTitles: ['VMT-Search', 'VMT-tool-bar-button'],
+                                tpi: ['TPC-tool-bar-button']
+                                };
+
+    //Values for classifying GA events into specific categories
+    this.applicationActivities = {
+                                    searchCategories: ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'],
+                                    panAndZoomLabels: ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent', 
+                                                        'Zoom to Greater Melbourne', 'Zoom to Scale'],
+                                    retrieveInformationLabels: ['Add Mark to selection', 'Clear Selection List', 'Display Mark Selection List Window', 'Historical Information',
+                                                                'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels', 'Identify Survey Marks', 
+                                                                'Parcel information: click on map'],
+                                    mapBasedSelectLabels: ['Select Parcel', 'Unselect Parcel', 'Complete Selection'],
+                                    mapToolsLabels: ['Markup tools', 'Measure Area', 'Measure Distance', 'Clear Highlight', 'Street View: click on map'],
+                                    saveLabels: ['Save Geo-Referenced Image', 'Save Image'],
+                                    printLabels: ['Print Map'],
+                                    downloadLabels: ['Activate Document Download Tab', 'Draw Polygon to Export Survey Information to LandXML'],
+                                    administerLabels: ['Add Labels', 'Administration', 'Administrator functions', 'Broadcast Message', 'Delete Labels', 'Edit Labels',
+                                                        'Export property information', 'Mark Maintenance']
+                                };
+        
+    //Create specific data elements to hold data for each chart
+    this.overallActivityData = {
+                                Current: {},
+                                Previous: {},
+                                Year: {}
+                                };
+
+    this.overallSearchBreakdownData = {
+                                Current: {},
+                                Previous: {},
+                                Year: {}
+                                };
+
+    this.applicationActivityData = {
+                                Current: {
+                                        'LASSI General': {},
+                                        'Historical Aerial Photographs': {},
+                                        'SMES': {},
+                                        'LASSI SPEAR Including Map Based Search': {},
+                                        'VICNAMES': {},
+                                        'View My Titles': {},
+                                        'TPI Confirm on Map': {}
+                                        },
+                                Previous: {
+                                        'LASSI General': {},
+                                        'Historical Aerial Photographs': {},
+                                        'SMES': {},
+                                        'LASSI SPEAR Including Map Based Search': {},
+                                        'VICNAMES': {},
+                                        'View My Titles': {},
+                                        'TPI Confirm on Map': {}                                    
+                                        },
+                                Year: {
+                                        'LASSI General': {},
+                                        'Historical Aerial Photographs': {},
+                                        'SMES': {},
+                                        'LASSI SPEAR Including Map Based Search': {},
+                                        'VICNAMES': {},
+                                        'View My Titles': {},
+                                        'TPI Confirm on Map': {}                                                                        
+                                        }
+                                    };
+    
+    this.applicationSearchBreakdownData = {
+                                    Current: {
+                                            'LASSI General': {},
+                                            'Historical Aerial Photographs': {},
+                                            'SMES': {},
+                                            'LASSI SPEAR Including Map Based Search': {},
+                                            'VICNAMES': {},
+                                            'View My Titles': {},
+                                            'TPI Confirm on Map': {}
+                                            },
+                                    Previous: {
+                                            'LASSI General': {},
+                                            'Historical Aerial Photographs': {},
+                                            'SMES': {},
+                                            'LASSI SPEAR Including Map Based Search': {},
+                                            'VICNAMES': {},
+                                            'View My Titles': {},
+                                            'TPI Confirm on Map': {}                                    
+                                            },
+                                    Year: {
+                                            'LASSI General': {},
+                                            'Historical Aerial Photographs': {},
+                                            'SMES': {},
+                                            'LASSI SPEAR Including Map Based Search': {},
+                                            'VICNAMES': {},
+                                            'View My Titles': {},
+                                            'TPI Confirm on Map': {}                                                                        
+                                            }                                
+                                        };
+    
+
 
 };
 
@@ -988,14 +1106,54 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
             var sumValues = 0;
             //Check for results and a specific return which GA gives for no data on a query of events
             if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
-                activityDataContext.parseActivityData(result);
+                activityDataContext.parseActivityData(result, 'Current');
             } 
-                
+                        
+            return activityDataContext.delayExecution();
+        })
+        .then(function(result) {        
+            var gaParams = {
+                            'ids': activityDataContext.gaIds,
+                            'dimensions': activityDataContext.gaDimensions,
+                            'metrics': activityDataContext.gaMetrics,
+                            'start-date': activityDataContext.lastWeekStartDate,
+                            'end-date': activityDataContext.lastWeekEndDate
+            };
+
+            return activityDataContext.queryGA(gaParams);
+        })
+        .then(function(result) {
+            var sumValues = 0;
+            //Check for results and a specific return which GA gives for no data on a query of events
+            if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
+                activityDataContext.parseActivityData(result, 'Previous');
+            } 
+        
+            return activityDataContext.delayExecution();
+        })
+        .then(function(result) {
+            var gaParams = {
+                            'ids': activityDataContext.gaIds,
+                            'dimensions': activityDataContext.gaDimensions,
+                            'metrics': activityDataContext.gaMetrics,
+                            'start-date': activityDataContext.lastYearStartDate,
+                            'end-date': activityDataContext.lastYearEndDate
+            };
+
+            return activityDataContext.queryGA(gaParams);
+        })
+        .then(function(result) {
+            var sumValues = 0;
+            //Check for results and a specific return which GA gives for no data on a query of events
+            if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
+                activityDataContext.parseActivityData(result, 'Year');
+            } 
+            
             return true;
-            })
-            .catch(function(err) {
-                console.log(err.message);
-            });
+        })
+        .catch(function(err) {
+            console.log(err.message);
+        });
        
 };
 
@@ -1005,7 +1163,7 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
  * @return {None}.
  */
 
-ActivityData.prototype.parseActivityData = function (results) {
+/*ActivityData.prototype.parseActivityData = function (results) {
     "use strict";
 
     //capture execution context to enable usage within functions
@@ -1019,51 +1177,146 @@ ActivityData.prototype.parseActivityData = function (results) {
         var application = activityDataContext.determineApplication(row[0]);
         var activity = activityDataContext.determineActivity(row[0], row[1]);
         
-        //Ensure all required properties exist with a value of at least 0
-        if (activityDataContext.overallActivityData[activity]===undefined) {
-            activityDataContext.overallActivityData[activity] = 0;
-        }
-        
-        if (activityDataContext.applicationActivityData[application]===undefined) {
-            activityDataContext.applicationActivityData[application] = {};
-        }
-
-        
-        if (activityDataContext.applicationActivityData[application][activity]===undefined) {
-            activityDataContext.applicationActivityData[application][activity] = 0;
-        }
-        
-        
-        
-        //Add aoverall activity value
-        activityDataContext.overallActivityData[activity] += (+row[2]);            
-            
-        //Add value to specific application activity values
-        activityDataContext.applicationActivityData[application][activity] += (+row[2]);
-
-        
-        
-        //Check if this is a search activity - add search breakdown figures as well
-        if(activity ==='Search') {
+        //Make sure the data returned is for an activity within our data set
+        if(application!==undefined && activity!==undefined) {
             //Ensure all required properties exist with a value of at least 0
-            if (activityDataContext.overallSearchBreakdownData[row[1]]===undefined) {
-                activityDataContext.overallSearchBreakdownData[row[1]] = 0;  
+            if (activityDataContext.overallActivityData[activity]===undefined) {
+                activityDataContext.overallActivityData[activity] = 0;
             }
 
-            if (activityDataContext.applicationSearchBreakdownData[application]===undefined) {
-                activityDataContext.applicationSearchBreakdownData[application] = {};
+            if (activityDataContext.applicationActivityData[application]===undefined) {
+                activityDataContext.applicationActivityData[application] = {};
             }
 
-            if (activityDataContext.applicationSearchBreakdownData[application][row[1]]===undefined) {
-                activityDataContext.applicationSearchBreakdownData[application][row[1]] = 0;
+
+            if (activityDataContext.applicationActivityData[application][activity]===undefined) {
+                activityDataContext.applicationActivityData[application][activity] = 0;
             }
 
-            //Add value to overall search type numbers
-            activityDataContext.overallSearchBreakdownData[row[1]] += (+row[2]);
-            
-            //Add value to specific application search type numbers
-            activityDataContext.applicationSearchBreakdownData[application][row[1]] += (+row[2]);  
+
+
+            //Add aoverall activity value
+            activityDataContext.overallActivityData[activity] += (+row[2]);            
+
+            //Add value to specific application activity values
+            activityDataContext.applicationActivityData[application][activity] += (+row[2]);
+
+
+
+            //Check if this is a search activity - add search breakdown figures as well
+            if(activity ==='Search') {
+                //Ensure all required properties exist with a value of at least 0
+                if (activityDataContext.overallSearchBreakdownData[row[1]]===undefined) {
+                    activityDataContext.overallSearchBreakdownData[row[1]] = 0;  
+                }
+
+                if (activityDataContext.applicationSearchBreakdownData[application]===undefined) {
+                    activityDataContext.applicationSearchBreakdownData[application] = {};
+                }
+
+                if (activityDataContext.applicationSearchBreakdownData[application][row[1]]===undefined) {
+                    activityDataContext.applicationSearchBreakdownData[application][row[1]] = 0;
+                }
+
+                //Add value to overall search type numbers
+                activityDataContext.overallSearchBreakdownData[row[1]] += (+row[2]);
+
+                //Add value to specific application search type numbers
+                activityDataContext.applicationSearchBreakdownData[application][row[1]] += (+row[2]);  
+            }             
         } 
+
+    });
+        
+                
+};*/
+    
+ActivityData.prototype.parseActivityData = function (results, dataType) {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var activityDataContext = this;
+
+        
+    //Work through each result and add value to appropriate         
+    results.rows.forEach(function(row, r) {
+
+        //Rows have the following elements, 0 - Event Category, 1 - event Label, 2 - Number of Events
+        var application = activityDataContext.determineApplication(row[0]);
+        var activity = activityDataContext.determineActivity(row[0], row[1]);
+        
+        
+        //Make sure the data returned is for an activity within our data set
+        if(application!==undefined && activity!==undefined) {
+            
+            //If this is the current week, that will be the basis for all three data sets, set the types and required properties now
+            if (dataType==="Current" && activityDataContext.overallActivityData.Current[activity]===undefined) {
+                activityDataContext.overallActivityData.Current[activity] = 0;
+                activityDataContext.overallActivityData.Previous[activity] = 0;
+                activityDataContext.overallActivityData.Year[activity] = 0;
+            }
+
+            if (dataType==="Current" && activityDataContext.applicationActivityData.Current[application]===undefined) {
+                activityDataContext.applicationActivityData.Current[application] = {};
+                activityDataContext.applicationActivityData.Previous[application] = {};
+                activityDataContext.applicationActivityData.Year[application] = {};
+            }
+
+
+            if (dataType==="Current" && activityDataContext.applicationActivityData.Current[application][activity]===undefined) {
+                activityDataContext.applicationActivityData.Current[application][activity] = 0;
+                activityDataContext.applicationActivityData.Previous[application][activity] = 0;
+                activityDataContext.applicationActivityData.Year[application][activity] = 0;
+            }
+
+
+
+            //Check property exists, then add overall activity value
+            if(activityDataContext.overallActivityData[dataType][activity]!==undefined) {
+                activityDataContext.overallActivityData[dataType][activity] += (+row[2]);            
+            }
+
+            //Check property exists, then Add value to specific application activity values
+            if(activityDataContext.applicationActivityData[dataType][application][activity]!==undefined) {
+                activityDataContext.applicationActivityData[dataType][application][activity] += (+row[2]);    
+            }
+            
+
+
+            //Check if this is a search activity - add search breakdown figures as well
+            if(activity ==='Search') {
+                //Ensure all required properties exist with a value of at least 0
+                if (dataType==="Current" && activityDataContext.overallSearchBreakdownData.Current[row[1]]===undefined) {
+                    activityDataContext.overallSearchBreakdownData.Current[row[1]] = 0;  
+                    activityDataContext.overallSearchBreakdownData.Previous[row[1]] = 0;  
+                    activityDataContext.overallSearchBreakdownData.Year[row[1]] = 0;  
+                }
+
+                if (dataType==="Current" && activityDataContext.applicationSearchBreakdownData.Current[application]===undefined) {
+                    activityDataContext.applicationSearchBreakdownData.Current[application] = {};
+                    activityDataContext.applicationSearchBreakdownData.Previous[application] = {};
+                    activityDataContext.applicationSearchBreakdownData.Year[application] = {};
+                }
+
+                if (dataType==="Current" && activityDataContext.applicationSearchBreakdownData.Current[application][row[1]]===undefined) {
+                    activityDataContext.applicationSearchBreakdownData.Current[application][row[1]] = 0;
+                    activityDataContext.applicationSearchBreakdownData.Previous[application][row[1]] = 0;
+                    activityDataContext.applicationSearchBreakdownData.Year[application][row[1]] = 0;
+                }
+
+                //Check property exists, then add value to overall search type numbers
+                if(activityDataContext.overallSearchBreakdownData[dataType][row[1]]!==undefined) {
+                    activityDataContext.overallSearchBreakdownData[dataType][row[1]] += (+row[2]);
+                }
+                    
+
+                //Check property exists, then add value to specific application search type numbers
+                if(activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]]!==undefined) {
+                    activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]] += (+row[2]);      
+                }
+            }             
+        } 
+
     });
         
                 
@@ -1071,11 +1324,11 @@ ActivityData.prototype.parseActivityData = function (results) {
 
 /**
  * Prepare Doughnut chart data for a data set for information 
- * @param {object} the overall chart data to render
+ * @param {object} the chart data to render
  * @return {None}.
  */
 
-ActivityData.prototype.prepareChartData = function (overallChartData) {
+ActivityData.prototype.prepareDoughnutChartData = function (renderChartData) {
     "use strict";
 
     var objProp, sumValues = 0, valueCounter = 0;
@@ -1087,19 +1340,19 @@ ActivityData.prototype.prepareChartData = function (overallChartData) {
     activityDataContext.chartData = [];
     
     //Calculate sum of all activity numbers for percentages
-    for (objProp in overallChartData) {
-        sumValues = sumValues + overallChartData[objProp];
+    for (objProp in renderChartData) {
+        sumValues = sumValues + renderChartData[objProp];
     }
     
     //Check if the sum of values is greater than 0
-    if (sumValues>0) {
+    if (sumValues > 0) {
         //Loop through again to provide the actual values 
-        for (objProp in overallChartData) {
+        for (objProp in renderChartData) {
             activityDataContext.chartData.push({
-                value: overallChartData[objProp],
+                value: renderChartData[objProp],
                 color: activityDataContext.fillColors[valueCounter],
                 highlight: activityDataContext.strokeColors[valueCounter],
-                label: objProp + ': ' + overallChartData[objProp] + ' (' + Math.round(overallChartData[objProp] / sumValues * 100) + '%)'
+                label: objProp + ': ' + renderChartData[objProp] + ' (' + Math.round(renderChartData[objProp] / sumValues * 100) + '%)'
             });
             
             valueCounter++;
@@ -1108,6 +1361,95 @@ ActivityData.prototype.prepareChartData = function (overallChartData) {
         //No data present fill with dummy values
         activityDataContext.chartData.push({
             value: 1,
+            color: activityDataContext.fillColors[0],
+            highlight: activityDataContext.strokeColors[0],
+            label: 'No data for selected period'
+        });
+    }
+    
+    
+    return true;
+       
+};
+
+/**
+ * Prepare bar chart data for a data set for current week, previous week and previous year
+ * @param {object} the overall chart data to render
+ * @return {None}.
+ */
+
+ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, renderChartDataPrevious, renderChartDataYear) {
+    "use strict";
+
+    var objProp, sumValues = 0;
+    
+    //capture execution context to enable usage within functions
+    var activityDataContext = this;
+    
+    //The same data set can be used for multiple charts so reset the chartData array to empty
+    activityDataContext.chartData = {};
+    activityDataContext.chartData.labels = [];
+    activityDataContext.chartData.datasets = [];
+    
+    //Calculate sum of all activity numbers for percentages
+    for (objProp in renderChartDataCurrent) {
+        sumValues = sumValues + renderChartDataCurrent[objProp];
+        activityDataContext.chartData.labels.push(objProp.replace(" ","\n"));
+    }
+
+    for (objProp in renderChartDataPrevious) {
+        sumValues = sumValues + renderChartDataPrevious[objProp];
+    }
+
+    for (objProp in renderChartDataYear) {
+        sumValues = sumValues + renderChartDataYear[objProp];
+    }
+
+    
+    //Check if the sum of values is greater than 0
+    if (sumValues > 0) {
+        //Loop through again to convert actual values to percentages
+        for (objProp in renderChartDataCurrent) {
+            renderChartDataCurrent[objProp] = Math.round(renderChartDataCurrent[objProp] / sumValues * 100);
+        }
+
+        for (objProp in renderChartDataPrevious) {
+            renderChartDataPrevious[objProp] = Math.round(renderChartDataPrevious[objProp] / sumValues * 100);
+        }
+
+        for (objProp in renderChartDataYear) {
+            renderChartDataYear[objProp] = Math.round(renderChartDataYear[objProp] / sumValues * 100);
+        }
+
+        
+        activityDataContext.chartData.datasets.push({
+                                                    label: 'Week Starting ' + activityDataContext.currentWeekStarting,
+                                                    fillColor: activityDataContext.fillColors[0],
+                                                    strokeColor: activityDataContext.strokeColors[0],
+                                                    pointColor: activityDataContext.strokeColors[0],
+                                                    pointStrokeColor: "#fff",
+                                                    data: renderChartDataCurrent
+                                                    },
+                                                    {
+                                                    label: 'Week Starting ' + activityDataContext.previousWeekStarting,
+                                                    fillColor: activityDataContext.fillColors[1],
+                                                    strokeColor: activityDataContext.strokeColors[1],
+                                                    pointColor: activityDataContext.strokeColors[1],
+                                                    pointStrokeColor: "#fff",
+                                                    data: renderChartDataPrevious
+                                                    },
+                                                    {
+                                                    label: 'The Last Year',
+                                                    fillColor: activityDataContext.fillColors[2],
+                                                    strokeColor: activityDataContext.strokeColors[2],
+                                                    pointColor: activityDataContext.strokeColors[2],
+                                                    pointStrokeColor: "#fff",
+                                                    data: renderChartDataYear
+                                                    });
+    } else {
+        //No data present fill with dummy values
+        activityDataContext.chartData.datasets.push({
+            data: 1,
             color: activityDataContext.fillColors[0],
             highlight: activityDataContext.strokeColors[0],
             label: 'No data for selected period'

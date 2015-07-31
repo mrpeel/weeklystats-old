@@ -470,163 +470,296 @@ function renderEventCharts(ids, startDate, endDate) {
         
     showLoadingBar();
     
-    //Create object and pass in the GA query term and top five data
-    var currentWeekActivityData = new ActivityData(ids, startDate, endDate, 'Current');
-    var previousWeekActivityData = new ActivityData(ids, startDate, endDate, 'Previous');
-    var lastYearActivityData = new ActivityData(ids, startDate, endDate, 'Year');
+    var activityData = new ActivityData(ids, startDate, endDate);
     
-    currentWeekActivityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
-    currentWeekActivityData.gaMetrics = 'ga:totalEvents';
-
-    previousWeekActivityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
-    previousWeekActivityData.gaMetrics = 'ga:totalEvents';
-
-    lastYearActivityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
-    lastYearActivityData.gaMetrics = 'ga:totalEvents';
+    activityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
+    activityData.gaMetrics = 'ga:totalEvents';
 
     
     //Query and parse current week Activity Data
-    return currentWeekActivityData.retrieveAndParseGAData()
+    return activityData.retrieveAndParseGAData()
+        .then(function(result) {
+            //Render overall activity & search charts
+            activityData.prepareDoughnutChartData(activityData.overallActivityData.Current);
+            activityData.createDoughnutChart('overall-activity-current-week-chart-container','overall-activity-current-week-legend-container');
+
+            activityData.prepareDoughnutChartData(activityData.overallSearchBreakdownData.Current);
+            activityData.createDoughnutChart('overall-search-current-week-chart-container','overall-search-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.overallActivityData.Current, activityData.overallActivityData.Previous, activityData.overallActivityData.Year);
+            activityData.createBarChart('overall-activity-history-chart-container','overall-activity-history-legend-container');
+
+            activityData.prepareBarChartData(activityData.overallSearchBreakdownData.Current, activityData.overallSearchBreakdownData.Previous,
+                                             activityData.overallSearchBreakdownData.Year);
+            activityData.createBarChart('overall-search-history-chart-container','overall-search-history-legend-container');
+
+            //Render LASSI General Charts
+            activityData.prepareDoughnutChartData(activityData.applicationActivityData.Current['LASSI General']);
+            activityData.createDoughnutChart('lassi-activity-current-week-chart-container','lassi-activity-current-week-legend-container');
+
+            activityData.prepareDoughnutChartData(activityData.applicationSearchBreakdownData.Current['LASSI General']);
+            activityData.createDoughnutChart('lassi-search-current-week-chart-container','lassi-search-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationActivityData.Current['LASSI General'], activityData.applicationActivityData.Previous['LASSI General'],
+                                             activityData.applicationActivityData.Year['LASSI General']);
+            activityData.createBarChart('lassi-activity-history-chart-container','lassi-activity-history-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.Current['LASSI General'], activityData.applicationSearchBreakdownData.Previous['LASSI General'],
+                                             activityData.applicationSearchBreakdownData.Year['LASSI General']);
+            activityData.createBarChart('lassi-search-history-chart-container','lassi-search-history-legend-container');
+
+            //Render LASSI SPEAR activity charts
+            activityData.prepareDoughnutChartData(activityData.applicationActivityData.Current['LASSI SPEAR Including Map Based Search']);
+            activityData.createDoughnutChart('spear-activity-current-week-chart-container','spear-activity-current-week-legend-container');
+
+            activityData.prepareDoughnutChartData(activityData.applicationSearchBreakdownData.Current['LASSI SPEAR Including Map Based Search']);
+            activityData.createDoughnutChart('spear-search-current-week-chart-container','spear-search-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationActivityData.Current['LASSI SPEAR Including Map Based Search'], 
+                                             activityData.applicationActivityData.Previous['LASSI SPEAR Including Map Based Search'], 
+                                             activityData.applicationActivityData.Year['LASSI SPEAR Including Map Based Search']);
+            activityData.createBarChart('spear-activity-history-chart-container','spear-activity-history-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.Current['LASSI SPEAR Including Map Based Search'], 
+                                            activityData.applicationSearchBreakdownData.Previous['LASSI SPEAR Including Map Based Search'],
+                                            activityData.applicationSearchBreakdownData.Year['LASSI SPEAR Including Map Based Search']);
+            activityData.createBarChart('spear-search-history-chart-container','spear-search-history-legend-container');
+
+            //Render SMES activity charts
+            activityData.prepareDoughnutChartData(activityData.applicationActivityData.Current.SMES);
+            activityData.createDoughnutChart('smes-activity-current-week-chart-container','smes-activity-current-week-legend-container');
+
+            activityData.prepareDoughnutChartData(activityData.applicationSearchBreakdownData.Current.SMES);
+            activityData.createDoughnutChart('smes-search-current-week-chart-container','smes-search-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationActivityData.Current.SMES, activityData.applicationActivityData.Previous.SMES,
+                                             activityData.applicationActivityData.Year.SMES);
+            activityData.createBarChart('smes-activity-history-chart-container','smes-activity-history-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.Current.SMES, activityData.applicationSearchBreakdownData.Previous.SMES,
+                                             activityData.applicationSearchBreakdownData.Year.SMES);
+            activityData.createBarChart('smes-search-history-chart-container','smes-search-history-legend-container');
+
+            //Render VICNAMES activity charts
+            activityData.prepareDoughnutChartData(activityData.applicationActivityData.Current.VICNAMES);
+            activityData.createDoughnutChart('vicnames-activity-current-week-chart-container','vicnames-activity-current-week-legend-container');
+
+            activityData.prepareDoughnutChartData(activityData.applicationSearchBreakdownData.Current.VICNAMES);
+            activityData.createDoughnutChart('vicnames-search-current-week-chart-container','vicnames-search-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationActivityData.Current.VICNAMES, activityData.applicationActivityData.Previous.VICNAMES,
+                                             activityData.applicationActivityData.Year.VICNAMES);
+            activityData.createBarChart('vicnames-activity-history-chart-container','vicnames-activity-history-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.Current.VICNAMES, activityData.applicationSearchBreakdownData.Previous.VICNAMES, 
+                                            activityData.applicationSearchBreakdownData.Year.VICNAMES);
+            activityData.createBarChart('vicnames-search-history-chart-container','vicnames-search-history-legend-container');
+
+
+            //Render View My Titles activity charts
+            activityData.prepareDoughnutChartData(activityData.applicationActivityData.Current['View My Titles']);
+            activityData.createDoughnutChart('vmt-activity-current-week-chart-container','vmt-activity-current-week-legend-container');
+
+            activityData.prepareDoughnutChartData(activityData.applicationSearchBreakdownData.Current['View My Titles']);
+            activityData.createDoughnutChart('vmt-search-current-week-chart-container','vmt-search-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationActivityData.Current['View My Titles'], activityData.applicationActivityData.Previous['View My Titles'], 
+                                            activityData.applicationActivityData.Year['View My Titles']);
+            activityData.createBarChart('vmt-activity-history-chart-container','vmt-activity-history-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.Current['View My Titles'], activityData.applicationSearchBreakdownData.Previous['View My Titles'],
+                                            activityData.applicationSearchBreakdownData.Year['View My Titles']);
+            activityData.createBarChart('vmt-search-history-chart-container','vmt-search-history-legend-container');
+
+            //Render Historical Aerial Photographs activity chart
+            activityData.prepareDoughnutChartData(activityData.applicationActivityData.Current['Historical Aerial Photographs']);
+            activityData.createDoughnutChart('hap-activity-current-week-chart-container','hap-activity-current-week-legend-container');
+
+            activityData.prepareDoughnutChartData(activityData.applicationSearchBreakdownData.Current['Historical Aerial Photographs']);
+            activityData.createDoughnutChart('hap-search-current-week-chart-container','hap-search-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationActivityData.Current['Historical Aerial Photographs'], 
+                                             activityData.applicationActivityData.Previous['Historical Aerial Photographs'],
+                                             activityData.applicationActivityData.Year['Historical Aerial Photographs']);
+            activityData.createBarChart('hap-activity-history-chart-container','hap-activity-history-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.Current['Historical Aerial Photographs'], 
+                                            activityData.applicationSearchBreakdownData.Previous['Historical Aerial Photographs'], 
+                                            activityData.applicationSearchBreakdownData.Year['Historical Aerial Photographs']);
+            activityData.createBarChart('hap-search-history-chart-container','hap-search-history-legend-container');
+
+            //Render TPI Confirm on Map activity chart
+            activityData.prepareDoughnutChartData(activityData.applicationActivityData.Current['TPI Confirm on Map']);
+            activityData.createDoughnutChart('tcom-activity-current-week-chart-container','tcom-activity-current-week-legend-container');
+
+            activityData.prepareBarChartData(activityData.applicationActivityData.Current['TPI Confirm on Map'], activityData.applicationActivityData.Previous['TPI Confirm on Map'], 
+                                            activityData.applicationActivityData.Year['TPI Confirm on Map']);
+            activityData.createBarChart('tcom-activity-history-chart-container','tcom-activity-history-legend-container');
+
+        })
+        .then(function(result) {
+            hideLoadingBar();
+        })
+        .catch(function(err) {
+            console.log(err.message);
+            hideLoadingBar();
+        });
+    
+
+}
+
+function renderEventBarCharts(ids, startDate, endDate) {
+        
+    showLoadingBar();
+    
+    //Create object and pass in the GA query term and top five data
+    var activityData = new ActivityData(ids, startDate, endDate, 'Current');
+    
+    activityData.gaDimensions = 'ga:eventCategory,ga:eventLabel';
+    activityData.gaMetrics = 'ga:totalEvents';
+
+
+    
+    //Query and parse current week Activity Data
+    return activityData.retrieveAndParseGAData()
         .then(function(result) {
             //Render overall activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.overallActivityData);
-            currentWeekActivityData.createDoughnutChart('overall-activity-current-week-chart-container','overall-activity-current-week-legend-container');
+/*        activityData.prepareBarChartData(activityData.overallActivityData);
+        activityData.createBarChart('overall-activity-current-week-chart-container','overall-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Render overall search chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.overallSearchBreakdownData);
-            currentWeekActivityData.createDoughnutChart('overall-search-current-week-chart-container','overall-search-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.overallSearchBreakdownData);
+        activityData.createBarChart('overall-search-current-week-chart-container','overall-search-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             //Attempt to render LASSI General activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['LASSI General'] || []);
-            currentWeekActivityData.createDoughnutChart('lassi-activity-current-week-chart-container','lassi-activity-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationActivityData['LASSI General'] || []);
+        activityData.createBarChart('lassi-activity-current-week-chart-container','lassi-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Attempt to render LASSI General search chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['LASSI General'] || []);
-            currentWeekActivityData.createDoughnutChart('lassi-search-current-week-chart-container','lassi-search-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationSearchBreakdownData['LASSI General'] || []);
+        activityData.createBarChart('lassi-search-current-week-chart-container','lassi-search-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             //Attempt to render LASSI SPEAR activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['LASSI SPEAR Including Map Based Search'] || []);
-            currentWeekActivityData.createDoughnutChart('spear-activity-current-week-chart-container','spear-activity-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationActivityData['LASSI SPEAR Including Map Based Search'] || []);
+        activityData.createBarChart('spear-activity-current-week-chart-container','spear-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Attempt to render LASSI SPEAR search chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['LASSI SPEAR Including Map Based Search'] || []);
-            currentWeekActivityData.createDoughnutChart('spear-search-current-week-chart-container','spear-search-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationSearchBreakdownData['LASSI SPEAR Including Map Based Search'] || []);
+        activityData.createBarChart('spear-search-current-week-chart-container','spear-search-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             //Attempt to render SMES activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData.SMES || []);
-            currentWeekActivityData.createDoughnutChart('smes-activity-current-week-chart-container','smes-activity-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationActivityData.SMES || []);
+        activityData.createBarChart('smes-activity-current-week-chart-container','smes-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Attempt to render SMES search chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData.SMES || []);
-            currentWeekActivityData.createDoughnutChart('smes-search-current-week-chart-container','smes-search-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.SMES || []);
+        activityData.createBarChart('smes-search-current-week-chart-container','smes-search-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             //Attempt to render VICNAMES activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData.VICNAMES || []);
-            currentWeekActivityData.createDoughnutChart('vicnames-activity-current-week-chart-container','vicnames-activity-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationActivityData.VICNAMES || []);
+        activityData.createBarChart('vicnames-activity-current-week-chart-container','vicnames-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Attempt to render VICNAMES search chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData.VICNAMES || []);
-            currentWeekActivityData.createDoughnutChart('vicnames-search-current-week-chart-container','vicnames-search-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationSearchBreakdownData.VICNAMES || []);
+        activityData.createBarChart('vicnames-search-current-week-chart-container','vicnames-search-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             //Attempt to render View My Titles activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['View My Titles'] || []);
-            currentWeekActivityData.createDoughnutChart('vmt-activity-current-week-chart-container','vmt-activity-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationActivityData['View My Titles'] || []);
+        activityData.createBarChart('vmt-activity-current-week-chart-container','vmt-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Attempt to render View My Titles search chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['View My Titles'] || []);
-            currentWeekActivityData.createDoughnutChart('vmt-search-current-week-chart-container','vmt-search-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationSearchBreakdownData['View My Titles'] || []);
+        activityData.createBarChart('vmt-search-current-week-chart-container','vmt-search-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             //Attempt to render Historical Aerial Photographs activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['Historical Aerial Photographs'] || []);
-            currentWeekActivityData.createDoughnutChart('hap-activity-current-week-chart-container','hap-activity-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationActivityData['Historical Aerial Photographs'] || []);
+        activityData.createBarChart('hap-activity-current-week-chart-container','hap-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Attempt to render Historical Aerial Photographs search chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationSearchBreakdownData['Historical Aerial Photographs'] || []);
-            currentWeekActivityData.createDoughnutChart('hap-search-current-week-chart-container','hap-search-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationSearchBreakdownData['Historical Aerial Photographs'] || []);
+        activityData.createBarChart('hap-search-current-week-chart-container','hap-search-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             //Attempt to render TPI Confirm on Map activity chart
-            currentWeekActivityData.prepareChartData(currentWeekActivityData.applicationActivityData['TPI Confirm on Map'] || []);
-            currentWeekActivityData.createDoughnutChart('tcom-activity-current-week-chart-container','tcom-activity-current-week-legend-container');
+        activityData.prepareBarChartData(activityData.applicationActivityData['TPI Confirm on Map'] || []);
+        activityData.createBarChart('tcom-activity-current-week-chart-container','tcom-activity-current-week-legend-container');
 
-            return currentWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         //Query and parse previous week Activity Data
         .then(function(result) {        
-            return previousWeekActivityData.retrieveAndParseGAData();
+            return activityData.retrieveAndParseGAData();
         })
-        .then(function(){
+        .then(function(){*/
             //Render overall activity chart
-            previousWeekActivityData.prepareChartData(previousWeekActivityData.overallActivityData);
-            previousWeekActivityData.createDoughnutChart('overall-activity-previous-week-chart-container','overall-activity-previous-week-legend-container');
+            activityData.prepareBarChartData(activityData.overallActivityData.Current, activityData.overallActivityData.Previous, activityData.overallActivityData.Year);
+            activityData.createBarChart('overall-activity-previous-week-chart-container','overall-activity-previous-week-legend-container');
 
-            return previousWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Render overall search chart
-            previousWeekActivityData.prepareChartData(previousWeekActivityData.overallSearchBreakdownData);
-            previousWeekActivityData.createDoughnutChart('overall-search-previous-week-chart-container','overall-search-previous-week-legend-container');
+            activityData.prepareBarChartData(activityData.overallSearchBreakdownData.Current, activityData.overallSearchBreakdownData.Previous,    
+                                                activityData.overallSearchBreakdownData.Year);
+            activityData.createBarChart('overall-search-previous-week-chart-container','overall-search-previous-week-legend-container');
 
-            return previousWeekActivityData.delayExecution();
-        })
-        //Query and parse last year Activity Data
-        .then(function(result) {        
-            return lastYearActivityData.retrieveAndParseGAData();
+            return activityData.delayExecution();
         })
         .then(function(){
             //Render overall activity chart
-            lastYearActivityData.prepareChartData(lastYearActivityData.overallActivityData);
-            lastYearActivityData.createDoughnutChart('overall-activity-last-year-chart-container','overall-activity-last-year-legend-container');
+            activityData.prepareBarChartData(activityData.overallActivityData.Current, activityData.overallActivityData.Previous, activityData.overallActivityData.Year);
+            activityData.createBarChart('overall-activity-last-year-chart-container','overall-activity-last-year-legend-container');
 
-            return previousWeekActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function() {
             //Render overall search chart
-            lastYearActivityData.prepareChartData(lastYearActivityData.overallSearchBreakdownData);
-            lastYearActivityData.createDoughnutChart('overall-search-last-year-chart-container','overall-search-last-year-legend-container');
+            activityData.prepareBarChartData(activityData.overallSearchBreakdownData.Current, activityData.overallSearchBreakdownData.Previous,
+                                             activityData.overallSearchBreakdownData.Year);
+            activityData.createBarChart('overall-search-last-year-chart-container','overall-search-last-year-legend-container');
 
-            return lastYearActivityData.delayExecution();
+            return activityData.delayExecution();
         })
         .then(function(result) {
             hideLoadingBar();

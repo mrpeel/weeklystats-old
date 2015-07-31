@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>System Weekly Stats</title>
-   <link rel="stylesheet" href="weekly_stats.min.css">
+   <link rel="stylesheet" href="weekly_stats.css">
    <link rel="shortcut icon" href="favicon.png?v=1.1">
 </head>
 <body>
@@ -42,12 +42,11 @@
 
 
   <ul class="FlexGrid FlexGrid--halves">
-  		<li class="FlexGrid-item">
+  		<li class="FlexGrid-item-selector">
   		  <h1 class="Titles-main">Data Source</h1>
         <div id="view-selector-container"></div>
       </li>
-
-  		<li class="FlexGrid-item">
+  		<li class="FlexGrid-item-selector">
   		  <h1 class="Titles-main">Primary Comparison Week</h1>
         <div id="date-range-selector-container"></div>
       </li>
@@ -195,7 +194,7 @@
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">User Activity Across all Applications for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
   				<figure class="Chartjs-figure" id="overall-activity-current-week-chart-container"/>
   			</div>
@@ -207,7 +206,7 @@
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">Search Types Across all Applications for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
   				</header>
   				<figure class="Chartjs-figure" id="overall-search-current-week-chart-container"/>
   			</div>
@@ -217,54 +216,31 @@
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">User Activity Across all Applications for the Previous Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<h1 class="Titles-main">Historical User Activity Across all Applications</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
-  				<figure class="Chartjs-figure" id="overall-activity-previous-week-chart-container"/>
+  				<figure class="Chartjs-figure" id="overall-activity-history-chart-container"/>
   			</div>
-  		<div class="Chartjs-legend" id="overall-activity-previous-week-legend-container"/>
+  		<div class="Chartjs-legend" id="overall-activity-history-legend-container"/>
   		</li>
 
 
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">Search Types Across all Applications for the Previous Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
+  					<h1 class="Titles-main">Historical Search Types Across all Applications</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
   				</header>
-  				<figure class="Chartjs-figure" id="overall-search-previous-week-chart-container"/>
+  				<figure class="Chartjs-figure" id="overall-search-history-chart-container"/>
   			</div>
-  		<div class="Chartjs-legend" id="overall-search-previous-week-legend-container"/>
-  		</li>      
+  		<div class="Chartjs-legend" id="overall-search-history-legend-container"/>
+  		</li>               
 
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">User Activity Across all Applications for the Last Year</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
-  				</header>
-  				<figure class="Chartjs-figure" id="overall-activity-last-year-chart-container"/>
-  			</div>
-  		<div class="Chartjs-legend" id="overall-activity-last-year-legend-container"/>
-  		</li>
-
-
-  		<li class="FlexGrid-item">
-  			<div class="Chartjs">
-  				<header class="Titles">
-  					<h1 class="Titles-main">Search Types Across all Applications for the Last Year</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
-  				</header>
-  				<figure class="Chartjs-figure" id="overall-search-last-year-chart-container"/>
-  			</div>
-  		<div class="Chartjs-legend" id="overall-search-last-year-legend-container"/>
-  		</li>            
-
-  		<li class="FlexGrid-item">
-  			<div class="Chartjs">
-  				<header class="Titles">
-  					<h1 class="Titles-main">LASSI General User Activity or the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<h1 class="Titles-main">LASSI General User Activity for the Week</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
   				<figure class="Chartjs-figure" id="lassi-activity-current-week-chart-container"/>
   			</div>
@@ -276,19 +252,42 @@
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">LASSI General Search Types for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
   				</header>
   				<figure class="Chartjs-figure" id="lassi-search-current-week-chart-container"/>
   			</div>
             <div class="Chartjs-legend" id="lassi-search-current-week-legend-container"/>
   		</li>      
 
+		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical LASSI General User Activity</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="lassi-activity-history-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="lassi-activity-history-legend-container"/>
+  		</li>
+
 
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">LASSI SPEAR User Activity or the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used (including map based search)</div>
+  					<h1 class="Titles-main">Historical LASSI General Search Types</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="lassi-search-history-chart-container"/>
+  			</div>
+            <div class="Chartjs-legend" id="lassi-search-history-legend-container"/>
+  		</li>      
+
+
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">LASSI SPEAR User Activity for the Week</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used (including map based search)</div>
   				</header>
   				<figure class="Chartjs-figure" id="spear-activity-current-week-chart-container"/>
   			</div>
@@ -300,7 +299,7 @@
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">LASSI SPEAR Search Types for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches (including map based search)</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches (including map based search)</div>
   				</header>
   				<figure class="Chartjs-figure" id="spear-search-current-week-chart-container"/>
   			</div>
@@ -310,20 +309,41 @@
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">SMES User Activity or the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<h1 class="Titles-main">Historical LASSI SPEAR User Activity</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used (including map based search)</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="spear-activity-history-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="spear-activity-history-legend-container"/>
+  		</li>
+
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical LASSI SPEAR Search Types</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches (including map based search)</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="spear-search-history-chart-container"/>
+  			</div>
+            <div class="Chartjs-legend" id="spear-search-history-legend-container"/>
+  		</li>           
+      
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">SMES User Activity for the Week</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
   				<figure class="Chartjs-figure" id="smes-activity-current-week-chart-container"/>
   			</div>
   		<div class="Chartjs-legend" id="smes-activity-current-week-legend-container"/>
   		</li>
 
-
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">SMES Search Types for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
   				</header>
   				<figure class="Chartjs-figure" id="smes-search-current-week-chart-container"/>
   			</div>
@@ -333,8 +353,31 @@
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">VICNAMES User Activity or the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<h1 class="Titles-main">Historical SMES User Activity</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="smes-activity-history-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="smes-activity-history-legend-container"/>
+  		</li>
+
+
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical SMES Search Types</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="smes-search-history-chart-container"/>
+  			</div>
+            <div class="Chartjs-legend" id="smes-search-history-legend-container"/>
+  		</li>      
+      
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">VICNAMES User Activity for the Week</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
   				<figure class="Chartjs-figure" id="vicnames-activity-current-week-chart-container"/>
   			</div>
@@ -346,18 +389,42 @@
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">VICNAMES Search Types for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
   				</header>
   				<figure class="Chartjs-figure" id="vicnames-search-current-week-chart-container"/>
   			</div>
             <div class="Chartjs-legend" id="vicnames-search-current-week-legend-container"/>
   		</li>            
 
+      
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical VICNAMES User Activity</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="vicnames-activity-history-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="vicnames-activity-history-legend-container"/>
+  		</li>
+
+
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical VICNAMES Search Types</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="vicnames-search-history-chart-container"/>
+  			</div>
+            <div class="Chartjs-legend" id="vicnames-search-history-legend-container"/>
+  		</li>            
+      
       <li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">LANDATA View My Titles User Activity for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
   				<figure class="Chartjs-figure" id="vmt-activity-current-week-chart-container"/>
   			</div>
@@ -369,18 +436,41 @@
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">LANDATA View My Titles Search Types for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
   				</header>
   				<figure class="Chartjs-figure" id="vmt-search-current-week-chart-container"/>
   			</div>
             <div class="Chartjs-legend" id="vmt-search-current-week-legend-container"/>
-  		</li>            
-
+  		</li>       
+      
       <li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">LANDATA Historical Aerial Photographs User Activity for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<h1 class="Titles-main">Historical LANDATA View My Titles User Activity</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="vmt-activity-history-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="vmt-activity-history-legend-container"/>
+  		</li>
+
+
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical LANDATA View My Titles Search Types</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="vmt-search-history-chart-container"/>
+  			</div>
+            <div class="Chartjs-legend" id="vmt-search-history-legend-container"/>
+  		</li>     
+      
+      <li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">LANDATA Aerial Photographs User Activity for the Week</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
   				<figure class="Chartjs-figure" id="hap-activity-current-week-chart-container"/>
   			</div>
@@ -391,23 +481,58 @@
   		<li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
-  					<h1 class="Titles-main">LANDATA Historical Aerial Photographs Search Types for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of search by the number of searches</div>
+  					<h1 class="Titles-main">LANDATA Aerial Photographs Search Types for the Week</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
   				</header>
   				<figure class="Chartjs-figure" id="hap-search-current-week-chart-container"/>
   			</div>
             <div class="Chartjs-legend" id="hap-search-current-week-legend-container"/>
   		</li>       
+      
+      <li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical LANDATA Aerial Photographs User Activity</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="hap-activity-history-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="hap-activity-history-legend-container"/>
+  		</li>
 
+
+  		<li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical LANDATA Aerial Photographs Search Types</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of search by the number of searches</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="hap-search-history-chart-container"/>
+  			</div>
+            <div class="Chartjs-legend" id="hap-search-history-legend-container"/>
+  		</li>       
+
+      
       <li class="FlexGrid-item">
   			<div class="Chartjs">
   				<header class="Titles">
   					<h1 class="Titles-main">LANDATA TPI Confirm on Map User Activity for the Week</h1>
-  					<div class="Titles-sub">Breakdown of the type of functions by number of times used</div>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
   				</header>
   				<figure class="Chartjs-figure" id="tcom-activity-current-week-chart-container"/>
   			</div>
   		<div class="Chartjs-legend" id="tcom-activity-current-week-legend-container"/>
+  		</li>
+
+      <li class="FlexGrid-item">
+  			<div class="Chartjs">
+  				<header class="Titles">
+  					<h1 class="Titles-main">Historical LANDATA TPI Confirm on Map User Activity</h1>
+  					<div class="Titles-sub">Percentage breakdown of the type of functions by number of times used</div>
+  				</header>
+  				<figure class="Chartjs-figure" id="tcom-activity-history-chart-container"/>
+  			</div>
+  		<div class="Chartjs-legend" id="tcom-activity-history-legend-container"/>
   		</li>
 
 
@@ -435,12 +560,16 @@
 <!-- Include the ViewSelector2 component script. -->
 <script src="javascript/view-selector2.js"></script>
 
-<!-- Include the DateRangeSelector component script. -->
-<script src="javascript/date-range-selector.js"></script>
+<!-- Include the DateRangeSelector component script. Replace with cusomt versionof date selector script -->
+<!--<script src="javascript/date-range-selector.js"></script>-->
 
+<script src="javascript/week-selector.js"></script>
+    
 <script src="statschartbuilder.js"></script>
-<script src="generatecharts.js"></script>
+<script src="generatecharts.js"></script> 
 
+
+    
 <script>
 gapi.analytics.ready(function() {
 
@@ -497,8 +626,7 @@ gapi.analytics.ready(function() {
       if(startDate!=newStartDate) {
         startDate = newStartDate;
         endDate =  newEndDate;
-        //renderCharts(gaId, startDate, endDate);
-        renderEventCharts(gaId, startDate, endDate);
+        renderCharts(gaId, startDate, endDate);
       }
 
     });
@@ -531,8 +659,7 @@ gapi.analytics.ready(function() {
     else {
       gaId = data.ids;
       //Start chart rendering
-      //renderCharts(gaId, startDate, endDate);
-      renderEventCharts(gaId, startDate, endDate);
+      renderCharts(gaId, startDate, endDate);
     }
 
   });
