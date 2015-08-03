@@ -38,7 +38,7 @@ gapi.analytics.ready(function () {
         setValues: function () {
             this["start-date"] = this.startDateInput.value;
         },
-        template: '<div class="DateRangeSelector"> <div class="DateRangeSelector-item"> <label>Week Beginning</label> <input type="date"> </div> </div>'
+        template: '<div class="DateRangeSelector"> <div class="DateRangeSelector-item"> <input type="date"> </div> </div>'
 		
 		
     });
