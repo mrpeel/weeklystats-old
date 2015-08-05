@@ -72,13 +72,16 @@ i {
 
 .title-text {
     font-family: 'And Black', Helvetica, Arial, sans-serif;
-    font-size: 2em;
+    font-size: 1.8em;
 }
 
 .chart-sub-title-text {
-    font-size: 1.2em;
+    font-size: 0.9em;
 }
 
+.mdl-card {
+    padding: 10px;
+}
 
 article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary {
     display: block;

@@ -45,7 +45,7 @@
                     <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#browsers">Browsers</a>
                     <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#activities">Activities</a>
                 </nav>
-                
+
             </div>
             <!-- Bottom row, not visible on scroll -->
             <div class="mdl-layout__header-row">
@@ -53,546 +53,534 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <div id="date-range-selector-container" class="header-selection"></div>
                 <div class="mdl-layout-spacer"></div>
-                    <aside class="Header-auth" id="header-auth">
-                        <div class="Header-embedApi" id="embed-api-auth-container" />
-                        <a class="Header-logout" href="https://accounts.google.com/logout">Logout</a>
-                    </aside>
-                    <div class="Screenshot" id="auth-button"></div>
+                <aside class="Header-auth" id="header-auth">
+                    <div class="Header-embedApi" id="embed-api-auth-container" />
+                    <a class="Header-logout" href="https://accounts.google.com/logout">Logout</a>
+                </aside>
+                <div class="Screenshot" id="auth-button"></div>
             </div>
         </header>
+
         <main class="mdl-layout__content mdl-color--grey-200">
             <div class="page-content">
 
-                <!--<header class="Header" id="header">
-                    <div class="Header-block">
-                        <span class="Header-menu" id="header-menu"></span>
 
-                        <div class="Header-user" id="header-user">
-
+                <div class="mdl-grid">
+                    <div  id="sessions" class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-session-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-session-legend-container"></div>
                         </div>
-                        <div class="u-lg-block">
-
-                            <div class="Titles Titles--hero">
-                                <!--<h1 class="Titles-main" id="page-title">Weekly Usage Stats and Trends</div>
-
-                            </div>
+                        <div class="mdl-card__actions mdl-card--border">
+                            <div class="mdl-typography--font-light mdl-typography--headline">Sessions for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
                         </div>
-
                     </div>
 
-                    <aside class="Header-auth" id="header-auth">
-                        <div class="Header-embedApi" id="embed-api-auth-container" />
-                        <a class="Header-logout" href="https://accounts.google.com/logout">Logout</a>
-                    </aside>
-                </header> -->
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="monthly-session-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="monthly-session-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Sessions By Month</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-session-duration-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-session-duration-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Average Session Duration for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Average session length (minutes)</div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="monthly-session-duration-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="monthly-session-duration-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Average Session Duration By Month</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Average session length (minutes)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-content-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-content-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Site Page Views for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per page</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="quarterly-content-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="quarterly-content-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Site Page View Comparison Across the Year</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per page</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="browsers" class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-browser-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-browser-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Browser Usage for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per browser</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="quarterly-browser-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="quarterly-browser-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Browser Usage Comparison Across the Year</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per browser</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-ieversion-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-ieversion-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Internet Explorer Version Usage for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Internet Explorer Version</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="quarterly-ieversion-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="quarterly-ieversion-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Internet Explorer Version Usage Across the Year</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Internet Explorer Version</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-firefoxversion-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-firefoxversion-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Firefox Version Usage for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Firefox Version</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="quarterly-firefoxversion-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="quarterly-firefoxversion-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Firefox Version Usage Across the Year</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Firefox Version</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="activities" class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="overall-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="overall-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">User Activity Across all Applications for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="overall-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="overall-search-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Search Types Across all Applications for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="overall-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="overall-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical User Activity Across all Applications</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="overall-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="overall-search-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical Search Types Across all Applications</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="lassi-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="lassi-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LASSI General User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="lassi-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="lassi-search-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LASSI General Search Types for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="lassi-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="lassi-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI General User Activity</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="lassi-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="lassi-search-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI General Search Types</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="spear-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="spear-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LASSI SPEAR User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="spear-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="spear-search-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LASSI SPEAR Search Types for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">>Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="spear-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="spear-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI SPEAR User Activity</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="spear-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="spear-search-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI SPEAR Search Types</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="smes-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="smes-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">SMES User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="smes-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="smes-search-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">SMES Search Types for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="smes-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="smes-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical SMES User Activity</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="smes-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="smes-search-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical SMES Search Types</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vicnames-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vicnames-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">VICNAMES User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vicnames-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vicnames-search-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">VICNAMES Search Types for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vicnames-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vicnames-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical VICNAMES User Activity</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vicnames-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vicnames-search-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical VICNAMES Search Types</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vmt-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vmt-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LANDATA View My Titles User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vmt-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vmt-search-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LANDATA View My Titles Search Types for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vmt-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vmt-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA View My Titles User Activity</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="vmt-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="vmt-search-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA View My Titles Search Types</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LANDATA Aerial Photographs User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-search-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LANDATA Aerial Photographs Search Types for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA Aerial Photographs User Activity</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-search-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA Aerial Photographs Search Types</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="tcom-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="tcom-activity-current-week-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">LANDATA TPI Confirm on Map User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="tcom-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="tcom-activity-history-legend-container"></div>
+                            <div class="mdl-card__actions mdl-card--border">
+                                <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA TPI Confirm on Map User Activity</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="Dashboard Dashboard--full">
-
-                    <!--<div id="load-bar" class="loader"></div>-->
+  
                     
+                </div>
 
 
-                <!--    <ul class="FlexGrid FlexGrid--halves">
-                        <li class="FlexGrid-item-selector">
-                            <div class="mdl-typography--font-light mdl-typography--headline">Data Source</div>
-                            <div id="view-selector-container2"></div>
-                        </li>
-                        <li class="FlexGrid-item-selector">
-                            <div class="mdl-typography--font-light mdl-typography--headline">Primary Comparison Week</div>
-                            <div id="date-range-selector-container2"></div>
-                        </li>
-                    </ul>
-                    <div class="Screenshot"></div> -->
-
-
-
-                    <ul class="FlexGrid" id="sessions">
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Sessions for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">No of sessions</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="weekly-session-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="weekly-session-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Sessions By Month</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">No of sessions</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="monthly-session-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="monthly-session-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Average Session Duration for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Average session length (minutes)</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="weekly-session-duration-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="weekly-session-duration-legend-container" />
-                        </li>
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Average Session Duration By Month</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Average session length (minutes)</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="monthly-session-duration-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="monthly-session-duration-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Site Page Views for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">No of page views per page</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="weekly-content-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="weekly-content-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Site Page View Comparison Across the Year</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage of page views per page</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="quarterly-content-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="quarterly-content-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item" id="browsers">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Browser Usage for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">No of page views per browser</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="weekly-browser-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="weekly-browser-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Browser Usage Comparison Across the Year</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage of page views per browser</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="quarterly-browser-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="quarterly-browser-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Internet Explorer Version Usage for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">No of page views per Internet Explorer version</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="weekly-ieversion-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="weekly-ieversion-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Internet Explorer Version Usage Comparison Across the Year</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage of page views per Internet Explorer Version</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="quarterly-ieversion-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="quarterly-ieversion-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Firefox Version Usage for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">No of page views per Firefox version</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="weekly-firefoxversion-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="weekly-firefoxversion-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Firefox Version Usage Comparison Across the Year</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage of page views per Firefox Version</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="quarterly-firefoxversion-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="quarterly-firefoxversion-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item" id="activities">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">User Activity Across all Applications for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="overall-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="overall-activity-current-week-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Search Types Across all Applications for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="overall-search-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="overall-search-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical User Activity Across all Applications</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="overall-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="overall-activity-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical Search Types Across all Applications</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="overall-search-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="overall-search-history-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LASSI General User Activity for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="lassi-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="lassi-activity-current-week-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LASSI General Search Types for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="lassi-search-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="lassi-search-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI General User Activity</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="lassi-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="lassi-activity-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI General Search Types</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="lassi-search-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="lassi-search-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LASSI SPEAR User Activity for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used (including map based search)</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="spear-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="spear-activity-current-week-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LASSI SPEAR Search Types for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches (including map based search)</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="spear-search-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="spear-search-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI SPEAR User Activity</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used (including map based search)</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="spear-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="spear-activity-history-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LASSI SPEAR Search Types</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches (including map based search)</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="spear-search-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="spear-search-history-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">SMES User Activity for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="smes-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="smes-activity-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">SMES Search Types for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="smes-search-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="smes-search-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical SMES User Activity</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="smes-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="smes-activity-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical SMES Search Types</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="smes-search-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="smes-search-history-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">VICNAMES User Activity for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vicnames-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vicnames-activity-current-week-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">VICNAMES Search Types for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vicnames-search-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vicnames-search-current-week-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical VICNAMES User Activity</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vicnames-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vicnames-activity-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical VICNAMES Search Types</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vicnames-search-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vicnames-search-history-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LANDATA View My Titles User Activity for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vmt-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vmt-activity-current-week-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LANDATA View My Titles Search Types for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vmt-search-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vmt-search-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA View My Titles User Activity</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vmt-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vmt-activity-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA View My Titles Search Types</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="vmt-search-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="vmt-search-history-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LANDATA Aerial Photographs User Activity for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="hap-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="hap-activity-current-week-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LANDATA Aerial Photographs Search Types for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="hap-search-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="hap-search-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA Aerial Photographs User Activity</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="hap-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="hap-activity-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA Aerial Photographs Search Types</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of search by the number of searches</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="hap-search-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="hap-search-history-legend-container" />
-                        </li>
-
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">LANDATA TPI Confirm on Map User Activity for the Week</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="tcom-activity-current-week-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="tcom-activity-current-week-legend-container" />
-                        </li>
-
-                        <li class="FlexGrid-item">
-                            <div class="Chartjs">
-                                <header class="Titles">
-                                    <div class="mdl-typography--font-light mdl-typography--headline">Historical LANDATA TPI Confirm on Map User Activity</div>
-                                    <div class="chart-sub-title-text mdl-color-text--grey-700">Percentage breakdown of the type of functions by number of times used</div>
-                                </header>
-                                <figure class="Chartjs-figure" id="tcom-activity-history-chart-container" />
-                            </div>
-                            <div class="Chartjs-legend" id="tcom-activity-history-legend-container" />
-                        </li>
-
-
-                    </ul>
 
                 </div>
-            </div>
         </main>
     </div>
 
