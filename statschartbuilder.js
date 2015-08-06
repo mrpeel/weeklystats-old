@@ -415,11 +415,7 @@ YearToPreviousYearChart.prototype.retrieveGAData = function () {
                 return +row[2];
             });
             
-            //Set-up data then render chart
-            yearToPreviousYearContext.setUpChartData();
-            yearToPreviousYearContext.createBarChart('monthly-session-chart-container', 'monthly-session-legend-container');
-
-            return yearToPreviousYearContext.delayExecution();
+            return true;
         })
         .then(function(){
             return true;
