@@ -25,7 +25,7 @@
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="material.min.css">
+    <link rel="stylesheet" media="screen" href="material.min.css">
     <link rel="stylesheet" href="weekly_stats_new.min.css">
 </head>
 
@@ -44,10 +44,10 @@
 
                 <div class="mdl-layout-spacer no-print"></div>
                 <nav class="header-hide-tablet mdl-navigation no-print">
-                    <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#view-selector-container">Change Data Selection</a>
-                    <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#sessions">Sessions &amp; Sites</a>
-                    <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#browsers">Browsers</a>
-                    <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#activities">Activities</a>
+                    <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#view-selector-container">Change Data Selection</a>
+                    <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#sessions">Sessions &amp; Sites</a>
+                    <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#browsers">Browsers</a>
+                    <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#activities">Activities</a>
                 </nav>
 
             </div>
@@ -66,11 +66,11 @@
         </header>
         <div class="mdl-layout__drawer mdl-typography--title no-print">
             <span class="mdl-layout-title">Weekly stats</span>
-            <nav class="mdl-navigation">
-                <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#view-selector-container">Change Data Selection</a>
-                <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#sessions">Sessions &amp; Sites</a>
-                <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#browsers">Browsers</a>
-                <a class="mdl-navigation__link mdl-typography--text-uppercase" href="#activities">Activities</a>
+            <nav class="mdl-navigation no-print">
+                <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#view-selector-container">Change Data Selection</a>
+                <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#sessions">Sessions &amp; Sites</a>
+                <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#browsers">Browsers</a>
+                <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#activities">Activities</a>
             </nav>
         </div>
 
@@ -96,7 +96,6 @@
                             <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
                         </div>
                     </div>
-
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions By Month</div>
@@ -113,6 +112,7 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -147,6 +147,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Site Page Views for the Week</div>
@@ -179,6 +181,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div id="browsers" class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Browser Usage for the Week</div>
@@ -211,6 +215,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Internet Explorer Version Usage for the Week</div>
@@ -243,6 +249,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Firefox Version Usage for the Week</div>
@@ -275,6 +283,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div id="activities" class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">User Activity Across all Applications for the Week</div>
@@ -307,6 +317,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">User Activity Across all Applications for the Year</div>
@@ -339,6 +351,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI General User Activity for the Week</div>
@@ -371,6 +385,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI General User Activity for the Year</div>
@@ -403,6 +419,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI SPEAR User Activity for the Week</div>
@@ -435,6 +453,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI SPEAR User Activity for the Year</div>
@@ -467,6 +487,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">SMES User Activity for the Week</div>
@@ -499,6 +521,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">SMES User Activity for the Year</div>
@@ -531,6 +555,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">VICNAMES User Activity for the Week</div>
@@ -563,6 +589,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">VICNAMES User Activity for the Year</div>
@@ -595,6 +623,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA View My Titles User Activity for the Week</div>
@@ -627,6 +657,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA View My Titles User Activity for the Year</div>
@@ -659,6 +691,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Week</div>
@@ -691,6 +725,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div>
                             <figure class="Chartjs">
@@ -719,6 +755,8 @@
                             </div>
                         </div>
                     </div>
+                    <div style="page-break-after: always;"></div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA TPI Confirm on Map User Activity for the Week</div>
