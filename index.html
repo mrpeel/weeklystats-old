@@ -26,7 +26,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" media="screen" href="material.min.css">
-    <link rel="stylesheet" href="weekly_stats_new.min.css">
+    <link rel="stylesheet" href="weekly_stats.min.css">
+    <link rel="stylesheet" media="print" href="weekly_stats_print.min.css">
 </head>
 
 <body>
@@ -91,7 +92,8 @@
                             </figure>
                             <div class="Chartjs-legend" id="weekly-session-legend-container"></div>
                         </div>
-                        <div class="mdl-card__actions mdl-card--border no-print">
+                        <div class="card-bottom-spacer"></div>
+                        <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions for the Week</div>
                             <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
                         </div>
@@ -106,13 +108,14 @@
                                 <div class="Chartjs-figure" id="monthly-session-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="monthly-session-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions By Month</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -124,7 +127,8 @@
                                 <div class="Chartjs-figure" id="weekly-session-duration-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="weekly-session-duration-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Average Session Duration for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Average session length (minutes)</div>
                             </div>
@@ -141,13 +145,14 @@
                                 <div class="Chartjs-figure" id="monthly-session-duration-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="monthly-session-duration-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Average Session Duration By Month</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Average session length (minutes)</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -159,7 +164,8 @@
                                 <div class="Chartjs-figure" id="weekly-content-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="weekly-content-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Site Page Views for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per page</div>
                             </div>
@@ -175,13 +181,14 @@
                                 <div class="Chartjs-figure" id="quarterly-content-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="quarterly-content-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Site Page View Comparison Across the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per page</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer-double print-only"></p>
 
                     <div id="browsers" class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -193,7 +200,8 @@
                                 <div class="Chartjs-figure" id="weekly-browser-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="weekly-browser-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Browser Usage for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per browser</div>
                             </div>
@@ -209,13 +217,14 @@
                                 <div class="Chartjs-figure" id="quarterly-browser-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="quarterly-browser-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Browser Usage Comparison Across the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per browser</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -227,7 +236,8 @@
                                 <div class="Chartjs-figure" id="weekly-ieversion-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="weekly-ieversion-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Internet Explorer Version Usage for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Internet Explorer Version</div>
                             </div>
@@ -243,13 +253,14 @@
                                 <div class="Chartjs-figure" id="quarterly-ieversion-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="quarterly-ieversion-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Internet Explorer Version Usage Across the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Internet Explorer Version</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer-double print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -261,7 +272,8 @@
                                 <div class="Chartjs-figure" id="weekly-firefoxversion-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="weekly-firefoxversion-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Firefox Version Usage for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Firefox Version</div>
                             </div>
@@ -277,13 +289,14 @@
                                 <div class="Chartjs-figure" id="quarterly-firefoxversion-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="quarterly-firefoxversion-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Firefox Version Usage Across the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of page views per Firefox Version</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div id="activities" class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -295,7 +308,8 @@
                                 <div class="Chartjs-figure" id="overall-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="overall-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">User Activity Across all Applications for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -311,13 +325,14 @@
                                 <div class="Chartjs-figure" id="overall-search-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="overall-search-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Search Types Across all Applications for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -329,7 +344,8 @@
                                 <div class="Chartjs-figure" id="overall-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="overall-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">User Activity Across all Applications for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -345,13 +361,14 @@
                                 <div class="Chartjs-figure" id="overall-search-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="overall-search-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Search Types Across all Applications for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -363,7 +380,8 @@
                                 <div class="Chartjs-figure" id="lassi-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="lassi-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI General User Activity for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -379,13 +397,14 @@
                                 <div class="Chartjs-figure" id="lassi-search-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="lassi-search-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI General Search Types for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -397,7 +416,8 @@
                                 <div class="Chartjs-figure" id="lassi-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="lassi-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI General User Activity for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -413,13 +433,14 @@
                                 <div class="Chartjs-figure" id="lassi-search-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="lassi-search-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI General Search Types for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -431,7 +452,8 @@
                                 <div class="Chartjs-figure" id="spear-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="spear-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI SPEAR User Activity for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -440,20 +462,21 @@
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
                             <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI SPEAR Search Types for the Week</div>
-                            <div class="chart-sub-title-text mdl-color-text--grey-600">>Percentage breakdown of the number of searches</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                         </div>
                         <div>
                             <figure class="Chartjs">
                                 <div class="Chartjs-figure" id="spear-search-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="spear-search-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI SPEAR Search Types for the Week</div>
-                                <div class="chart-sub-title-text mdl-color-text--grey-600">>Percentage breakdown of the number of searches</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -465,7 +488,8 @@
                                 <div class="Chartjs-figure" id="spear-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="spear-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI SPEAR User Activity for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -481,13 +505,14 @@
                                 <div class="Chartjs-figure" id="spear-search-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="spear-search-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LASSI SPEAR Search Types for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -499,7 +524,8 @@
                                 <div class="Chartjs-figure" id="smes-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="smes-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">SMES User Activity for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -515,13 +541,14 @@
                                 <div class="Chartjs-figure" id="smes-search-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="smes-search-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">SMES Search Types for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -533,7 +560,8 @@
                                 <div class="Chartjs-figure" id="smes-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="smes-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">SMES User Activity for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -549,13 +577,14 @@
                                 <div class="Chartjs-figure" id="smes-search-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="smes-search-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">SMES Search Types for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -567,7 +596,8 @@
                                 <div class="Chartjs-figure" id="vicnames-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vicnames-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">VICNAMES User Activity for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -583,13 +613,14 @@
                                 <div class="Chartjs-figure" id="vicnames-search-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vicnames-search-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">VICNAMES Search Types for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -601,7 +632,8 @@
                                 <div class="Chartjs-figure" id="vicnames-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vicnames-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">VICNAMES User Activity for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -617,13 +649,14 @@
                                 <div class="Chartjs-figure" id="vicnames-search-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vicnames-search-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">VICNAMES Search Types for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -635,7 +668,8 @@
                                 <div class="Chartjs-figure" id="vmt-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vmt-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA View My Titles User Activity for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -651,13 +685,14 @@
                                 <div class="Chartjs-figure" id="vmt-search-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vmt-search-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA View My Titles Search Types for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -669,7 +704,8 @@
                                 <div class="Chartjs-figure" id="vmt-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vmt-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA View My Titles User Activity for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -685,13 +721,14 @@
                                 <div class="Chartjs-figure" id="vmt-search-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="vmt-search-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA View My Titles Search Types for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -703,7 +740,8 @@
                                 <div class="Chartjs-figure" id="hap-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="hap-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -719,13 +757,14 @@
                                 <div class="Chartjs-figure" id="hap-search-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="hap-search-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div>
@@ -733,7 +772,8 @@
                                 <div class="Chartjs-figure" id="hap-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="hap-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -749,13 +789,14 @@
                                 <div class="Chartjs-figure" id="hap-search-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="hap-search-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
                             </div>
                         </div>
                     </div>
-                    <div style="page-break-after: always;"></div>
+                    <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
@@ -767,7 +808,8 @@
                                 <div class="Chartjs-figure" id="tcom-activity-current-week-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="tcom-activity-current-week-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA TPI Confirm on Map User Activity for the Week</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -783,7 +825,8 @@
                                 <div class="Chartjs-figure" id="tcom-activity-history-chart-container"></div>
                             </figure>
                             <div class="Chartjs-legend" id="tcom-activity-history-legend-container"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print">
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
                                 <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA TPI Confirm on Map User Activity for the Year</div>
                                 <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
                             </div>
@@ -799,6 +842,12 @@
             </div>
         </main>
     </div>
+
+    <script>
+        // If Promise is not supported, include the polyfill
+        window.Promise || document.write("<script src=javascript/Promise.min.js><\/script>");
+
+    </script>
 
     <script src="material.min.js"></script>
 
@@ -838,7 +887,6 @@
 
     <script src="statschartbuilder.min.js"></script>
     <script src="generatecharts.min.js"></script>
-
 
 
     <script>
