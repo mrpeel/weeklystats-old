@@ -567,15 +567,15 @@ WeekDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
  *  Class to create a dougnut chart which compares percentages 
  *  for the past year
  */
-var YearDoughnutChart = function (ids, startDate, endDate) {
+var MonthDoughnutChart = function (ids, startDate, endDate) {
     "use strict";
     StatsChart.call(this, ids, startDate, endDate);
-    this.lastYearStartDate = moment(endDate).subtract(1, 'years').format('YYYY-MM-DD');
-    this.lastYearEndDate = moment(endDate).format('YYYY-MM-DD');
+    this.lastMonthStartDate = moment(endDate).subtract(1, 'months').format('YYYY-MM-DD');
+    this.lastMonthEndDate = moment(endDate).format('YYYY-MM-DD');
 };
 
-YearDoughnutChart.prototype = Object.create(StatsChart.prototype);
-YearDoughnutChart.prototype.constructor = YearDoughnutChart;
+MonthDoughnutChart.prototype = Object.create(StatsChart.prototype);
+MonthDoughnutChart.prototype.constructor = MonthDoughnutChart;
 
 
 /**
@@ -583,31 +583,31 @@ YearDoughnutChart.prototype.constructor = YearDoughnutChart;
  * @param {None} 
  * @return {None}.
  */
-YearDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
+MonthDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
     "use strict";
 
     //capture execution context to enable usage within functions
-    var yearDoughnutChartContext = this;
+    var MonthDoughnutChartContext = this;
 
     //Create gaParams object
     var gaParams = {
-        'ids': yearDoughnutChartContext.gaIds,
-        'dimensions': yearDoughnutChartContext.gaDimensions,
-        'metrics': yearDoughnutChartContext.gaMetrics,
-        'start-date': yearDoughnutChartContext.lastYearStartDate,
-        'end-date': yearDoughnutChartContext.lastYearEndDate,
-        'sort': yearDoughnutChartContext.gaSort,
+        'ids': MonthDoughnutChartContext.gaIds,
+        'dimensions': MonthDoughnutChartContext.gaDimensions,
+        'metrics': MonthDoughnutChartContext.gaMetrics,
+        'start-date': MonthDoughnutChartContext.lastMonthStartDate,
+        'end-date': MonthDoughnutChartContext.lastMonthEndDate,
+        'sort': MonthDoughnutChartContext.gaSort,
         'max-results': 5
     };
 
     //Add in the filters property if required
-    if (yearDoughnutChartContext.gaFilters !== '') {
-        gaParams.filters = yearDoughnutChartContext.gaFilters;
+    if (MonthDoughnutChartContext.gaFilters !== '') {
+        gaParams.filters = MonthDoughnutChartContext.gaFilters;
     }
 
 
     //run GA queries and map data into properties
-    return yearDoughnutChartContext.queryGA(gaParams)
+    return MonthDoughnutChartContext.queryGA(gaParams)
         //process results
         .then(function (result) {
             var sumValues = 0;
@@ -621,19 +621,19 @@ YearDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
 
                 result.rows.forEach(function (row, i) {
                     //Add the value into the chart results for rendering
-                    yearDoughnutChartContext.chartData.push({
+                    MonthDoughnutChartContext.chartData.push({
                         value: +row[1],
-                        color: yearDoughnutChartContext.fillColors[i],
-                        highlight: yearDoughnutChartContext.strokeColors[i],
+                        color: MonthDoughnutChartContext.fillColors[i],
+                        highlight: MonthDoughnutChartContext.strokeColors[i],
                         label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1] / sumValues * 100) + '%)'
                     });
                 });
 
             } else {
-                yearDoughnutChartContext.chartData.push({
+                MonthDoughnutChartContext.chartData.push({
                     value: 1,
-                    color: yearDoughnutChartContext.fillColors[0],
-                    highlight: yearDoughnutChartContext.strokeColors[0],
+                    color: MonthDoughnutChartContext.fillColors[0],
+                    highlight: MonthDoughnutChartContext.strokeColors[0],
                     label: 'No data for selected period'
                 });
             }
@@ -646,6 +646,133 @@ YearDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
 
 };
 
+
+/** 
+ *  Class to create a dougnut chart which divides results into 
+ *  Within a day, within a week, within a month, within a year, more than a year
+ */
+var ElapsedTimeDoughnutChart = function (ids, startDate, endDate) {
+    "use strict";
+    StatsChart.call(this, ids, startDate, endDate);
+    this.elapsedTimeStartDate = moment(endDate).subtract(2, 'years').format('YYYY-MM-DD');
+    this.elapsedTimeEndDate = moment(endDate).format('YYYY-MM-DD');
+    this.withinDay = 0;
+    this.withinWeek = 0;
+    this.withinMonth = 0;
+    this.withinYear = 0;
+    this.moreThanYear = 0;
+};
+
+ElapsedTimeDoughnutChart.prototype = Object.create(StatsChart.prototype);
+ElapsedTimeDoughnutChart.prototype.constructor = MonthDoughnutChart;
+
+
+/**
+ * Retrieve the data required from Google Analytics and populate data sets
+ * @param {None} 
+ * @return {None}.
+ */
+ElapsedTimeDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var MonthDoughnutChartContext = this;
+
+    //Create gaParams object
+    var gaParams = {
+        'ids': MonthDoughnutChartContext.gaIds,
+        'dimensions': MonthDoughnutChartContext.gaDimensions,
+        'metrics': MonthDoughnutChartContext.gaMetrics,
+        'start-date': MonthDoughnutChartContext.elapsedTimeStartDate,
+        'end-date': MonthDoughnutChartContext.elapsedTimeEndDate,
+        'sort': MonthDoughnutChartContext.gaSort
+    };
+
+    //Add in the filters property if required
+    if (MonthDoughnutChartContext.gaFilters !== '') {
+        gaParams.filters = MonthDoughnutChartContext.gaFilters;
+    }
+
+
+    //run GA queries and map data into properties
+    return MonthDoughnutChartContext.queryGA(gaParams)
+        //process results
+        .then(function (result) {
+            var sumValues = 0;
+
+            if (result.totalResults > 0) {
+                result.rows.forEach(function (row, i) {
+                    //Check which category the value falls into
+                    if ((+row[0]) <= 1) {
+                        MonthDoughnutChartContext.withinDay = MonthDoughnutChartContext.withinDay + (+row[1]);
+                    } else if ((+row[0]) <= 7) {
+                        MonthDoughnutChartContext.withinWeek = MonthDoughnutChartContext.withinWeek + (+row[1]);
+                    } else if ((+row[0]) <= 31) {
+                        MonthDoughnutChartContext.withinMonth = MonthDoughnutChartContext.withinMonth + (+row[1]);
+                    } else if ((+row[0]) <= 365) {
+                        MonthDoughnutChartContext.withinYear = MonthDoughnutChartContext.withinYear + (+row[1]);
+                    } else {
+                        MonthDoughnutChartContext.moreThanYear = MonthDoughnutChartContext.moreThanYear + (+row[1]);
+                    }
+
+                    //Add value to the sum of all values to calculate percentages
+                    sumValues = sumValues + (+row[1]);
+                });
+
+                //Push data values into chart for each type
+                MonthDoughnutChartContext.chartData.push({
+                    value: MonthDoughnutChartContext.withinDay,
+                    color: MonthDoughnutChartContext.fillColors[0],
+                    highlight: MonthDoughnutChartContext.strokeColors[0],
+                    label: 'Within a day: ' + MonthDoughnutChartContext.withinDay + ' (' + Math.round(MonthDoughnutChartContext.withinDay / sumValues * 100) + '%)'
+                });
+
+                MonthDoughnutChartContext.chartData.push({
+                    value: MonthDoughnutChartContext.withinWeek,
+                    color: MonthDoughnutChartContext.fillColors[1],
+                    highlight: MonthDoughnutChartContext.strokeColors[1],
+                    label: 'Within a week: ' + MonthDoughnutChartContext.withinWeek + ' (' + Math.round(MonthDoughnutChartContext.withinWeek / sumValues * 100) + '%)'
+                });
+
+                MonthDoughnutChartContext.chartData.push({
+                    value: MonthDoughnutChartContext.withinMonth,
+                    color: MonthDoughnutChartContext.fillColors[2],
+                    highlight: MonthDoughnutChartContext.strokeColors[2],
+                    label: 'Within a month: ' + MonthDoughnutChartContext.withinMonth + ' (' + Math.round(MonthDoughnutChartContext.withinMonth / sumValues * 100) + '%)'
+                });
+
+                MonthDoughnutChartContext.chartData.push({
+                    value: MonthDoughnutChartContext.withinYear,
+                    color: MonthDoughnutChartContext.fillColors[3],
+                    highlight: MonthDoughnutChartContext.strokeColors[3],
+                    label: 'Within a year: ' + MonthDoughnutChartContext.withinYear + ' (' + Math.round(MonthDoughnutChartContext.withinYear / sumValues * 100) + '%)'
+                });
+
+                MonthDoughnutChartContext.chartData.push({
+                    value: MonthDoughnutChartContext.moreThanYear,
+                    color: MonthDoughnutChartContext.fillColors[4],
+                    highlight: MonthDoughnutChartContext.strokeColors[4],
+                    label: 'More than a year: ' + MonthDoughnutChartContext.moreThanYear + ' (' + Math.round(MonthDoughnutChartContext.moreThanYear / sumValues * 100) + '%)'
+                });
+
+
+
+            } else {
+                MonthDoughnutChartContext.chartData.push({
+                    value: 1,
+                    color: MonthDoughnutChartContext.fillColors[0],
+                    highlight: MonthDoughnutChartContext.strokeColors[0],
+                    label: 'No data for selected period'
+                });
+            }
+
+            return true;
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+
+};
 
 
 /** 
@@ -1192,79 +1319,6 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
 
 };
 
-/**
- * Parse the GA event data and categorise into event type and application and store in overall breakdown and application specific breakdown data properties
- * @param {object} results object from call to GA to retrieve events 
- * @return {None}.
- */
-
-/*ActivityData.prototype.parseActivityData = function (results) {
-    "use strict";
-
-    //capture execution context to enable usage within functions
-    var activityDataContext = this;
-
-    //Work through each result and add value to appropriate 
-        
-    results.rows.forEach(function(row, r) {
-
-        //Rows have the following elements, 0 - Event Category, 1 - event Label, 2 - Number of Events
-        var application = activityDataContext.determineApplication(row[0]);
-        var activity = activityDataContext.determineActivity(row[0], row[1]);
-        
-        //Make sure the data returned is for an activity within our data set
-        if(application!==undefined && activity!==undefined) {
-            //Ensure all required properties exist with a value of at least 0
-            if (activityDataContext.overallActivityData[activity]===undefined) {
-                activityDataContext.overallActivityData[activity] = 0;
-            }
-
-            if (activityDataContext.applicationActivityData[application]===undefined) {
-                activityDataContext.applicationActivityData[application] = {};
-            }
-
-
-            if (activityDataContext.applicationActivityData[application][activity]===undefined) {
-                activityDataContext.applicationActivityData[application][activity] = 0;
-            }
-
-
-
-            //Add aoverall activity value
-            activityDataContext.overallActivityData[activity] += (+row[2]);            
-
-            //Add value to specific application activity values
-            activityDataContext.applicationActivityData[application][activity] += (+row[2]);
-
-
-
-            //Check if this is a search activity - add search breakdown figures as well
-            if(activity ==='Search') {
-                //Ensure all required properties exist with a value of at least 0
-                if (activityDataContext.overallSearchBreakdownData[row[1]]===undefined) {
-                    activityDataContext.overallSearchBreakdownData[row[1]] = 0;  
-                }
-
-                if (activityDataContext.applicationSearchBreakdownData[application]===undefined) {
-                    activityDataContext.applicationSearchBreakdownData[application] = {};
-                }
-
-                if (activityDataContext.applicationSearchBreakdownData[application][row[1]]===undefined) {
-                    activityDataContext.applicationSearchBreakdownData[application][row[1]] = 0;
-                }
-
-                //Add value to overall search type numbers
-                activityDataContext.overallSearchBreakdownData[row[1]] += (+row[2]);
-
-                //Add value to specific application search type numbers
-                activityDataContext.applicationSearchBreakdownData[application][row[1]] += (+row[2]);  
-            }             
-        } 
-
-    });
-        
-                
-};*/
 
 ActivityData.prototype.parseActivityData = function (results, dataType) {
     "use strict";
@@ -1430,7 +1484,7 @@ ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, r
     //Calculate sum of all activity numbers for percentages
     for (objProp in renderChartDataCurrent) {
         sumValues = sumValues + renderChartDataCurrent[objProp];
-        activityDataContext.chartData.labels.push(objProp.replace(" ", "\n"));
+        activityDataContext.chartData.labels.push(objProp);
     }
 
     for (objProp in renderChartDataPrevious) {
