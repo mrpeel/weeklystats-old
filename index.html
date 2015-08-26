@@ -46,7 +46,7 @@
                 <div class="mdl-layout-spacer no-print"></div>
                 <nav class="header-hide-tablet mdl-navigation no-print">
                     <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#view-selector-container">Change Data Selection</a>
-                    <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#sessions">Sessions &amp; Sites</a>
+                    <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#users">Users &amp; Sites</a>
                     <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#browsers">Browsers</a>
                     <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#activities">Activities</a>
                 </nav>
@@ -69,7 +69,7 @@
             <span class="mdl-layout-title">Weekly stats</span>
             <nav class="mdl-navigation no-print">
                 <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#view-selector-container">Change Data Selection</a>
-                <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#sessions">Sessions &amp; Sites</a>
+                <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#users">Users &amp; Sites</a>
                 <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#browsers">Browsers</a>
                 <a class="mdl-navigation__link mdl-typography--text-uppercase no-print" href="#activities">Activities</a>
             </nav>
@@ -81,10 +81,84 @@
 
 
                 <div class="mdl-grid">
+                    <div id="users" class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div class="mdl-card__actions mdl-card--border print-only">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Site Visits for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">No of visits</div>
+                        </div>
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-user-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-user-legend-container"></div>
+                        </div>
+                        <div class="card-bottom-spacer"></div>
+                        <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Site Visits for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">No of visits</div>
+                        </div>
+                    </div>
+
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div class="mdl-card__actions mdl-card--border print-only">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Site Visits By Month</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">No of visits</div>
+                        </div>
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="monthly-user-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="monthly-user-legend-container"></div>
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Site Visits By Month</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">No of visits</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="print-spacer print-only"></p>
+
+                    <div id="usertypes" class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div class="mdl-card__actions mdl-card--border print-only">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">New vs Returning Visitors for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of visitor types</div>
+                        </div>
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="weekly-user-type-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="weekly-user-type-legend-container"></div>
+                        </div>
+                        <div class="card-bottom-spacer"></div>
+                        <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">New vs Returning Visitors for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">PercePercentagentgae of visitor types</div>
+                        </div>
+                    </div>
+
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div class="mdl-card__actions mdl-card--border print-only">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">New vs Returning Visitors for the Year</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of visitor types</div>
+                        </div>
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="yearly-user-type-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="yearly-user-type-legend-container"></div>
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">New vs Returning Visitors for the Year</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage of visitor types</div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="print-spacer print-only"></p>
+
                     <div id="sessions" class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
-                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions for the Week</div>
-                            <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions Per Visit for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Average no of sessions</div>
                         </div>
                         <div>
                             <figure class="Chartjs">
@@ -94,14 +168,15 @@
                         </div>
                         <div class="card-bottom-spacer"></div>
                         <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
-                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions for the Week</div>
-                            <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions Per Visit for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Average no of sessions</div>
                         </div>
                     </div>
+
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">
-                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions By Month</div>
-                            <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions Per Visit By Month</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Average no of sessions</div>
                         </div>
                         <div>
                             <figure class="Chartjs">
@@ -110,12 +185,13 @@
                             <div class="Chartjs-legend" id="monthly-session-legend-container"></div>
                             <div class="card-bottom-spacer"></div>
                             <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
-                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions By Month</div>
-                                <div class="chart-sub-title-text mdl-color-text--grey-600">No of sessions</div>
+                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">Sessions Per Visit By Month</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Average no of sessions</div>
                             </div>
                         </div>
                     </div>
                     <p class="print-spacer print-only"></p>
+
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
                         <div class="mdl-card__actions mdl-card--border print-only">

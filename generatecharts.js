@@ -32,11 +32,23 @@ function renderCharts(ids, startDate, endDate) {
 
     //Update the sub-title displayed when printing 
     var printSubTitle = document.getElementById("print-sub-heading");
-    printSubTitle.textContent = "For the week beginning " + moment(startDate).format('DD/MM/YYYY')
+    printSubTitle.textContent = "For the week beginning " + moment(startDate).format('DD/MM/YYYY');
 
 
     //Run each rendering function through a promise chain
-    return renderWeekOverWeekSessions(ids, startDate, endDate)
+    return renderWeekOverWeekUsers(ids, startDate, endDate)
+        .then(function (result) {
+            return renderYearOverYearUsers(ids, startDate, endDate);
+        })
+        .then(function (result) {
+            return renderWeekUserTypes(ids, startDate, endDate);
+        })
+        .then(function (result) {
+            return renderYearUserTypes(ids, startDate, endDate);
+        })
+        .then(function (result) {
+            return renderWeekOverWeekSessions(ids, startDate, endDate);
+        })
         .then(function (result) {
             return renderYearOverYearSessions(ids, startDate, endDate);
         })
@@ -84,15 +96,106 @@ function renderCharts(ids, startDate, endDate) {
 
 }
 
+function renderWeekOverWeekUsers(ids, startDate, endDate) {
+
+    var weekOverWeekUsers = new WeekToPreviousWeekChart(ids, startDate, endDate);
+
+    weekOverWeekUsers.gaLastYearDimensions = 'ga:dayOfWeek,ga:year,ga:nthWeek';
+    weekOverWeekUsers.gaDimensions = 'ga:date,ga:nthDay';
+    weekOverWeekUsers.gaMetrics = 'ga:users';
+    weekOverWeekUsers.gaSort = 'ga:dayOfWeek';
+
+
+
+    //Retrieve GA Data
+    return weekOverWeekUsers.retrieveGAData()
+        .then(function (result) {
+            //Set up data in chart format and render chart
+            weekOverWeekUsers.setUpChartData();
+            weekOverWeekUsers.createLineChart('weekly-user-chart-container', 'weekly-user-legend-container');
+
+            return weekOverWeekUsers.delayExecution();
+        })
+        .then(function () {
+            return true;
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+}
+
+function renderYearOverYearUsers(ids, startDate, endDate) {
+
+    var yearOverYearUsers = new YearToPreviousYearChart(ids, startDate, endDate);
+
+    yearOverYearUsers.gaDimensions = 'ga:month,ga:nthMonth';
+    yearOverYearUsers.gaMetrics = 'ga:users';
+
+    //Retrieve GA Data
+    return yearOverYearUsers.retrieveGAData()
+        .then(function (result) {
+            //Set up data in chart format and render chart
+            yearOverYearUsers.setUpChartData();
+            yearOverYearUsers.createBarChart('monthly-user-chart-container', 'monthly-user-legend-container');
+
+            return yearOverYearUsers.delayExecution();
+        })
+        .then(function () {
+            return true;
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+}
+
+function renderWeekUserTypes(ids, startDate, endDate) {
+
+    var weekUserTypes = new WeekDoughnutChart(ids, startDate, endDate);
+
+    weekUserTypes.gaDimensions = 'ga:userType';
+    weekUserTypes.gaMetrics = 'ga:users';
+    weekUserTypes.gaSort = 'ga:userType';
+
+    //Retrieve data for year and set up data in doughnut chart format
+    return weekUserTypes.retrieveAndSetUpGAData()
+        .then(function (result) {
+            weekUserTypes.createDoughnutChart('weekly-user-type-chart-container', 'weekly-user-type-legend-container');
+            return weekUserTypes.delayExecution();
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+
+}
+
+function renderYearUserTypes(ids, startDate, endDate) {
+
+    var yearUserTypes = new YearDoughnutChart(ids, startDate, endDate);
+
+    yearUserTypes.gaDimensions = 'ga:userType';
+    yearUserTypes.gaMetrics = 'ga:users';
+    yearUserTypes.gaSort = 'ga:userType';
+
+    //Retrieve data for year and set up data in doughnut chart format
+    return yearUserTypes.retrieveAndSetUpGAData()
+        .then(function (result) {
+            yearUserTypes.createDoughnutChart('yearly-user-type-chart-container', 'yearly-user-type-legend-container');
+            return yearUserTypes.delayExecution();
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+
+}
+
 function renderWeekOverWeekSessions(ids, startDate, endDate) {
 
     var weekOverWeekSessions = new WeekToPreviousWeekChart(ids, startDate, endDate);
 
     weekOverWeekSessions.gaLastYearDimensions = 'ga:dayOfWeek,ga:year,ga:nthWeek';
     weekOverWeekSessions.gaDimensions = 'ga:date,ga:nthDay';
-    weekOverWeekSessions.gaMetrics = 'ga:sessions';
-    weekOverWeekSessions.gaFilters = 'ga:sessions>0';
-    weekOverWeekSessions.gaSort = 'ga:dayOfWeek,-ga:sessions';
+    weekOverWeekSessions.gaMetrics = 'ga:sessionsPerUser';
+    weekOverWeekSessions.gaSort = 'ga:dayOfWeek';
 
 
 
@@ -118,7 +221,7 @@ function renderYearOverYearSessions(ids, startDate, endDate) {
     var yearOverYearSessions = new YearToPreviousYearChart(ids, startDate, endDate);
 
     yearOverYearSessions.gaDimensions = 'ga:month,ga:nthMonth';
-    yearOverYearSessions.gaMetrics = 'ga:sessions';
+    yearOverYearSessions.gaMetrics = 'ga:sessionsPerUser';
 
     //Retrieve GA Data
     return yearOverYearSessions.retrieveGAData()
@@ -136,6 +239,7 @@ function renderYearOverYearSessions(ids, startDate, endDate) {
             console.log(err.message);
         });
 }
+
 
 function renderWeekOverWeekSessionDuration(ids, startDate, endDate) {
 

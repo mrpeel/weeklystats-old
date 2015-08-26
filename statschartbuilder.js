@@ -24,16 +24,16 @@ var DOUGHNUT_CHART_LEGEND = "<% for (var i=0; i<segments.length; i++) {%><li><i 
  */
 var StatsChart = function (ids, startDate, endDate) {
     "use strict";
-    this.fillColors =   [   'rgba(244,67,54,0.33)', 'rgba(76,175,80,0.33)', 'rgba(96,125,139,0.33)', 'rgba(103,58,183,0.33)', 'rgba(3,169,244,0.33)', 'rgba(255,87,34,0.33)',
+    this.fillColors = ['rgba(244,67,54,0.33)', 'rgba(76,175,80,0.33)', 'rgba(96,125,139,0.33)', 'rgba(103,58,183,0.33)', 'rgba(3,169,244,0.33)', 'rgba(255,87,34,0.33)',
                             'rgba(233,30,99,0.33)', 'rgba(139,195,74,0.33)', 'rgba(121,85,72,0.33)', 'rgba(63,81,181,0.33)', 'rgba(0,188,212,0.33)', 'rgba(255,193,7,0.33)',
                             'rgba(156,39,176,0.33)', 'rgba(205,220,57,0.33)', 'rgba(158,158,158,0.33)', 'rgba(33,150,243,0.33)', 'rgba(0,150,136,0.33)', 'rgba(255,235,59,0.33)'
                         ];
-    
-    this.strokeColors = [   'rgba(244,67,54,1)', 'rgba(76,175,80,1)', 'rgba(96,125,139,1)', 'rgba(103,58,183,1)', 'rgba(3,169,244,1)', 'rgba(255,87,34,1)',
+
+    this.strokeColors = ['rgba(244,67,54,1)', 'rgba(76,175,80,1)', 'rgba(96,125,139,1)', 'rgba(103,58,183,1)', 'rgba(3,169,244,1)', 'rgba(255,87,34,1)',
                             'rgba(233,30,99,1)', 'rgba(139,195,74,1)', 'rgba(121,85,72,1)', 'rgba(63,81,181,1)', 'rgba(0,188,212,1)', 'rgba(255,193,7,1)',
                             'rgba(156,39,176,1)', 'rgba(205,220,57,1)', 'rgba(158,158,158,1)', 'rgba(33,150,243,1)', 'rgba(0,150,136,1)', 'rgba(255,235,59,1)'
                         ];
-    
+
     this.gaIds = ids;
     this.gaDimensions = '';
     this.gaMetrics = '';
@@ -60,8 +60,8 @@ StatsChart.prototype.queryGA = function (queryParams) {
         });
 
         data.once('success', function (response) {
-            resolve(response);
-        })
+                resolve(response);
+            })
             .once('error', function (response) {
                 reject(response);
             })
@@ -111,14 +111,14 @@ StatsChart.prototype.makeCanvas = function (chartElement) {
  */
 StatsChart.prototype.createLineChart = function (chartElement, legendElement) {
     "use strict";
-    
+
     //capture execution context to enable usage within functions
     var statsChartContext = this;
 
     //Make the canvas on the element
     var lineChart = new Chart(statsChartContext.makeCanvas(chartElement)).Line(statsChartContext.chartData, {
-            legendTemplate: LINE_CHART_LEGEND
-        });
+        legendTemplate: LINE_CHART_LEGEND
+    });
     document.getElementById(legendElement).innerHTML = lineChart.generateLegend();
 };
 
@@ -134,11 +134,11 @@ StatsChart.prototype.createBarChart = function (chartElement, legendElement) {
 
     //capture execution context to enable usage within functions
     var statsChartContext = this;
-    
+
     //Make the canvas on the element
     var barChart = new Chart(statsChartContext.makeCanvas(chartElement)).Bar(statsChartContext.chartData, {
-            legendTemplate: BAR_CHART_LEGEND
-        });
+        legendTemplate: BAR_CHART_LEGEND
+    });
     document.getElementById(legendElement).innerHTML = barChart.generateLegend();
 };
 
@@ -154,13 +154,13 @@ StatsChart.prototype.createDoughnutChart = function (chartElement, legendElement
 
     //capture execution context to enable usage within functions
     var statsChartContext = this;
-    
+
     //Make the canvas on the element
     var doughnutChart = new Chart(statsChartContext.makeCanvas(chartElement)).Doughnut(statsChartContext.chartData, {
-            percentageInnerCutout: 33,
-            animateScale: true,
-            legendTemplate: DOUGHNUT_CHART_LEGEND
-        });
+        percentageInnerCutout: 33,
+        animateScale: true,
+        legendTemplate: DOUGHNUT_CHART_LEGEND
+    });
     document.getElementById(legendElement).innerHTML = doughnutChart.generateLegend();
 };
 
@@ -180,7 +180,7 @@ var WeekToPreviousWeekChart = function (ids, startDate, endDate) {
     this.lastYearEndDate = moment(endDate).format('YYYY-MM-DD');
     this.lastWeekStartDate = moment(startDate).subtract(7, 'days').format('YYYY-MM-DD');
     this.lastWeekEndDate = moment(endDate).subtract(7, 'days').format('YYYY-MM-DD');
-    this.lastWeekStarting =  moment(startDate).subtract(7, 'days').format('DD/MM/YYYY');
+    this.lastWeekStarting = moment(startDate).subtract(7, 'days').format('DD/MM/YYYY');
 };
 
 WeekToPreviousWeekChart.prototype = Object.create(StatsChart.prototype);
@@ -197,36 +197,37 @@ WeekToPreviousWeekChart.prototype.transformLastYearDataToMedians = function (las
 
     //capture execution context to enable usage within functions
     var weekToPreviousWeekContext = this;
-    
+
     // Object to hold year's data for each weekday
-    var dayData = { day0: [],
-                    day1: [],
-                    day2: [],
-                    day3: [],
-                    day4: [],
-                    day5: [],
-                    day6: []
-                  }, 
+    var dayData = {
+            day0: [],
+            day1: [],
+            day2: [],
+            day3: [],
+            day4: [],
+            day5: [],
+            day6: []
+        },
         dayLoop;
 
-        //push yearvalues into dayData object
+    //push yearvalues into dayData object
     lastYearResults.rows.forEach(function (row, i) {
         dayData['day' + row[0]].push(+row[3]);
     });
 
-        /* Loop through day values and check whether there is a set of values for the week day.
-        *  If present, retrieve median value.
-        *  If not, add 0 in.
-        *  Modulus is used to access data element so function can start with day 1 (Monday) and loop through day 6 then 0 (Sunday)
-        */
+    /* Loop through day values and check whether there is a set of values for the week day.
+     *  If present, retrieve median value.
+     *  If not, add 0 in.
+     *  Modulus is used to access data element so function can start with day 1 (Monday) and loop through day 6 then 0 (Sunday)
+     */
     for (dayLoop = 1; dayLoop <= 7; dayLoop++) {
         if (dayData['day' + (dayLoop % 7)] === undefined) {
             weekToPreviousWeekContext.lastYearData.push(0);
         } else {
             weekToPreviousWeekContext.lastYearData.push(dayData['day' + (dayLoop % 7)][Math.round(dayData['day' + (dayLoop % 7)].length / 2)]);
-        }   
+        }
     }
-    
+
 };
 
 /**
@@ -245,70 +246,76 @@ WeekToPreviousWeekChart.prototype.retrieveGAData = function () {
         'ids': weekToPreviousWeekContext.gaIds,
         'dimensions': weekToPreviousWeekContext.gaLastYearDimensions,
         'metrics': weekToPreviousWeekContext.gaMetrics,
-        'filters': weekToPreviousWeekContext.gaFilters,
         'start-date': weekToPreviousWeekContext.lastYearStartDate,
         'end-date': weekToPreviousWeekContext.lastYearEndDate,
         'sort': weekToPreviousWeekContext.gaSort
     };
-    
+
+    //Add in filters if present
+    if (weekToPreviousWeekContext.gaFilters.length > 0) {
+        gaParams.filters = weekToPreviousWeekContext.gaFilters;
+    }
+
+
+
     //run GA queries and map data into properties
-   return weekToPreviousWeekContext.queryGA(gaParams)
-            //process last year's data results
-            .then(function(result) {
-                weekToPreviousWeekContext.transformLastYearDataToMedians(result);
-                
-                return weekToPreviousWeekContext.delayExecution();
-            })
-            //Retrieve current week data
-            .then(function(result) {  
-                //Redefine gaParams for weekly data
-                gaParams = {
-                    'ids': weekToPreviousWeekContext.gaIds,
-                    'dimensions': weekToPreviousWeekContext.gaDimensions,
-                    'metrics': weekToPreviousWeekContext.gaMetrics,
-                    'start-date': weekToPreviousWeekContext.currentWeekStartDate,
-                    'end-date': weekToPreviousWeekContext.currentWeekEndDate
-                };
+    return weekToPreviousWeekContext.queryGA(gaParams)
+        //process last year's data results
+        .then(function (result) {
+            weekToPreviousWeekContext.transformLastYearDataToMedians(result);
 
-                return weekToPreviousWeekContext.queryGA(gaParams);
-            })
-            //Add results for current week data
-            .then(function(result) {
-                weekToPreviousWeekContext.currentWeekData = result.rows.map(function(row) {
-                    return +row[2];
-                });
-        
-                return weekToPreviousWeekContext.delayExecution();
-            })
-            //Retrieve previous week data
-            .then(function(result) {
-                gaParams["start-date"] = weekToPreviousWeekContext.lastWeekStartDate;
-                gaParams["end-date"] = weekToPreviousWeekContext.lastWeekEndDate;
+            return weekToPreviousWeekContext.delayExecution();
+        })
+        //Retrieve current week data
+        .then(function (result) {
+            //Redefine gaParams for weekly data
+            gaParams = {
+                'ids': weekToPreviousWeekContext.gaIds,
+                'dimensions': weekToPreviousWeekContext.gaDimensions,
+                'metrics': weekToPreviousWeekContext.gaMetrics,
+                'start-date': weekToPreviousWeekContext.currentWeekStartDate,
+                'end-date': weekToPreviousWeekContext.currentWeekEndDate
+            };
 
-                return weekToPreviousWeekContext.queryGA(gaParams);
-            })
-            //Add results for previous week data
-            .then(function(result) {
-                weekToPreviousWeekContext.previousWeekData = result.rows.map(function(row) {
-                    return +row[2];
-                });
-        
-                //map in labels information
-                weekToPreviousWeekContext.labels = result.rows.map(function(row) {
-                    return +row[0];
-                });
-        
-                //transform labels to 3 letter name of day of the week 
-                weekToPreviousWeekContext.labels = weekToPreviousWeekContext.labels.map(function(label) {
-                    return moment(label, 'YYYYMMDD').format('ddd');
-                });
-            
-                return true;
-            })
-            .catch(function(err) {
-                console.log(err.message);
+            return weekToPreviousWeekContext.queryGA(gaParams);
+        })
+        //Add results for current week data
+        .then(function (result) {
+            weekToPreviousWeekContext.currentWeekData = result.rows.map(function (row) {
+                return +row[2];
             });
-       
+
+            return weekToPreviousWeekContext.delayExecution();
+        })
+        //Retrieve previous week data
+        .then(function (result) {
+            gaParams["start-date"] = weekToPreviousWeekContext.lastWeekStartDate;
+            gaParams["end-date"] = weekToPreviousWeekContext.lastWeekEndDate;
+
+            return weekToPreviousWeekContext.queryGA(gaParams);
+        })
+        //Add results for previous week data
+        .then(function (result) {
+            weekToPreviousWeekContext.previousWeekData = result.rows.map(function (row) {
+                return +row[2];
+            });
+
+            //map in labels information
+            weekToPreviousWeekContext.labels = result.rows.map(function (row) {
+                return +row[0];
+            });
+
+            //transform labels to 3 letter name of day of the week 
+            weekToPreviousWeekContext.labels = weekToPreviousWeekContext.labels.map(function (label) {
+                return moment(label, 'YYYYMMDD').format('ddd');
+            });
+
+            return true;
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+
 };
 
 /**
@@ -321,38 +328,39 @@ WeekToPreviousWeekChart.prototype.setUpChartData = function () {
 
     //capture execution context to enable usage within functions
     var weekToPreviousWeekContext = this;
-    
-    
+
+
     //Set-up the chart data ready for rendering
-    weekToPreviousWeekContext.chartData = {  labels: weekToPreviousWeekContext.labels,
-                        datasets: [{
-                                    //Previous week
-                                    label: 'Week Starting ' + weekToPreviousWeekContext.lastWeekStarting,
-                                    fillColor: weekToPreviousWeekContext.fillColors[0],
-                                    strokeColor: weekToPreviousWeekContext.strokeColors[0],
-                                    pointColor: weekToPreviousWeekContext.strokeColors[0],
-                                    pointStrokeColor: "#fff",
-                                    data: weekToPreviousWeekContext.previousWeekData
-                                    }, 
-                                   {
-                                    //Current week
-                                    label: 'Week Starting ' + weekToPreviousWeekContext.currentWeekStarting,
-                                    fillColor: weekToPreviousWeekContext.fillColors[1],
-                                    strokeColor: weekToPreviousWeekContext.strokeColors[1],
-                                    pointColor: weekToPreviousWeekContext.strokeColors[1],
-                                    pointStrokeColor: "#fff",
-                                    data: weekToPreviousWeekContext.currentWeekData
-                                    }, 
-                                   {
-                                    //Previous year median
-                                    label: 'Median for the Last Year',
-                                    fillColor: weekToPreviousWeekContext.fillColors[2],
-                                    strokeColor: weekToPreviousWeekContext.strokeColors[2],
-                                    pointColor: weekToPreviousWeekContext.strokeColors[2],
-                                    pointStrokeColor: "#fff",
-                                    data: weekToPreviousWeekContext.lastYearData
+    weekToPreviousWeekContext.chartData = {
+        labels: weekToPreviousWeekContext.labels,
+        datasets: [{
+                //Previous week
+                label: 'Week Starting ' + weekToPreviousWeekContext.lastWeekStarting,
+                fillColor: weekToPreviousWeekContext.fillColors[0],
+                strokeColor: weekToPreviousWeekContext.strokeColors[0],
+                pointColor: weekToPreviousWeekContext.strokeColors[0],
+                pointStrokeColor: "#fff",
+                data: weekToPreviousWeekContext.previousWeekData
+                                    },
+            {
+                //Current week
+                label: 'Week Starting ' + weekToPreviousWeekContext.currentWeekStarting,
+                fillColor: weekToPreviousWeekContext.fillColors[1],
+                strokeColor: weekToPreviousWeekContext.strokeColors[1],
+                pointColor: weekToPreviousWeekContext.strokeColors[1],
+                pointStrokeColor: "#fff",
+                data: weekToPreviousWeekContext.currentWeekData
+                                    },
+            {
+                //Previous year median
+                label: 'Median for the Last Year',
+                fillColor: weekToPreviousWeekContext.fillColors[2],
+                strokeColor: weekToPreviousWeekContext.strokeColors[2],
+                pointColor: weekToPreviousWeekContext.strokeColors[2],
+                pointStrokeColor: "#fff",
+                data: weekToPreviousWeekContext.lastYearData
                                     }]
-                };
+    };
 };
 
 /** 
@@ -368,9 +376,9 @@ var YearToPreviousYearChart = function (ids, startDate, endDate) {
     this.currentYearEndDate = moment(endDate).format('YYYY-MM-DD');
     this.previousYearStartDate = moment(endDate).subtract(1, 'year').date(1).month(0).format('YYYY-MM-DD');
     this.previousYearEndDate = moment(endDate).date(1).month(0).subtract(1, 'day').format('YYYY-MM-DD');
-    this.labels = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
-    
+    this.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 };
 
 YearToPreviousYearChart.prototype = Object.create(StatsChart.prototype);
@@ -384,43 +392,43 @@ YearToPreviousYearChart.prototype.retrieveGAData = function () {
 
     //Create gaParams object and populate with first query
     var gaParams = {
-            'ids': yearToPreviousYearContext.gaIds,
-            'dimensions': yearToPreviousYearContext.gaDimensions ,
-            'metrics': yearToPreviousYearContext.gaMetrics,
-            'start-date': yearToPreviousYearContext.currentYearStartDate,
-            'end-date': yearToPreviousYearContext.currentYearEndDate
+        'ids': yearToPreviousYearContext.gaIds,
+        'dimensions': yearToPreviousYearContext.gaDimensions,
+        'metrics': yearToPreviousYearContext.gaMetrics,
+        'start-date': yearToPreviousYearContext.currentYearStartDate,
+        'end-date': yearToPreviousYearContext.currentYearEndDate
     };
-    
-    
+
+
     //run GA queries and map data into properties
 
     //Retrieve data for current year
     return yearToPreviousYearContext.queryGA(gaParams)
-        .then(function(result) {
-            yearToPreviousYearContext.currentYearData = result.rows.map(function(row) {
+        .then(function (result) {
+            yearToPreviousYearContext.currentYearData = result.rows.map(function (row) {
                 return +row[2];
             });
-            
+
             return yearToPreviousYearContext.delayExecution();
         })
-        .then(function(result) {
+        .then(function (result) {
             //Previous year data
-                gaParams["start-date"] = yearToPreviousYearContext.previousYearStartDate;
-                gaParams["end-date"] = yearToPreviousYearContext.previousYearEndDate;
+            gaParams["start-date"] = yearToPreviousYearContext.previousYearStartDate;
+            gaParams["end-date"] = yearToPreviousYearContext.previousYearEndDate;
 
-                return yearToPreviousYearContext.queryGA(gaParams);
+            return yearToPreviousYearContext.queryGA(gaParams);
         })
-        .then(function(result) {
-            yearToPreviousYearContext.previousYearData = result.rows.map(function(row) {
+        .then(function (result) {
+            yearToPreviousYearContext.previousYearData = result.rows.map(function (row) {
                 return +row[2];
             });
-            
+
             return true;
         })
-        .then(function(){
+        .then(function () {
             return true;
         })
-        .catch(function(err) {
+        .catch(function (err) {
             console.log(err.message);
         });
 };
@@ -435,7 +443,7 @@ YearToPreviousYearChart.prototype.setUpChartData = function () {
 
     //capture execution context to enable usage within functions
     var yearToPreviousYearContext = this;
-    
+
 
     // Ensure the data arrays match the labels array.  If not, add in null values
     // Chart.js bar charts don't accept sparse datasets.
@@ -446,27 +454,27 @@ YearToPreviousYearChart.prototype.setUpChartData = function () {
         }
 
         if (yearToPreviousYearContext.previousYearData[i] === undefined) {
-            yearToPreviousYearContext.previousYearData[i] = null;  
+            yearToPreviousYearContext.previousYearData[i] = null;
         }
     }
 
-    
+
     //Set-up the chart data ready for rendering
     yearToPreviousYearContext.chartData = {
         labels: yearToPreviousYearContext.labels,
         datasets: [{
-                    label: 'Last Year',
-                    fillColor: yearToPreviousYearContext.fillColors[0],
-                    strokeColor: yearToPreviousYearContext.strokeColors[0],
-                    data: yearToPreviousYearContext.previousYearData
-                    }, 
-                   {
-                    label: 'This Year',
-                    fillColor: yearToPreviousYearContext.fillColors[1],
-                    strokeColor: yearToPreviousYearContext.strokeColors[1],
-                    data: yearToPreviousYearContext.currentYearData
+                label: 'Last Year',
+                fillColor: yearToPreviousYearContext.fillColors[0],
+                strokeColor: yearToPreviousYearContext.strokeColors[0],
+                data: yearToPreviousYearContext.previousYearData
+                    },
+            {
+                label: 'This Year',
+                fillColor: yearToPreviousYearContext.fillColors[1],
+                strokeColor: yearToPreviousYearContext.strokeColors[1],
+                data: yearToPreviousYearContext.currentYearData
                     }]
-            };
+    };
 };
 
 /** 
@@ -493,7 +501,7 @@ WeekDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
 
     //capture execution context to enable usage within functions
     var weekDoughnutChartContext = this;
-    
+
     //Create gaParams object
     var gaParams = {
         'ids': weekDoughnutChartContext.gaIds,
@@ -502,33 +510,33 @@ WeekDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
         'start-date': weekDoughnutChartContext.currentWeekStartDate,
         'end-date': weekDoughnutChartContext.currentWeekEndDate,
         'sort': weekDoughnutChartContext.gaSort,
-        'max-results': 5                    
+        'max-results': 5
     };
 
     //Add in the filters property if required
-    if (weekDoughnutChartContext.gaFilters!=='') {
+    if (weekDoughnutChartContext.gaFilters !== '') {
         gaParams.filters = weekDoughnutChartContext.gaFilters;
-    }        
+    }
 
-    
+
     //run GA queries and map data into properties
     return weekDoughnutChartContext.queryGA(gaParams)
         //process results
-        .then(function(result) {
+        .then(function (result) {
             var sumValues = 0;
-            
+
             if (result.totalResults > 0) {
                 //Calculate sum of all page views for percentages
-                result.rows.forEach(function(row, i) {
+                result.rows.forEach(function (row, i) {
                     sumValues = sumValues + (+row[1]);
                 });
 
 
-                result.rows.forEach(function(row, i) {
+                result.rows.forEach(function (row, i) {
                     //Store the value for the top five data
                     weekDoughnutChartContext.topFiveData.push(row[0]);
                     //Add the value into the chart results for rendering
-                    
+
                     weekDoughnutChartContext.chartData.push({
                         value: +row[1],
                         color: weekDoughnutChartContext.fillColors[i],
@@ -545,13 +553,97 @@ WeekDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
                     label: 'No data for selected period'
                 });
             }
-                
+
             return true;
-            })
-            .catch(function(err) {
-                console.log(err.message);
-            });
-       
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+
+};
+
+
+/** 
+ *  Class to create a dougnut chart which compares percentages 
+ *  for the past year
+ */
+var YearDoughnutChart = function (ids, startDate, endDate) {
+    "use strict";
+    StatsChart.call(this, ids, startDate, endDate);
+    this.lastYearStartDate = moment(endDate).subtract(1, 'years').format('YYYY-MM-DD');
+    this.lastYearEndDate = moment(endDate).format('YYYY-MM-DD');
+};
+
+YearDoughnutChart.prototype = Object.create(StatsChart.prototype);
+YearDoughnutChart.prototype.constructor = YearDoughnutChart;
+
+
+/**
+ * Retrieve the data required from Google Analytics and populate data sets
+ * @param {None} 
+ * @return {None}.
+ */
+YearDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
+    "use strict";
+
+    //capture execution context to enable usage within functions
+    var yearDoughnutChartContext = this;
+
+    //Create gaParams object
+    var gaParams = {
+        'ids': yearDoughnutChartContext.gaIds,
+        'dimensions': yearDoughnutChartContext.gaDimensions,
+        'metrics': yearDoughnutChartContext.gaMetrics,
+        'start-date': yearDoughnutChartContext.lastYearStartDate,
+        'end-date': yearDoughnutChartContext.lastYearEndDate,
+        'sort': yearDoughnutChartContext.gaSort,
+        'max-results': 5
+    };
+
+    //Add in the filters property if required
+    if (yearDoughnutChartContext.gaFilters !== '') {
+        gaParams.filters = yearDoughnutChartContext.gaFilters;
+    }
+
+
+    //run GA queries and map data into properties
+    return yearDoughnutChartContext.queryGA(gaParams)
+        //process results
+        .then(function (result) {
+            var sumValues = 0;
+
+            if (result.totalResults > 0) {
+                //Calculate sum of all page views for percentages
+                result.rows.forEach(function (row, i) {
+                    sumValues = sumValues + (+row[1]);
+                });
+
+
+                result.rows.forEach(function (row, i) {
+                    //Add the value into the chart results for rendering
+                    yearDoughnutChartContext.chartData.push({
+                        value: +row[1],
+                        color: yearDoughnutChartContext.fillColors[i],
+                        highlight: yearDoughnutChartContext.strokeColors[i],
+                        label: row[0] + ': ' + row[1] + ' (' + Math.round(row[1] / sumValues * 100) + '%)'
+                    });
+                });
+
+            } else {
+                yearDoughnutChartContext.chartData.push({
+                    value: 1,
+                    color: yearDoughnutChartContext.fillColors[0],
+                    highlight: yearDoughnutChartContext.strokeColors[0],
+                    label: 'No data for selected period'
+                });
+            }
+
+            return true;
+        })
+        .catch(function (err) {
+            console.log(err.message);
+        });
+
 };
 
 
@@ -562,7 +654,7 @@ WeekDoughnutChart.prototype.retrieveAndSetUpGAData = function () {
  */
 var QuarterlyChart = function (ids, startDate, endDate, queryElement, topFiveData) {
     "use strict";
-    
+
     StatsChart.call(this, ids, startDate, endDate);
     this.queryPrefix = '';
     this.pageQuery = '';
@@ -571,7 +663,7 @@ var QuarterlyChart = function (ids, startDate, endDate, queryElement, topFiveDat
     this.periodDates = [];
     this.searchValues = [];
     this.gaQueryElement = queryElement;
-    
+
     if (topFiveData.length > 0) {
         this.searchValues = topFiveData;
     }
@@ -587,45 +679,45 @@ QuarterlyChart.prototype.constructor = YearToPreviousYearChart;
  * @param {string} queryElement the GA name of the field to search
  * @return {boolean} returns true so that it can be used with promise chaining to wait for the result.
  */
-QuarterlyChart.prototype.retrieveTopFive = function() {
+QuarterlyChart.prototype.retrieveTopFive = function () {
     "use strict";
-    
+
     //capture execution context to enable usage within functions
     var quarterlyChartContext = this;
 
     //Create gaParams object with query vals
     var gaParams = {
-            'ids': quarterlyChartContext.gaIds,
-            'dimensions': quarterlyChartContext.gaDimensions,
-            'metrics': quarterlyChartContext.gaMetrics,
-            'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
-            'end-date': moment().format('YYYY-MM-DD'),
-            'sort': '-ga:pageviews',
-            'max-results': 5
+        'ids': quarterlyChartContext.gaIds,
+        'dimensions': quarterlyChartContext.gaDimensions,
+        'metrics': quarterlyChartContext.gaMetrics,
+        'start-date': moment().subtract(2, 'years').format('YYYY-MM-DD'),
+        'end-date': moment().format('YYYY-MM-DD'),
+        'sort': '-ga:pageviews',
+        'max-results': 5
     };
 
     //Add in the filters if required
-    if (quarterlyChartContext.gaFilters!=='') {
+    if (quarterlyChartContext.gaFilters !== '') {
         gaParams.filters = quarterlyChartContext.gaFilters;
     }
-    
+
     //Check if there is data in the search values, if so return immediately
-    if (quarterlyChartContext.searchValues.length === 0) {    
+    if (quarterlyChartContext.searchValues.length === 0) {
         /*run query for previous 2 years*/
         return quarterlyChartContext.queryGA(gaParams)
-            .then(function(result) {
+            .then(function (result) {
                 if (result.totalResults > 0) {
-                    result.rows.forEach(function(row, i) {
+                    result.rows.forEach(function (row, i) {
                         quarterlyChartContext.searchValues.push(row[0]);
                     });
                 }
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 console.log(err.message);
                 return false;
             });
     }
-    
+
     return quarterlyChartContext.delayExecution();
 
 };
@@ -636,22 +728,22 @@ QuarterlyChart.prototype.retrieveTopFive = function() {
  * @param {none} 
  * @return {boolean} returns true so that it can be used with promise chaining to wait for the result.
  */
-QuarterlyChart.prototype.buildQueryAndLabels = function() {
+QuarterlyChart.prototype.buildQueryAndLabels = function () {
     "use strict";
 
     //capture execution context to enable usage within functions
     var quarterlyChartContext = this;
-    
+
     /* Use searchElement and searchValues to build query
      *  and initialise arrays for holding the data
      */
-    
+
     //If a special prefix is required, add it to the start of the query
-    if (quarterlyChartContext.queryPrefix!=='') {
+    if (quarterlyChartContext.queryPrefix !== '') {
         quarterlyChartContext.pageQuery = quarterlyChartContext.queryPrefix;
     }
-    
-    quarterlyChartContext.searchValues.forEach(function(element, index, array) {
+
+    quarterlyChartContext.searchValues.forEach(function (element, index, array) {
         //Add page to query string
         if (index > 0) {
             quarterlyChartContext.pageQuery = quarterlyChartContext.pageQuery + ',';
@@ -664,19 +756,19 @@ QuarterlyChart.prototype.buildQueryAndLabels = function() {
     });
 
     /**Build month labels and time periods for 4 query periods
-    * 1st day of 12 months ago - last day of 10 months ago
-    * 1st day of 9 months ago - last day of 7 months ago
-    * 1st day of 6 months ago - last day of 4 months ago
-    * 1st day of 3 months ago - last day of last month
-    */
+     * 1st day of 12 months ago - last day of 10 months ago
+     * 1st day of 9 months ago - last day of 7 months ago
+     * 1st day of 6 months ago - last day of 4 months ago
+     * 1st day of 3 months ago - last day of last month
+     */
     for (var qCalculator = 3, dataCounter = 0; qCalculator >= 0; qCalculator--, dataCounter++) {
-        quarterlyChartContext.monthLabels.push(moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 3, 'months').date(1).format('MMM') + '-' + 
-                                  moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 1,         'months').date(1).format('MMM'));
+        quarterlyChartContext.monthLabels.push(moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 3, 'months').date(1).format('MMM') + '-' +
+            moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 1, 'months').date(1).format('MMM'));
 
         quarterlyChartContext.periodDates.push(moment(quarterlyChartContext.endDate).subtract((qCalculator * 3) + 3, 'months').date(1).format('YYYY-MM-DD'));
         quarterlyChartContext.periodDates.push(moment(quarterlyChartContext.endDate).subtract((qCalculator * 3), 'months').date(1).subtract(1, 'days').format('YYYY-MM-DD'));
-    }    
-    
+    }
+
     return true;
 };
 
@@ -685,51 +777,51 @@ QuarterlyChart.prototype.retrieveGAData = function () {
 
     //capture execution context to enable usage within functions
     var quarterlyChartContext = this;
-    
+
     //Create gaParams object with first query vals
     var gaParams = {
-            'ids': quarterlyChartContext.gaIds,
-            'dimensions': quarterlyChartContext.gaDimensions,
-            'metrics': quarterlyChartContext.gaMetrics,
-            'filters': quarterlyChartContext.pageQuery,
-            'start-date': quarterlyChartContext.periodDates[0],
-            'end-date': quarterlyChartContext.periodDates[1]
+        'ids': quarterlyChartContext.gaIds,
+        'dimensions': quarterlyChartContext.gaDimensions,
+        'metrics': quarterlyChartContext.gaMetrics,
+        'filters': quarterlyChartContext.pageQuery,
+        'start-date': quarterlyChartContext.periodDates[0],
+        'end-date': quarterlyChartContext.periodDates[1]
     };
-    
+
     //run GA queries and map data into properties
     return quarterlyChartContext.queryGA(gaParams)
-        .then(function(result) {
+        .then(function (result) {
             quarterlyChartContext.processQuarterlyResults(result);
             return quarterlyChartContext.delayExecution();
         })
-        .then(function(result) {
+        .then(function (result) {
             gaParams["start-date"] = quarterlyChartContext.periodDates[2];
             gaParams["end-date"] = quarterlyChartContext.periodDates[3];
             return quarterlyChartContext.queryGA(gaParams);
         })
-        .then(function(result) {
+        .then(function (result) {
             quarterlyChartContext.processQuarterlyResults(result);
             return quarterlyChartContext.delayExecution();
         })
-        .then(function(result) {
+        .then(function (result) {
             gaParams["start-date"] = quarterlyChartContext.periodDates[4];
             gaParams["end-date"] = quarterlyChartContext.periodDates[5];
             return quarterlyChartContext.queryGA(gaParams);
         })
-        .then(function(result) {
+        .then(function (result) {
             quarterlyChartContext.processQuarterlyResults(result);
             return quarterlyChartContext.delayExecution();
         })
-        .then(function(result) {
+        .then(function (result) {
             gaParams["start-date"] = quarterlyChartContext.periodDates[6];
             gaParams["end-date"] = quarterlyChartContext.periodDates[7];
             return quarterlyChartContext.queryGA(gaParams);
         })
-        .then(function(result) {
+        .then(function (result) {
             quarterlyChartContext.processQuarterlyResults(result);
             return true;
         })
-        .catch(function(err) {
+        .catch(function (err) {
             console.log(err.message);
         });
 };
@@ -740,7 +832,7 @@ QuarterlyChart.prototype.retrieveGAData = function () {
  * for missing values and converts each value to a percentage.
  * @param {object} results The results return by the GA query 
  * @return {boolean} returns true so that it can be used with promise chaining to wait for the result.
-*/
+ */
 
 QuarterlyChart.prototype.processQuarterlyResults = function (results) {
     "use strict";
@@ -754,17 +846,17 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
         //initially set all searchValues to not being found in results
         var valsFound = [];
 
-        quarterlyChartContext.searchValues.forEach(function(element, index, array) {
+        quarterlyChartContext.searchValues.forEach(function (element, index, array) {
             valsFound.push(false);
         });
 
         //Find the current length of array depending on which quarter is being processed, 0 = First quarter, 1 = Second quarter ...
         var quarterNum = quarterlyChartContext.pageData.val0.length;
-        
-        
+
+
         //iterate through results, map in values and set the value as being found
         if (results.totalResults > 0) {
-            results.rows.forEach(function(row, r) {
+            results.rows.forEach(function (row, r) {
 
                 //Find the position of the returned value in the searchValues
                 var referencePos = quarterlyChartContext.searchValues.indexOf(row[0]);
@@ -772,7 +864,7 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
                 if (referencePos > -1) {
                     //set value has been found
                     valsFound[referencePos] = true;
-                    
+
                     //add in data to the value in array for this quarter
                     quarterlyChartContext.pageData['val' + referencePos][quarterNum] = (+row[1]);
                 }
@@ -784,7 +876,7 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
          */
         var sumValues = 0;
 
-        quarterlyChartContext.searchValues.forEach(function(element, index, array) {
+        quarterlyChartContext.searchValues.forEach(function (element, index, array) {
             if (valsFound[index] === false)
                 quarterlyChartContext.pageData['val' + index].push(0);
             else
@@ -796,12 +888,12 @@ QuarterlyChart.prototype.processQuarterlyResults = function (results) {
          *  periods where there is a large variation in the raw numbers.
          */
         if (sumValues > 0) {
-            quarterlyChartContext.searchValues.forEach(function(element, index, array) {
+            quarterlyChartContext.searchValues.forEach(function (element, index, array) {
                 quarterlyChartContext.pageData['val' + index][quarterNum] = (quarterlyChartContext.pageData['val' + index][quarterNum] / sumValues * 100).toFixed(2);
             });
         }
     }
-    
+
     return true;
 };
 
@@ -817,7 +909,7 @@ QuarterlyChart.prototype.setUpChartData = function () {
         datasets: []
     };
 
-    quarterlyChartContext.searchValues.forEach(function(element, index, array) {
+    quarterlyChartContext.searchValues.forEach(function (element, index, array) {
         //Build data set for each page
         quarterlyChartContext.chartData.datasets[index] = {
             label: element,
@@ -827,180 +919,127 @@ QuarterlyChart.prototype.setUpChartData = function () {
             pointStrokeColor: "#fff",
             data: quarterlyChartContext.pageData['val' + index]
         };
-    });    
+    });
 };
 
 /** 
  *  Class to retrieve and parse GA activity data 
  *  
  */
-/*var ActivityData = function (ids, startDate, endDate, periodType) {
-    "use strict";
-    
-    var periodStartDate, periodEndDate;
-    
-    //Set-up correct date for current week, previous week, or previous year
-    if(periodType==='Current') {
-        periodStartDate = startDate;
-        periodEndDate = endDate;
-    } else if(periodType==='Previous') {
-        periodStartDate = moment(startDate).subtract(7, 'days').format('YYYY-MM-DD');
-        periodEndDate = moment(endDate).subtract(7, 'days').format('YYYY-MM-DD');        
-    } else {
-        periodStartDate = moment(endDate).subtract(1, 'years').format('YYYY-MM-DD');
-        periodEndDate = moment(endDate).format('YYYY-MM-DD');
-    }
-    
-    StatsChart.call(this, ids, periodStartDate, periodEndDate);
-
-    //Values for determining which applicaion triggered a GA event
-    this.applicationCategories = {};
-    this.applicationCategories.lassi = ['LASSI-Search', 'LASSI-tool-bar-button'];
-    this.applicationCategories.historicalAerialPhotographs = ['OHAP-Search', 'OHAP-tool-bar-button'];
-    this.applicationCategories.smes = ['SMES-Search', 'SMES-tool-bar-button'];
-    this.applicationCategories.lassiSpear = ['SPEAR-Search','SPEAR-tool-bar-button'];
-    this.applicationCategories.vicnames = ['VICNAMES-Search', 'VICNAMES-tool-bar-button'];
-    this.applicationCategories.viewMyTitles = ['VMT-Search', 'VMT-tool-bar-button'];
-    this.applicationCategories.tpi = ['TPC-tool-bar-button'];
-
-    //Values for classifying GA events into specific categories
-    this.applicationActivities = {};
-    this.applicationActivities.searchCategories = ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'];
-    this.applicationActivities.panAndZoomLabels = ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent', 
-                                              'Zoom to Greater Melbourne', 'Zoom to Scale'];
-    this.applicationActivities.retrieveInformationLabels = ['Add Mark to selection', 'Clear Selection List', 'Display Mark Selection List Window', 'Historical Information',
-                                                       'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels', 'Identify Survey Marks', 
-                                                       'Parcel information: click on map'];
-    this.applicationActivities.mapBasedSelectLabels = ['Select Parcel', 'Unselect Parcel', 'Complete Selection'];
-    this.applicationActivities.mapToolsLabels = ['Markup tools', 'Measure Area', 'Measure Distance', 'Clear Highlight', 'Street View: click on map'];
-    this.applicationActivities.saveLabels = ['Save Geo-Referenced Image', 'Save Image'];
-    this.applicationActivities.printLabels = ['Print Map'];
-    this.applicationActivities.downloadLabels = ['Activate Document Download Tab', 'Draw Polygon to Export Survey Information to LandXML'];
-    this.applicationActivities.administerLabels = ['Add Labels', 'Administration', 'Administrator functions', 'Broadcast Message', 'Delete Labels', 'Edit Labels',
-                                                   'Export property information', 'Mark Maintenance'];
-    
-    //Create specific data elements to hold data for each chart
-    this.overallActivityData = {};
-    this.overallSearchBreakdownData = {};
-    this.applicationActivityData = {};
-    this.applicationSearchBreakdownData = {};
-
-};*/
-
 var ActivityData = function (ids, startDate, endDate) {
     "use strict";
-    
+
     StatsChart.call(this, ids, startDate, endDate);
-    
+
     this.previousWeekStartDate = moment(startDate).subtract(7, 'days').format('YYYY-MM-DD');
-    this.previousWeekEndDate = moment(endDate).subtract(7, 'days').format('YYYY-MM-DD');        
+    this.previousWeekEndDate = moment(endDate).subtract(7, 'days').format('YYYY-MM-DD');
     this.previousWeekStarting = moment(this.previousWeekStartDate).format('DD/MM/YYYY');
-    
+
     this.lastYearStartDate = moment(endDate).subtract(1, 'years').format('YYYY-MM-DD');
     this.lastYearEndDate = moment(endDate).format('YYYY-MM-DD');
-    
+
 
     //Values for determining which applicaion triggered a GA event
     this.applicationCategories = {
-                                lassi: ['LASSI-Search', 'LASSI-tool-bar-button'],
-                                historicalAerialPhotographs: ['OHAP-Search', 'OHAP-tool-bar-button'],
-                                smes: ['SMES-Search', 'SMES-tool-bar-button'],
-                                lassiSpear: ['SPEAR-Search','SPEAR-tool-bar-button'],
-                                vicnames: ['VICNAMES-Search', 'VICNAMES-tool-bar-button'],
-                                viewMyTitles: ['VMT-Search', 'VMT-tool-bar-button'],
-                                tpi: ['TPC-tool-bar-button']
-                                };
+        lassi: ['LASSI-Search', 'LASSI-tool-bar-button'],
+        historicalAerialPhotographs: ['OHAP-Search', 'OHAP-tool-bar-button'],
+        smes: ['SMES-Search', 'SMES-tool-bar-button'],
+        lassiSpear: ['SPEAR-Search', 'SPEAR-tool-bar-button'],
+        vicnames: ['VICNAMES-Search', 'VICNAMES-tool-bar-button'],
+        viewMyTitles: ['VMT-Search', 'VMT-tool-bar-button'],
+        tpi: ['TPC-tool-bar-button']
+    };
 
     //Values for classifying GA events into specific categories
     this.applicationActivities = {
-                                    searchCategories: ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'],
-                                    panAndZoomLabels: ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent', 
+        searchCategories: ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'],
+        panAndZoomLabels: ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent',
                                                         'Zoom to Greater Melbourne', 'Zoom to Scale'],
-                                    retrieveInformationLabels: ['Add Mark to selection', 'Clear Selection List', 'Display Mark Selection List Window', 'Historical Information',
-                                                                'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels', 'Identify Survey Marks', 
+        retrieveInformationLabels: ['Add Mark to selection', 'Clear Selection List', 'Display Mark Selection List Window', 'Historical Information',
+                                                                'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels', 'Identify Survey Marks',
                                                                 'Parcel information: click on map'],
-                                    mapBasedSelectLabels: ['Select Parcel', 'Unselect Parcel', 'Complete Selection'],
-                                    mapToolsLabels: ['Markup tools', 'Measure Area', 'Measure Distance', 'Clear Highlight', 'Street View: click on map'],
-                                    saveLabels: ['Save Geo-Referenced Image', 'Save Image'],
-                                    printLabels: ['Print Map'],
-                                    downloadLabels: ['Activate Document Download Tab', 'Draw Polygon to Export Survey Information to LandXML'],
-                                    administerLabels: ['Add Labels', 'Administration', 'Administrator functions', 'Broadcast Message', 'Delete Labels', 'Edit Labels',
+        mapBasedSelectLabels: ['Select Parcel', 'Unselect Parcel', 'Complete Selection'],
+        mapToolsLabels: ['Markup tools', 'Measure Area', 'Measure Distance', 'Clear Highlight', 'Street View: click on map'],
+        saveLabels: ['Save Geo-Referenced Image', 'Save Image'],
+        printLabels: ['Print Map'],
+        downloadLabels: ['Activate Document Download Tab', 'Draw Polygon to Export Survey Information to LandXML'],
+        administerLabels: ['Add Labels', 'Administration', 'Administrator functions', 'Broadcast Message', 'Delete Labels', 'Edit Labels',
                                                         'Export property information', 'Mark Maintenance']
-                                };
-        
+    };
+
     //Create specific data elements to hold data for each chart
     this.overallActivityData = {
-                                Current: {},
-                                Previous: {},
-                                Year: {}
-                                };
+        Current: {},
+        Previous: {},
+        Year: {}
+    };
 
     this.overallSearchBreakdownData = {
-                                Current: {},
-                                Previous: {},
-                                Year: {}
-                                };
+        Current: {},
+        Previous: {},
+        Year: {}
+    };
 
     this.applicationActivityData = {
-                                Current: {
-                                        'LASSI General': {},
-                                        'Historical Aerial Photographs': {},
-                                        'SMES': {},
-                                        'LASSI SPEAR Including Map Based Search': {},
-                                        'VICNAMES': {},
-                                        'View My Titles': {},
-                                        'TPI Confirm on Map': {}
-                                        },
-                                Previous: {
-                                        'LASSI General': {},
-                                        'Historical Aerial Photographs': {},
-                                        'SMES': {},
-                                        'LASSI SPEAR Including Map Based Search': {},
-                                        'VICNAMES': {},
-                                        'View My Titles': {},
-                                        'TPI Confirm on Map': {}                                    
-                                        },
-                                Year: {
-                                        'LASSI General': {},
-                                        'Historical Aerial Photographs': {},
-                                        'SMES': {},
-                                        'LASSI SPEAR Including Map Based Search': {},
-                                        'VICNAMES': {},
-                                        'View My Titles': {},
-                                        'TPI Confirm on Map': {}                                                                        
-                                        }
-                                    };
-    
+        Current: {
+            'LASSI General': {},
+            'Historical Aerial Photographs': {},
+            'SMES': {},
+            'LASSI SPEAR Including Map Based Search': {},
+            'VICNAMES': {},
+            'View My Titles': {},
+            'TPI Confirm on Map': {}
+        },
+        Previous: {
+            'LASSI General': {},
+            'Historical Aerial Photographs': {},
+            'SMES': {},
+            'LASSI SPEAR Including Map Based Search': {},
+            'VICNAMES': {},
+            'View My Titles': {},
+            'TPI Confirm on Map': {}
+        },
+        Year: {
+            'LASSI General': {},
+            'Historical Aerial Photographs': {},
+            'SMES': {},
+            'LASSI SPEAR Including Map Based Search': {},
+            'VICNAMES': {},
+            'View My Titles': {},
+            'TPI Confirm on Map': {}
+        }
+    };
+
     this.applicationSearchBreakdownData = {
-                                    Current: {
-                                            'LASSI General': {},
-                                            'Historical Aerial Photographs': {},
-                                            'SMES': {},
-                                            'LASSI SPEAR Including Map Based Search': {},
-                                            'VICNAMES': {},
-                                            'View My Titles': {},
-                                            'TPI Confirm on Map': {}
-                                            },
-                                    Previous: {
-                                            'LASSI General': {},
-                                            'Historical Aerial Photographs': {},
-                                            'SMES': {},
-                                            'LASSI SPEAR Including Map Based Search': {},
-                                            'VICNAMES': {},
-                                            'View My Titles': {},
-                                            'TPI Confirm on Map': {}                                    
-                                            },
-                                    Year: {
-                                            'LASSI General': {},
-                                            'Historical Aerial Photographs': {},
-                                            'SMES': {},
-                                            'LASSI SPEAR Including Map Based Search': {},
-                                            'VICNAMES': {},
-                                            'View My Titles': {},
-                                            'TPI Confirm on Map': {}                                                                        
-                                            }                                
-                                        };
-    
+        Current: {
+            'LASSI General': {},
+            'Historical Aerial Photographs': {},
+            'SMES': {},
+            'LASSI SPEAR Including Map Based Search': {},
+            'VICNAMES': {},
+            'View My Titles': {},
+            'TPI Confirm on Map': {}
+        },
+        Previous: {
+            'LASSI General': {},
+            'Historical Aerial Photographs': {},
+            'SMES': {},
+            'LASSI SPEAR Including Map Based Search': {},
+            'VICNAMES': {},
+            'View My Titles': {},
+            'TPI Confirm on Map': {}
+        },
+        Year: {
+            'LASSI General': {},
+            'Historical Aerial Photographs': {},
+            'SMES': {},
+            'LASSI SPEAR Including Map Based Search': {},
+            'VICNAMES': {},
+            'View My Titles': {},
+            'TPI Confirm on Map': {}
+        }
+    };
+
 
 
 };
@@ -1019,23 +1058,23 @@ ActivityData.prototype.determineApplication = function (categoryValue) {
 
     //capture execution context to enable usage within functions
     var activityDataContext = this;
-    
-    if(activityDataContext.applicationCategories.lassi.indexOf(categoryValue) >= 0) {
+
+    if (activityDataContext.applicationCategories.lassi.indexOf(categoryValue) >= 0) {
         return 'LASSI General';
-    } else if(activityDataContext.applicationCategories.historicalAerialPhotographs.indexOf(categoryValue) >= 0) {
+    } else if (activityDataContext.applicationCategories.historicalAerialPhotographs.indexOf(categoryValue) >= 0) {
         return 'Historical Aerial Photographs';
-    } else if(activityDataContext.applicationCategories.smes.indexOf(categoryValue) >= 0) {
+    } else if (activityDataContext.applicationCategories.smes.indexOf(categoryValue) >= 0) {
         return 'SMES';
-    } else if(activityDataContext.applicationCategories.lassiSpear.indexOf(categoryValue) >= 0) {
+    } else if (activityDataContext.applicationCategories.lassiSpear.indexOf(categoryValue) >= 0) {
         return 'LASSI SPEAR Including Map Based Search';
-    } else if(activityDataContext.applicationCategories.vicnames.indexOf(categoryValue) >= 0) {
+    } else if (activityDataContext.applicationCategories.vicnames.indexOf(categoryValue) >= 0) {
         return 'VICNAMES';
-    } else if(activityDataContext.applicationCategories.viewMyTitles.indexOf(categoryValue) >= 0) {
+    } else if (activityDataContext.applicationCategories.viewMyTitles.indexOf(categoryValue) >= 0) {
         return 'View My Titles';
-    } else if(activityDataContext.applicationCategories.tpi.indexOf(categoryValue) >= 0) {
+    } else if (activityDataContext.applicationCategories.tpi.indexOf(categoryValue) >= 0) {
         return 'TPI Confirm on Map';
     }
-        
+
 };
 
 /**
@@ -1049,28 +1088,28 @@ ActivityData.prototype.determineActivity = function (categoryValue, eventLabelVa
 
     //capture execution context to enable usage within functions
     var activityDataContext = this;
-    
+
     //Search predefined values to determine which class of activity was performed and return readable string
-    if(activityDataContext.applicationActivities.searchCategories.indexOf(categoryValue) >= 0) {
+    if (activityDataContext.applicationActivities.searchCategories.indexOf(categoryValue) >= 0) {
         return 'Search';
-    } else if(activityDataContext.applicationActivities.panAndZoomLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.panAndZoomLabels.indexOf(eventLabelValue) >= 0) {
         return 'Pan and Zoom';
-    } else if(activityDataContext.applicationActivities.retrieveInformationLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.retrieveInformationLabels.indexOf(eventLabelValue) >= 0) {
         return 'Retrieve Information';
-    } else if(activityDataContext.applicationActivities.mapBasedSelectLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.mapBasedSelectLabels.indexOf(eventLabelValue) >= 0) {
         return 'Map Based Parcel Select';
-    } else if(activityDataContext.applicationActivities.mapToolsLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.mapToolsLabels.indexOf(eventLabelValue) >= 0) {
         return 'Map Tools';
-    } else if(activityDataContext.applicationActivities.saveLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.saveLabels.indexOf(eventLabelValue) >= 0) {
         return 'Save Image';
-    } else if(activityDataContext.applicationActivities.printLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.printLabels.indexOf(eventLabelValue) >= 0) {
         return 'Print Map';
-    } else if(activityDataContext.applicationActivities.downloadLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.downloadLabels.indexOf(eventLabelValue) >= 0) {
         return 'Download Data';
-    } else if(activityDataContext.applicationActivities.administerLabels.indexOf(eventLabelValue) >= 0) {
+    } else if (activityDataContext.applicationActivities.administerLabels.indexOf(eventLabelValue) >= 0) {
         return 'Administer Data';
     }
-        
+
 };
 
 /**
@@ -1083,7 +1122,7 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
 
     //capture execution context to enable usage within functions
     var activityDataContext = this;
-    
+
     //Create gaParams object
     var gaParams = {
         'ids': activityDataContext.gaIds,
@@ -1094,63 +1133,63 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
     };
 
 
-    
+
     //run GA queries and map data into properties
     return activityDataContext.queryGA(gaParams)
         //process results
-        .then(function(result) {
+        .then(function (result) {
             var sumValues = 0;
             //Check for results and a specific return which GA gives for no data on a query of events
-            if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
+            if (result.totalResults > 0 && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
                 activityDataContext.parseActivityData(result, 'Current');
-            } 
-                        
+            }
+
             return activityDataContext.delayExecution();
         })
-        .then(function(result) {        
+        .then(function (result) {
             var gaParams = {
-                            'ids': activityDataContext.gaIds,
-                            'dimensions': activityDataContext.gaDimensions,
-                            'metrics': activityDataContext.gaMetrics,
-                            'start-date': activityDataContext.lastWeekStartDate,
-                            'end-date': activityDataContext.lastWeekEndDate
+                'ids': activityDataContext.gaIds,
+                'dimensions': activityDataContext.gaDimensions,
+                'metrics': activityDataContext.gaMetrics,
+                'start-date': activityDataContext.lastWeekStartDate,
+                'end-date': activityDataContext.lastWeekEndDate
             };
 
             return activityDataContext.queryGA(gaParams);
         })
-        .then(function(result) {
+        .then(function (result) {
             var sumValues = 0;
             //Check for results and a specific return which GA gives for no data on a query of events
-            if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
+            if (result.totalResults > 0 && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
                 activityDataContext.parseActivityData(result, 'Previous');
-            } 
-        
+            }
+
             return activityDataContext.delayExecution();
         })
-        .then(function(result) {
+        .then(function (result) {
             var gaParams = {
-                            'ids': activityDataContext.gaIds,
-                            'dimensions': activityDataContext.gaDimensions,
-                            'metrics': activityDataContext.gaMetrics,
-                            'start-date': activityDataContext.lastYearStartDate,
-                            'end-date': activityDataContext.lastYearEndDate
+                'ids': activityDataContext.gaIds,
+                'dimensions': activityDataContext.gaDimensions,
+                'metrics': activityDataContext.gaMetrics,
+                'start-date': activityDataContext.lastYearStartDate,
+                'end-date': activityDataContext.lastYearEndDate
             };
 
             return activityDataContext.queryGA(gaParams);
         })
-        .then(function(result) {
+        .then(function (result) {
             var sumValues = 0;
             //Check for results and a specific return which GA gives for no data on a query of events
-            if (result.totalResults > 0  && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
+            if (result.totalResults > 0 && result.rows[0][0] !== 'to use this feature visit: EVENT-TRACKING.COM') {
                 activityDataContext.parseActivityData(result, 'Year');
-            } 
-            
+            }
+
             return true;
         })
-        .catch(function(err) {
+        .catch(function (err) {
             console.log(err.message);
         });
-       
+
 };
 
 /**
@@ -1226,40 +1265,40 @@ ActivityData.prototype.retrieveAndParseGAData = function () {
         
                 
 };*/
-    
+
 ActivityData.prototype.parseActivityData = function (results, dataType) {
     "use strict";
 
     //capture execution context to enable usage within functions
     var activityDataContext = this;
 
-        
+
     //Work through each result and add value to appropriate         
-    results.rows.forEach(function(row, r) {
+    results.rows.forEach(function (row, r) {
 
         //Rows have the following elements, 0 - Event Category, 1 - event Label, 2 - Number of Events
         var application = activityDataContext.determineApplication(row[0]);
         var activity = activityDataContext.determineActivity(row[0], row[1]);
-        
-        
+
+
         //Make sure the data returned is for an activity within our data set
-        if(application!==undefined && activity!==undefined) {
-            
+        if (application !== undefined && activity !== undefined) {
+
             //If this is the current week, that will be the basis for all three data sets, set the types and required properties now
-            if (dataType==="Current" && activityDataContext.overallActivityData.Current[activity]===undefined) {
+            if (dataType === "Current" && activityDataContext.overallActivityData.Current[activity] === undefined) {
                 activityDataContext.overallActivityData.Current[activity] = 0;
                 activityDataContext.overallActivityData.Previous[activity] = 0;
                 activityDataContext.overallActivityData.Year[activity] = 0;
             }
 
-            if (dataType==="Current" && activityDataContext.applicationActivityData.Current[application]===undefined) {
+            if (dataType === "Current" && activityDataContext.applicationActivityData.Current[application] === undefined) {
                 activityDataContext.applicationActivityData.Current[application] = {};
                 activityDataContext.applicationActivityData.Previous[application] = {};
                 activityDataContext.applicationActivityData.Year[application] = {};
             }
 
 
-            if (dataType==="Current" && activityDataContext.applicationActivityData.Current[application][activity]===undefined) {
+            if (dataType === "Current" && activityDataContext.applicationActivityData.Current[application][activity] === undefined) {
                 activityDataContext.applicationActivityData.Current[application][activity] = 0;
                 activityDataContext.applicationActivityData.Previous[application][activity] = 0;
                 activityDataContext.applicationActivityData.Year[application][activity] = 0;
@@ -1268,54 +1307,54 @@ ActivityData.prototype.parseActivityData = function (results, dataType) {
 
 
             //Check property exists, then add overall activity value
-            if(activityDataContext.overallActivityData[dataType][activity]!==undefined) {
-                activityDataContext.overallActivityData[dataType][activity] += (+row[2]);            
+            if (activityDataContext.overallActivityData[dataType][activity] !== undefined) {
+                activityDataContext.overallActivityData[dataType][activity] += (+row[2]);
             }
 
             //Check property exists, then Add value to specific application activity values
-            if(activityDataContext.applicationActivityData[dataType][application][activity]!==undefined) {
-                activityDataContext.applicationActivityData[dataType][application][activity] += (+row[2]);    
+            if (activityDataContext.applicationActivityData[dataType][application][activity] !== undefined) {
+                activityDataContext.applicationActivityData[dataType][application][activity] += (+row[2]);
             }
-            
+
 
 
             //Check if this is a search activity - add search breakdown figures as well
-            if(activity ==='Search') {
+            if (activity === 'Search') {
                 //Ensure all required properties exist with a value of at least 0
-                if (dataType==="Current" && activityDataContext.overallSearchBreakdownData.Current[row[1]]===undefined) {
-                    activityDataContext.overallSearchBreakdownData.Current[row[1]] = 0;  
-                    activityDataContext.overallSearchBreakdownData.Previous[row[1]] = 0;  
-                    activityDataContext.overallSearchBreakdownData.Year[row[1]] = 0;  
+                if (dataType === "Current" && activityDataContext.overallSearchBreakdownData.Current[row[1]] === undefined) {
+                    activityDataContext.overallSearchBreakdownData.Current[row[1]] = 0;
+                    activityDataContext.overallSearchBreakdownData.Previous[row[1]] = 0;
+                    activityDataContext.overallSearchBreakdownData.Year[row[1]] = 0;
                 }
 
-                if (dataType==="Current" && activityDataContext.applicationSearchBreakdownData.Current[application]===undefined) {
+                if (dataType === "Current" && activityDataContext.applicationSearchBreakdownData.Current[application] === undefined) {
                     activityDataContext.applicationSearchBreakdownData.Current[application] = {};
                     activityDataContext.applicationSearchBreakdownData.Previous[application] = {};
                     activityDataContext.applicationSearchBreakdownData.Year[application] = {};
                 }
 
-                if (dataType==="Current" && activityDataContext.applicationSearchBreakdownData.Current[application][row[1]]===undefined) {
+                if (dataType === "Current" && activityDataContext.applicationSearchBreakdownData.Current[application][row[1]] === undefined) {
                     activityDataContext.applicationSearchBreakdownData.Current[application][row[1]] = 0;
                     activityDataContext.applicationSearchBreakdownData.Previous[application][row[1]] = 0;
                     activityDataContext.applicationSearchBreakdownData.Year[application][row[1]] = 0;
                 }
 
                 //Check property exists, then add value to overall search type numbers
-                if(activityDataContext.overallSearchBreakdownData[dataType][row[1]]!==undefined) {
+                if (activityDataContext.overallSearchBreakdownData[dataType][row[1]] !== undefined) {
                     activityDataContext.overallSearchBreakdownData[dataType][row[1]] += (+row[2]);
                 }
-                    
+
 
                 //Check property exists, then add value to specific application search type numbers
-                if(activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]]!==undefined) {
-                    activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]] += (+row[2]);      
+                if (activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]] !== undefined) {
+                    activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]] += (+row[2]);
                 }
-            }             
-        } 
+            }
+        }
 
     });
-        
-                
+
+
 };
 
 /**
@@ -1327,19 +1366,20 @@ ActivityData.prototype.parseActivityData = function (results, dataType) {
 ActivityData.prototype.prepareDoughnutChartData = function (renderChartData) {
     "use strict";
 
-    var objProp, sumValues = 0, valueCounter = 0;
-    
+    var objProp, sumValues = 0,
+        valueCounter = 0;
+
     //capture execution context to enable usage within functions
     var activityDataContext = this;
-    
+
     //The same data set can be used for multiple charts so reset the chartData array to empty
     activityDataContext.chartData = [];
-    
+
     //Calculate sum of all activity numbers for percentages
     for (objProp in renderChartData) {
         sumValues = sumValues + renderChartData[objProp];
     }
-    
+
     //Check if the sum of values is greater than 0
     if (sumValues > 0) {
         //Loop through again to provide the actual values 
@@ -1350,7 +1390,7 @@ ActivityData.prototype.prepareDoughnutChartData = function (renderChartData) {
                 highlight: activityDataContext.strokeColors[valueCounter],
                 label: objProp + ': ' + renderChartData[objProp] + ' (' + Math.round(renderChartData[objProp] / sumValues * 100) + '%)'
             });
-            
+
             valueCounter++;
         }
     } else {
@@ -1362,10 +1402,10 @@ ActivityData.prototype.prepareDoughnutChartData = function (renderChartData) {
             label: 'No data for selected period'
         });
     }
-    
-    
+
+
     return true;
-       
+
 };
 
 /**
@@ -1378,19 +1418,19 @@ ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, r
     "use strict";
 
     var objProp, sumValues = 0;
-    
+
     //capture execution context to enable usage within functions
     var activityDataContext = this;
-    
+
     //The same data set can be used for multiple charts so reset the chartData array to empty
     activityDataContext.chartData = {};
     activityDataContext.chartData.labels = [];
     activityDataContext.chartData.datasets = [];
-    
+
     //Calculate sum of all activity numbers for percentages
     for (objProp in renderChartDataCurrent) {
         sumValues = sumValues + renderChartDataCurrent[objProp];
-        activityDataContext.chartData.labels.push(objProp.replace(" ","\n"));
+        activityDataContext.chartData.labels.push(objProp.replace(" ", "\n"));
     }
 
     for (objProp in renderChartDataPrevious) {
@@ -1401,7 +1441,7 @@ ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, r
         sumValues = sumValues + renderChartDataYear[objProp];
     }
 
-    
+
     //Check if the sum of values is greater than 0
     if (sumValues > 0) {
         //Loop through again to convert actual values to percentages
@@ -1417,31 +1457,29 @@ ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, r
             renderChartDataYear[objProp] = Math.round(renderChartDataYear[objProp] / sumValues * 100);
         }
 
-        
+
         activityDataContext.chartData.datasets.push({
-                                                    label: 'Week Starting ' + activityDataContext.currentWeekStarting,
-                                                    fillColor: activityDataContext.fillColors[0],
-                                                    strokeColor: activityDataContext.strokeColors[0],
-                                                    pointColor: activityDataContext.strokeColors[0],
-                                                    pointStrokeColor: "#fff",
-                                                    data: renderChartDataCurrent
-                                                    },
-                                                    {
-                                                    label: 'Week Starting ' + activityDataContext.previousWeekStarting,
-                                                    fillColor: activityDataContext.fillColors[1],
-                                                    strokeColor: activityDataContext.strokeColors[1],
-                                                    pointColor: activityDataContext.strokeColors[1],
-                                                    pointStrokeColor: "#fff",
-                                                    data: renderChartDataPrevious
-                                                    },
-                                                    {
-                                                    label: 'The Last Year',
-                                                    fillColor: activityDataContext.fillColors[2],
-                                                    strokeColor: activityDataContext.strokeColors[2],
-                                                    pointColor: activityDataContext.strokeColors[2],
-                                                    pointStrokeColor: "#fff",
-                                                    data: renderChartDataYear
-                                                    });
+            label: 'Week Starting ' + activityDataContext.currentWeekStarting,
+            fillColor: activityDataContext.fillColors[0],
+            strokeColor: activityDataContext.strokeColors[0],
+            pointColor: activityDataContext.strokeColors[0],
+            pointStrokeColor: "#fff",
+            data: renderChartDataCurrent
+        }, {
+            label: 'Week Starting ' + activityDataContext.previousWeekStarting,
+            fillColor: activityDataContext.fillColors[1],
+            strokeColor: activityDataContext.strokeColors[1],
+            pointColor: activityDataContext.strokeColors[1],
+            pointStrokeColor: "#fff",
+            data: renderChartDataPrevious
+        }, {
+            label: 'The Last Year',
+            fillColor: activityDataContext.fillColors[2],
+            strokeColor: activityDataContext.strokeColors[2],
+            pointColor: activityDataContext.strokeColors[2],
+            pointStrokeColor: "#fff",
+            data: renderChartDataYear
+        });
     } else {
         //No data present fill with dummy values
         activityDataContext.chartData.datasets.push({
@@ -1451,8 +1489,8 @@ ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, r
             label: 'No data for selected period'
         });
     }
-    
-    
+
+
     return true;
-       
+
 };
