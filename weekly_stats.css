@@ -1,16 +1,17 @@
-@font-face {
+/*@font-face {
     font-family: "And Black";
     src: url("myfont-webfont.eot?#iefix") format('embedded-opentype'), url("fonts/and_black.woff") format('woff'), url("fonts/and_black.ttf") format('truetype');
-}
+}*/
+
 html {
-    font-family: 'And Black', Helvetica, Arial, sans-serif;
+    /*font-family: 'And Black', Helvetica, Arial, sans-serif;*/
+    font-family: 'Muli', sans-serif;
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
     box-sizing: border-box;
     height: 100%;
     color: #212121;
     font-size: .875em;
-    /* 'Open Sans',sans-serif;*/
     text-rendering: optimizeLegibility;
 }
 body {
@@ -98,7 +99,8 @@ i {
     animation: loading 2s linear infinite;
 }
 .title-text {
-    font-family: 'And Black', Helvetica, Arial, sans-serif;
+    font-family: 'Muli', sans-serif;
+    /*font-family: 'And Black', Helvetica, Arial, sans-serif;*/
     font-size: 1.8em;
 }
 .chart-sub-title-text {
