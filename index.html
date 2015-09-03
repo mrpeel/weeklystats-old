@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html manifest="weeklystats.appcache">
 
 <head>
     <meta charset="utf-8">
@@ -26,7 +26,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Muli' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" media="screen" href="material.min.css">
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.blue_grey-pink.min.css" />
+    <!--<link rel="stylesheet" media="screen" href="material.min.css">-->
     <link rel="stylesheet" href="weekly_stats.min.css">
     <link rel="stylesheet" media="print" href="weekly_stats_print.min.css">
 </head>
@@ -805,74 +806,8 @@
                             </div>
                         </div>
                     </div>
-                    <p class="print-spacer print-only"></p>
 
-                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
-                        <div class="mdl-card__actions mdl-card--border print-only">
-                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Week</div>
-                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
-                        </div>
-                        <div>
-                            <figure class="Chartjs">
-                                <div class="Chartjs-figure" id="hap-activity-current-week-chart-container"></div>
-                            </figure>
-                            <div class="Chartjs-legend" id="hap-activity-current-week-legend-container"></div>
-                            <div class="card-bottom-spacer"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
-                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Week</div>
-                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
-                        <div class="mdl-card__actions mdl-card--border print-only">
-                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Week</div>
-                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
-                        </div>
-                        <div>
-                            <figure class="Chartjs">
-                                <div class="Chartjs-figure" id="hap-search-current-week-chart-container"></div>
-                            </figure>
-                            <div class="Chartjs-legend" id="hap-search-current-week-legend-container"></div>
-                            <div class="card-bottom-spacer"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
-                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Week</div>
-                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="print-spacer print-only"></p>
 
-                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
-                        <div>
-                            <figure class="Chartjs">
-                                <div class="Chartjs-figure" id="hap-activity-history-chart-container"></div>
-                            </figure>
-                            <div class="Chartjs-legend" id="hap-activity-history-legend-container"></div>
-                            <div class="card-bottom-spacer"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
-                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Year</div>
-                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
-                        <div class="mdl-card__actions mdl-card--border print-only">
-                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Year</div>
-                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
-                        </div>
-                        <div>
-                            <figure class="Chartjs">
-                                <div class="Chartjs-figure" id="hap-search-history-chart-container"></div>
-                            </figure>
-                            <div class="Chartjs-legend" id="hap-search-history-legend-container"></div>
-                            <div class="card-bottom-spacer"></div>
-                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
-                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Year</div>
-                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
-                            </div>
-                        </div>
-                    </div>
                     <p class="print-spacer print-only"></p>
 
                     <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
@@ -909,9 +844,75 @@
                             </div>
                         </div>
                     </div>
+                    <p class="print-spacer print-only"></p>
 
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-activity-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-activity-history-legend-container"></div>
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Year</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div class="mdl-card__actions mdl-card--border print-only">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Year</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                        </div>
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-search-history-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-search-history-legend-container"></div>
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Year</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <p class="print-spacer print-only"></p>
 
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div class="mdl-card__actions mdl-card--border print-only">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                        </div>
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-activity-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-activity-current-week-legend-container"></div>
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs User Activity for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of times functions were used</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet mdl-shadow--3dp">
+                        <div class="mdl-card__actions mdl-card--border print-only">
+                            <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Week</div>
+                            <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                        </div>
+                        <div>
+                            <figure class="Chartjs">
+                                <div class="Chartjs-figure" id="hap-search-current-week-chart-container"></div>
+                            </figure>
+                            <div class="Chartjs-legend" id="hap-search-current-week-legend-container"></div>
+                            <div class="card-bottom-spacer"></div>
+                            <div class="mdl-card__actions mdl-card--border no-print align-card-bottom">
+                                <div class="mdl-typography--font-light mdl-typography--title mdl-color-text--primary">LANDATA Aerial Photographs Search Types for the Week</div>
+                                <div class="chart-sub-title-text mdl-color-text--grey-600">Percentage breakdown of the number of searches</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -926,7 +927,7 @@
 
     </script>
 
-    <script src="material.min.js"></script>
+    <script src="https://storage.googleapis.com/code.getmdl.io/1.0.4/material.min.js"></script>
 
 
 
