@@ -1082,9 +1082,10 @@ var ActivityData = function (ids, startDate, endDate) {
         searchCategories: ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'],
         panAndZoomLabels: ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent',
                                                         'Zoom to Greater Melbourne', 'Zoom to Scale'],
-        retrieveInformationLabels: ['Add Mark to selection', 'Clear Selection List', 'Display Mark Selection List Window', 'Historical Information',
+        retrieveInformationLabels: ['Add Mark to selection', 'Clear Selection List', 'Historical Information',
                                                                 'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels', 'Identify Survey Marks',
                                                                 'Parcel information: click on map'],
+        displayMarkSelectionListLabels: ['Display Mark Selection List Window'],
         mapBasedSelectLabels: ['Select Parcel', 'Unselect Parcel', 'Complete Selection'],
         mapToolsLabels: ['Markup tools', 'Measure Area', 'Measure Distance', 'Clear Highlight', 'Street View: click on map'],
         saveLabels: ['Save Geo-Referenced Image', 'Save Image'],
@@ -1223,6 +1224,8 @@ ActivityData.prototype.determineActivity = function (categoryValue, eventLabelVa
         return 'Pan and Zoom';
     } else if (activityDataContext.applicationActivities.retrieveInformationLabels.indexOf(eventLabelValue) >= 0) {
         return 'Retrieve Information';
+    } else if (activityDataContext.applicationActivities.displayMarkSelectionListLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Mark Selection Window';
     } else if (activityDataContext.applicationActivities.mapBasedSelectLabels.indexOf(eventLabelValue) >= 0) {
         return 'Map Based Parcel Select';
     } else if (activityDataContext.applicationActivities.mapToolsLabels.indexOf(eventLabelValue) >= 0) {
