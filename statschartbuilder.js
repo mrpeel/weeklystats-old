@@ -10,11 +10,11 @@
 
 
 //Constants for generating the legend for each type of chart
-var LINE_CHART_LEGEND = "<% for (var i=0; i<datasets.length; i++) {%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].pointColor%>;\"></i><%if (datasets[i].label) {%><%=datasets[i].label%><%}%></li><%}%>";
+var LINE_CHART_LEGEND = "<% for (var i=0; i<datasets.length; i++) {%><li><i style=\"background:<%=datasets[i].fillColor%>; font-size: .85em; border-width: 1px; border-style: solid; border-color:<%=datasets[i].pointColor%>;\"></i><span style=\"font-size: .85em;\"><%if (datasets[i].label) {%><%=datasets[i].label%><%}%></span></li><%}%>";
 
-var BAR_CHART_LEGEND = "<% for (var i=0; i<datasets.length; i++) {%><li><i style=\"background:<%=datasets[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=datasets[i].strokeColor%>;\"></i><%if (datasets[i].label) {%><%=datasets[i].label%><%}%></li><%}%>";
+var BAR_CHART_LEGEND = "<% for (var i=0; i<datasets.length; i++) {%><li><i style=\"background:<%=datasets[i].fillColor%>; font-size: .85em; border-width: 1px; border-style: solid; border-color:<%=datasets[i].strokeColor%>;\"></i><span style=\"font-size: .85em;\"><%if (datasets[i].label) {%><%=datasets[i].label%><%}%></span></li><%}%>";
 
-var DOUGHNUT_CHART_LEGEND = "<% for (var i=0; i<segments.length; i++) {%><li><i style=\"background:<%=segments[i].fillColor%>; border-width: 1px; border-style: solid; border-color:<%=segments[i].highlightColor%>;\"></i><%if (segments[i].label) {%><%=segments[i].label%><%}%></li><%}%>";
+var DOUGHNUT_CHART_LEGEND = "<% for (var i=0; i<segments.length; i++) {%><li><i style=\"background:<%=segments[i].fillColor%>; font-size: .85em; border-width: 1px; border-style: solid; border-color:<%=segments[i].highlightColor%>;\"></i><span style=\"font-size: .85em;\"><%if (segments[i].label) {%><%=segments[i].label%><%}%></span></li><%}%>";
 
 
 
@@ -1082,17 +1082,20 @@ var ActivityData = function (ids, startDate, endDate) {
         searchCategories: ['LASSI-Search', 'OHAP-Search', 'SMES-Search', 'SPEAR-Search', 'VICNAMES-Search', 'VMT-Search'],
         panAndZoomLabels: ['Pan: Drag cursor or hold shift key and drag cursor to zoom', 'Zoom In', 'Zoom Out', 'Zoom to Full Extent',
                                                         'Zoom to Greater Melbourne', 'Zoom to Scale'],
-        retrieveInformationLabels: ['Add Mark to selection', 'Clear Selection List', 'Historical Information',
-                                                                'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels', 'Identify Survey Marks',
-                                                                'Parcel information: click on map'],
+        retrieveInformationLabels: ['Historical Information', 'Identify Aerial Photograph', 'Identify Property', 'Identify Survey Labels',
+                                    'Identify Survey Marks', 'Parcel information: click on map', 'Identify Feature',
+                                   'Identify Road. Enabled when zoom scale is 1:50,000 or below.', 'Polygon Search. Enabled when zoom scale is 1:10,000 or below.',
+                                   'View Search Results'],
+        selectMarksLabels: ['Add Mark to selection'],
+        removeMarksLabels: ['Clear Selection List', 'Remove Mark from selection'],
         displayMarkSelectionListLabels: ['Display Mark Selection List Window'],
         mapBasedSelectLabels: ['Select Parcel', 'Unselect Parcel', 'Complete Selection'],
         mapToolsLabels: ['Markup tools', 'Measure Area', 'Measure Distance', 'Clear Highlight', 'Street View: click on map'],
         saveLabels: ['Save Geo-Referenced Image', 'Save Image'],
         printLabels: ['Print Map'],
-        downloadLabels: ['Activate Document Download Tab', 'Draw Polygon to Export Survey Information to LandXML'],
+        downloadLabels: ['Activate Document Download Tab', 'Draw Polygon to Export Survey Information to LandXML', 'Downoad GNR Data', 'Export property information'],
         administerLabels: ['Add Labels', 'Administration', 'Administrator functions', 'Broadcast Message', 'Delete Labels', 'Edit Labels',
-                                                        'Export property information', 'Mark Maintenance']
+                                                        'Export property information', 'Mark Maintenance', 'Add New GNR Record'],
     };
 
     //Create specific data elements to hold data for each chart
@@ -1223,11 +1226,15 @@ ActivityData.prototype.determineActivity = function (categoryValue, eventLabelVa
     } else if (activityDataContext.applicationActivities.panAndZoomLabels.indexOf(eventLabelValue) >= 0) {
         return 'Pan and Zoom';
     } else if (activityDataContext.applicationActivities.retrieveInformationLabels.indexOf(eventLabelValue) >= 0) {
-        return 'Retrieve Information';
+        return 'Inf. / Identify';
     } else if (activityDataContext.applicationActivities.displayMarkSelectionListLabels.indexOf(eventLabelValue) >= 0) {
-        return 'Mark Selection Window';
+        return 'Display Mark Inf.';
+    } else if (activityDataContext.applicationActivities.selectMarksLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Select Mark(s)';
+    } else if (activityDataContext.applicationActivities.removeMarksLabels.indexOf(eventLabelValue) >= 0) {
+        return 'Deselect Marks';
     } else if (activityDataContext.applicationActivities.mapBasedSelectLabels.indexOf(eventLabelValue) >= 0) {
-        return 'Map Based Parcel Select';
+        return 'Parcel Selection';
     } else if (activityDataContext.applicationActivities.mapToolsLabels.indexOf(eventLabelValue) >= 0) {
         return 'Map Tools';
     } else if (activityDataContext.applicationActivities.saveLabels.indexOf(eventLabelValue) >= 0) {
@@ -1377,11 +1384,23 @@ ActivityData.prototype.parseActivityData = function (results, dataType) {
 
             //Check if this is a search activity - add search breakdown figures as well
             if (activity === 'Search') {
+                //Pre-process search value to abbreviate data
+                var searchVal = row[1];
+
+                //Apply abbrevation rules
+                searchVal = searchVal.replace("Property", "Prop");
+                searchVal = searchVal.replace("Description", "Desc");
+                searchVal = searchVal.replace("Historical", "Hist");
+                searchVal = searchVal.replace("VIEW_PFI", "View PFI");
+                searchVal = searchVal.replace("Melway/VicRoads", "Melway/Vicrds");
+
+
+
                 //Ensure all required properties exist with a value of at least 0
-                if (dataType === "Current" && activityDataContext.overallSearchBreakdownData.Current[row[1]] === undefined) {
-                    activityDataContext.overallSearchBreakdownData.Current[row[1]] = 0;
-                    activityDataContext.overallSearchBreakdownData.Previous[row[1]] = 0;
-                    activityDataContext.overallSearchBreakdownData.Year[row[1]] = 0;
+                if (dataType === "Current" && activityDataContext.overallSearchBreakdownData.Current[searchVal] === undefined) {
+                    activityDataContext.overallSearchBreakdownData.Current[searchVal] = 0;
+                    activityDataContext.overallSearchBreakdownData.Previous[searchVal] = 0;
+                    activityDataContext.overallSearchBreakdownData.Year[searchVal] = 0;
                 }
 
                 if (dataType === "Current" && activityDataContext.applicationSearchBreakdownData.Current[application] === undefined) {
@@ -1390,21 +1409,21 @@ ActivityData.prototype.parseActivityData = function (results, dataType) {
                     activityDataContext.applicationSearchBreakdownData.Year[application] = {};
                 }
 
-                if (dataType === "Current" && activityDataContext.applicationSearchBreakdownData.Current[application][row[1]] === undefined) {
-                    activityDataContext.applicationSearchBreakdownData.Current[application][row[1]] = 0;
-                    activityDataContext.applicationSearchBreakdownData.Previous[application][row[1]] = 0;
-                    activityDataContext.applicationSearchBreakdownData.Year[application][row[1]] = 0;
+                if (dataType === "Current" && activityDataContext.applicationSearchBreakdownData.Current[application][searchVal] === undefined) {
+                    activityDataContext.applicationSearchBreakdownData.Current[application][searchVal] = 0;
+                    activityDataContext.applicationSearchBreakdownData.Previous[application][searchVal] = 0;
+                    activityDataContext.applicationSearchBreakdownData.Year[application][searchVal] = 0;
                 }
 
                 //Check property exists, then add value to overall search type numbers
-                if (activityDataContext.overallSearchBreakdownData[dataType][row[1]] !== undefined) {
-                    activityDataContext.overallSearchBreakdownData[dataType][row[1]] += (+row[2]);
+                if (activityDataContext.overallSearchBreakdownData[dataType][searchVal] !== undefined) {
+                    activityDataContext.overallSearchBreakdownData[dataType][searchVal] += (+row[2]);
                 }
 
 
                 //Check property exists, then add value to specific application search type numbers
-                if (activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]] !== undefined) {
-                    activityDataContext.applicationSearchBreakdownData[dataType][application][row[1]] += (+row[2]);
+                if (activityDataContext.applicationSearchBreakdownData[dataType][application][searchVal] !== undefined) {
+                    activityDataContext.applicationSearchBreakdownData[dataType][application][searchVal] += (+row[2]);
                 }
             }
         }
