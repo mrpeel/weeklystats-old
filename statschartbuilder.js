@@ -70,6 +70,20 @@ StatsChart.prototype.queryGA = function (queryParams) {
 };
 
 /**
+ * Sorts a numerical array into ascending order.
+ * This allows an array to be sorted so the median can be acccurately identified.
+ * @param {numericalArray} an array of numbers
+ * @return {None}
+ */
+StatsChart.prototype.sortNumericalArray = function (numericalArray) {
+    "use strict";
+    numericalArray.sort(function (a, b) {
+        return a - b;
+    });
+
+};
+
+/**
  * Return a promise after a delay.
  * When used with promise chaining, this allows the execution to be paused
  * for a priod of time.  This is used to control the rate of calls to the analytics API.
@@ -224,6 +238,10 @@ WeekToPreviousWeekChart.prototype.transformLastYearDataToMedians = function (las
         if (dayData['day' + (dayLoop % 7)] === undefined) {
             weekToPreviousWeekContext.lastYearData.push(0);
         } else {
+            //Sort array in ascending order
+            weekToPreviousWeekContext.sortNumericalArray(dayData['day' + (dayLoop % 7)]);
+
+            //Identify median and push into data set
             weekToPreviousWeekContext.lastYearData.push(dayData['day' + (dayLoop % 7)][Math.round(dayData['day' + (dayLoop % 7)].length / 2)]);
         }
     }

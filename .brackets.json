@@ -7,8 +7,8 @@
                 ],
                 "output": "statschartbuilder.min.js",
                 "generateMap": true,
-                "mangle": false,
-                "isolate": true
+                "mangle": true,
+                "isolate": false
             },
             {
                 "inputs": [
@@ -16,10 +16,10 @@
                 ],
                 "output": "generatecharts.min.js",
                 "generateMap": true,
-                "mangle": false,
-                "isolate": true
+                "mangle": true,
+                "isolate": false
             }
-            
+
         ]
     }
 }
