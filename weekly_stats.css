@@ -1,3 +1,9 @@
+/** --------------------------------------------------------------------------------------------------------------
+  This web app uses the application cache - any change requires the weekly_stats.appcache file to be modified.  
+    Modify the timestamp comment in the 2nd line to force browsers to refresh  
+  ----------------------------------------------------------------------------------------------------------------
+*/
+
 html {
     /*font-family: 'And Black', Helvetica, Arial, sans-serif;*/
     font-family: 'Muli', sans-serif;
