@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html manifest="weeklystats.appcache">
+<html manifest="weekly_stats.appcache">
 
 <head>
     <meta charset="utf-8">
@@ -8,19 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title id="bar-title">System Weekly Usage Stats</title>
 
-    <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
-
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Weekly Usage Stats">
-    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
-
-    <!-- Tile icon for Win8 (144x144 + tile color) -->
-    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-    <meta name="msapplication-TileColor" content="#3372DF">
 
 
     <link href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" rel="stylesheet">
@@ -920,6 +907,21 @@
             </div>
         </main>
     </div>
+
+    <script>
+        // Check if a new cache is available on page load - force a reload if it has.
+        window.addEventListener('load', function(e) {
+
+            window.applicationCache.addEventListener('updateready', function(e) {
+                if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                    // Browser downloaded a new app cache.
+                    window.location.reload();
+                }
+            }, false);
+
+        }, false);
+
+    </script>
 
     <script>
         // If Promise is not supported, include the polyfill

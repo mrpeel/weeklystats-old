@@ -1,0 +1,18 @@
+CACHE MANIFEST
+# 201509071151
+
+# Explicitly cached entries
+CACHE:
+statschartbuilder.min.js
+generatecharts.min.js
+weekly_stats.min.css
+javascript/Promise.min.js
+javascript/Chart.min.js
+javascript/moment.min.js
+javascript/view-selector-material.min.js
+javascript/week-selector.min.js
+
+# All other resources (e.g. sites) require the user to be online. 
+NETWORK:
+*
+
