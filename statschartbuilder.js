@@ -1516,7 +1516,9 @@ ActivityData.prototype.prepareDoughnutChartData = function (renderChartData) {
 ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, renderChartDataPrevious, renderChartDataYear) {
     "use strict";
 
-    var objProp, sumValues = 0;
+    var objProp, sumValuesCurrent = 0,
+        sumValuesPrevious = 0,
+        sumValuesYear = 0;
 
     //capture execution context to enable usage within functions
     var activityDataContext = this;
@@ -1528,35 +1530,41 @@ ActivityData.prototype.prepareBarChartData = function (renderChartDataCurrent, r
 
     //Calculate sum of all activity numbers for percentages
     for (objProp in renderChartDataCurrent) {
-        sumValues = sumValues + renderChartDataCurrent[objProp];
+        sumValuesCurrent = sumValuesCurrent + renderChartDataCurrent[objProp];
         activityDataContext.chartData.labels.push(objProp);
     }
 
     for (objProp in renderChartDataPrevious) {
-        sumValues = sumValues + renderChartDataPrevious[objProp];
+        sumValuesPrevious = sumValuesPrevious + renderChartDataPrevious[objProp];
     }
 
     for (objProp in renderChartDataYear) {
-        sumValues = sumValues + renderChartDataYear[objProp];
+        sumValuesYear = sumValuesYear + renderChartDataYear[objProp];
     }
 
 
     //Check if the sum of values is greater than 0
-    if (sumValues > 0) {
+    if (sumValuesCurrent > 0) {
         //Loop through again to convert actual values to percentages
         for (objProp in renderChartDataCurrent) {
-            renderChartDataCurrent[objProp] = Math.round(renderChartDataCurrent[objProp] / sumValues * 100);
+            renderChartDataCurrent[objProp] = Math.round(renderChartDataCurrent[objProp] / sumValuesCurrent * 100);
         }
+    }
 
+    if (sumValuesPrevious > 0) {
         for (objProp in renderChartDataPrevious) {
-            renderChartDataPrevious[objProp] = Math.round(renderChartDataPrevious[objProp] / sumValues * 100);
+            renderChartDataPrevious[objProp] = Math.round(renderChartDataPrevious[objProp] / sumValuesPrevious * 100);
         }
+    }
+
+    if (sumValuesYear > 0) {
 
         for (objProp in renderChartDataYear) {
-            renderChartDataYear[objProp] = Math.round(renderChartDataYear[objProp] / sumValues * 100);
+            renderChartDataYear[objProp] = Math.round(renderChartDataYear[objProp] / sumValuesYear * 100);
         }
+    }
 
-
+    if (sumValuesCurrent > 0 || sumValuesPrevious > 0 || sumValuesYear > 0) {
         activityDataContext.chartData.datasets.push({
             label: 'Week Starting ' + activityDataContext.currentWeekStarting,
             fillColor: activityDataContext.fillColors[0],
